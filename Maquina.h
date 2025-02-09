@@ -13,22 +13,17 @@ class Maquina
 private:
 
     static int contadorID;//este es un contador estatico para generar IDs unicos
-    
-public:
-
     int id;
     String nombre;
     String tipo;
     bool EnUso;
+    
+public:
 
-    Maquina(String nombre, String tipo, bool EnUso){
+    
 
-        this->id= ++contadorID;// Asigna un ID unico automáticamente
-        this->nombre=nombre;
-        this->tipo=tipo;
-        this->EnUso=false;
-
-    }
+    Maquina(const String &nombre, const String &tipo, bool EnUso = false)
+    : id(++contadorID), nombre(nombre), tipo(tipo), EnUso(EnUso) {}
 
     void Encender() {this->EnUso = true;}
     void Apagar() {this->EnUso=false;}
@@ -38,6 +33,15 @@ public:
         std::cout<<"ID: "<<this->id<<" - Maquina: "<<this->nombre<<" - Tipo: "<<this->tipo<<" - Estado: "<<(this->EnUso ? "En uso" : "Apagada") <<std::endl;   
 
     }
+
+    int getId() const {return id;}
+    String getNombre() const {return nombre;}
+    String getTipo() const {return tipo;}
+    bool isEnUso() const {return EnUso;}
+
+    void setNombre(const String &Nuevonombre) {nombre=Nuevonombre;}
+    void setTipo(const String &NuevoTipo) {tipo=NuevoTipo;}
+    void setEnUso(bool estado) { EnUso = estado; } 
     
 };
 
