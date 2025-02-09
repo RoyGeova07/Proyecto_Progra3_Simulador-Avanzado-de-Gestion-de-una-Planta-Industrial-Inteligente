@@ -19,19 +19,25 @@ public:
     int id;
     String cargo;
 
-    Empleado(String nombre,int id, String cargo){
+    Empleado(const String &nombre,int id, const String &cargo) 
+    : nombre(nombre), id(id),cargo(cargo) {}
 
-        this->id = ++contadorID;
-        this->nombre=nombre;
-        this->cargo=cargo;
-
-    }
 
     void MostrarInfo(){
 
         std::cout<<"ID: "<<this->id<<" - Nombre: "<<this->nombre<<" - Cargo"<<this->cargo<<std::endl;
 
     }
+
+    // Destructor virtual para herencia
+    virtual ~Empleado() {}
+
+    String getNombre() const {return nombre;}
+    int id() const {return id;}
+    String cargo() const {return cargo;}
+
+    void setNombre(const String &nombre) {this->nombre=nombre;}
+    void setcargo(const String &cargo) {this->cargo=cargo;}
   
 };
 
