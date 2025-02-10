@@ -8,8 +8,6 @@
 #include "Ingrediente.h"
 
 
-using String = std::string;
-
 class Producto
 {
 
@@ -23,13 +21,8 @@ public:
 
     Producto(const String &nombre, int cantidadProducida) : nombre(nombre), cantidadProducida(cantidadProducida){}
 
-    void AgregarIngrediente(const Ingrediente i){
 
-        this->ingredientes.push_back(i);
-
-    }
-
-    void MostrarInfo(){
+    virtual void MostrarInfo() {
 
         std::cout<<"Producto: "<<this->nombre<<" - Cantidad: "<<this->cantidadProducida<<" unidades"<<std::endl;
         std::cout<<"Ingredientes Usados: "<<std::endl;
@@ -42,6 +35,15 @@ public:
         
 
     }
+
+    
+    void AgregarIngrediente(const Ingrediente i){
+
+        this->ingredientes.push_back(i);
+
+    }
+
+    virtual ~Producto() {}
 
     String getNombre() const { return nombre; }
     int getCantidadProducida() const { return cantidadProducida; }
