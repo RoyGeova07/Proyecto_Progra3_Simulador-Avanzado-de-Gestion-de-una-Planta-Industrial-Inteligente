@@ -2,18 +2,14 @@
 #define OPERARIO_H
 #include <Empleado.h>
 
-class EmpleadoOperario
+class Operario : public Empleado
 {
-private:
-    /* data */
 public:
-    EmpleadoOperario(/* args */);
-    ~EmpleadoOperario();
+
+
+    Operario(std::string nombre) : Empleado(nombre, "Operario") {}
+
+
 };
 
-
-
-
-
-
-#endif OPERARIO_H
+#endif //OPERARIO_H

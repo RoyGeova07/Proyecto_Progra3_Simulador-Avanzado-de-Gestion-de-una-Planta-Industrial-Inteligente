@@ -1,47 +1,38 @@
 #ifndef EMPLEADO_H
 #define EMPLEADO_H
 
-
 #include <iostream>
 #include <string>
 
-using String = std::string;
-
 class Empleado
 {
-private:
+protected:
 
+    std::string nombre;
+    int id;
+   std::string cargo;
     static int contadorID;
-    
+
 public:
 
-    String nombre;
-    int id;
-    String cargo;
+    Empleado(const String &nombre, const String &cargo) 
+        : nombre(nombre), cargo(cargo), id(++contadorID) {} // Asigna un ID unico automáticamente
 
-    Empleado(const String &nombre,int id, const String &cargo) 
-    : nombre(nombre), id(id),cargo(cargo) {}
-
-
-    void MostrarInfo(){
-
-        std::cout<<"ID: "<<this->id<<" - Nombre: "<<this->nombre<<" - Cargo"<<this->cargo<<std::endl;
-
+    virtual void MostrarInfo() const {
+        std::cout << "Empleado ID: " << id << " - Nombre: " << nombre << " - Cargo: " << cargo << std::endl;
     }
 
-    // Destructor virtual para herencia
-    virtual ~Empleado() {}
+    virtual void RealizarTarea() = 0; // funciona pura (obligatorio en subclases)
+    virtual ~Empleado() = default; // Destructor virtual
 
-    String getNombre() const {return nombre;}
-    int id() const {return id;}
-    String cargo() const {return cargo;}
-
-    void setNombre(const String &nombre) {this->nombre=nombre;}
-    void setcargo(const String &cargo) {this->cargo=cargo;}
-  
+    // Getters
+    int getId() const { return id; }
+    std::string getNombre() const { return nombre; }
+    std::string getCargo() const { return cargo; }
 };
 
-int Empleado::contadorID=0;
+//aqui inicializacion del contador estatico
+int Empleado::contadorID = 0;
 
 
-#endif //EMPLEADO_H
+#endif // EMPLEADO_H

@@ -15,15 +15,27 @@ class Gestor_De_Planta
 {
 private:
   
-
+std::vector<Producto> productos;
+std::vector<Ingrediente> ingredientes;
+std::vector<Maquina> maquinas;
+std::vector<Empleado> empleado;
 
 public:
 
-    std::vector<Producto> productos;
-    std::vector<Ingrediente> ingredientes;
-    std::vector<Maquina> maquinas;
-    std::vector<Empleado> empleado;
+    Gestor_De_Planta()=default;
+    ~Gestor_De_Planta();    
 
+    void agregarEmpleado(const std::string &nombre, const std::string &cargo);
+    void agregarProducto(Producto* nuevoProducto);
+    void agregarMaquina(const std::string &nombre, const std::string &tipo);
+
+    void listarEmpleados() const;
+    void listarProductos() const;
+    void listarMaquinas() const;
+
+    void eliminarEmpleado(int id);
+    void eliminarProducto(const std::string &nombre);
+    void eliminarMaquina(int id);
     
 
 };

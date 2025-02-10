@@ -5,24 +5,28 @@
 class Distribucion
 {
 private:
-    vector<Producto> pedidos;
+    std::vector<Producto> pedidos;
 
 public:
     void agregarPedido(const Producto &producto)
     {
+
         pedidos.push_back(producto);
+        
     }
 
     void mostrarPedidos() const
     {
-        cout << "\n--- Pedidos en Distribución ---\n";
+        std::cout << "\n--- Pedidos en Distribucion ---\n";
         for (const auto &pedido : pedidos)
         {
+
             pedido.mostrarInfo();
+
         }
     }
 
-    // Función recursiva para calcular el tiempo estimado de entrega
+    //aqui una Funcion recursiva para calcular el tiempo estimado de entrega
     int calcularTiempoEntrega(int pedidosPendientes)
     {
         if (pedidosPendientes <= 0)

@@ -1,5 +1,5 @@
-#ifndef PRODUCTO_H //SI PRODUCTO NO ESTA DEFINIDO
-#define PRODUCTO_H// LO DEFINIMOS
+#ifndef PRODUCTO_H // SI PRODUCTO NO ESTA DEFINIDO
+#define PRODUCTO_H // LO DEFINIMOS
 
 #include <iostream>
 #include <fstream>
@@ -7,54 +7,37 @@
 #include <vector>
 #include "Ingrediente.h"
 
-
 class Producto
 {
 
 private:
+    std::string nombre;
+    int cantidad;
+    std::string tipoEnvase;
+    double precio;
 
-String nombre;
-std::vector<Ingrediente> ingredientes;
-int cantidadProducida;
-   
 public:
+    //aqui sobrecarga de constructores
+    Producto(const std::string& nombre, int cantidad,const std::string& tipoEnvase, double precio)
+        : nombre(nombre), cantidad(cantidad), tipoEnvase(tipoEnvase), precio(precio) {}
 
-    Producto(const String &nombre, int cantidadProducida) : nombre(nombre), cantidadProducida(cantidadProducida){}
+    Producto(const std::string& nombre,const std::string& tipoEnvase) : nombre(nombre),cantidad(0),tipoEnvase(tipoEnvase),precio(0){}
 
-
-    virtual void MostrarInfo() {
-
-        std::cout<<"Producto: "<<this->nombre<<" - Cantidad: "<<this->cantidadProducida<<" unidades"<<std::endl;
-        std::cout<<"Ingredientes Usados: "<<std::endl;
-        for (auto &i : this->ingredientes)
-        {
-            
-            i.MostrarInfo();
-
-        }
-        
-
-    }
-
-    
-    void AgregarIngrediente(const Ingrediente i){
-
-        this->ingredientes.push_back(i);
-
+    void mostrarInfo() const
+    {
+        std::cout << "Producto: " << nombre << " | Cantidad: " << cantidad
+             << " | Envase: " << tipoEnvase << " | Precio: " << precio << "\n";
     }
 
     virtual ~Producto() {}
 
     String getNombre() const { return nombre; }
-    int getCantidadProducida() const { return cantidadProducida; }
-    const std::vector<Ingrediente>& getIngredientes() const { return ingredientes; } // Devuelve referencia constante
+    int getCantidadProducida() const { return cantidad; }
 
     // Setters (const & en string para evitar copias innecesarias)
     void setNombre(const String &nuevoNombre) { nombre = nuevoNombre; }
-    void setCantidadProducida(int nuevaCantidad) { cantidadProducida = nuevaCantidad; }
+    void setCantidadProducida(int nuevaCantidad) { cantidad = nuevaCantidad; }
 
-   
 };
-
 
 #endif // PRODUCTO_H

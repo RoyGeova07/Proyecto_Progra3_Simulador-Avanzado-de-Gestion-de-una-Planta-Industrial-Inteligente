@@ -10,14 +10,28 @@ private:
     vector<Producto> productos;
 
 public:
-    void agregarMateriaPrima(const MateriaPrima &materia)
+
+    //aqui sobrecarga de funciones para agregar stock
+    void agregarMateriaPrima(const MateriaPrima& materia)
     {
         materiasPrimas.push_back(materia);
+    }
+
+    void agregarMateriaPrima(const std::string& nombre, double cantidad,const std::string& unidad){
+
+        materiasPrimas.push_back(MateriaPrima(nombre,cantidad,unidad));
+
     }
 
     void agregarProducto(const Producto &producto)
     {
         productos.push_back(producto);
+    }
+
+    void agregarProducto(const std::string& nombre,int cantidad,const std::string& tipoEnvase,double precio){
+
+        productos.push_back(Producto(nombre,cantidad,tipoEnvase,precio));
+
     }
 
     void mostrarStock() const
