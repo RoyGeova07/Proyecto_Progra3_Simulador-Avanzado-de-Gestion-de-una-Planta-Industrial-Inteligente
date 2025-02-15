@@ -1,32 +1,32 @@
-#ifndef PRODUCTO_H // SI PRODUCTO NO ESTA DEFINIDO
+#ifndef PRODUCTO_H // SI PRODUCTO NO ESTA DEFINIDOs
 #define PRODUCTO_H // LO DEFINIMOS
 
 #include <iostream>
 #include <fstream>
 #include <thread>
 #include <vector>
-#include "Ingrediente.h"
+
 
 class Producto
 {
-
+    
 private:
     std::string nombre;
     int cantidad;
-    std::string tipoEnvase;
     double precio;
 
 public:
     //aqui sobrecarga de constructores
-    Producto(const std::string& nombre, int cantidad,const std::string& tipoEnvase, double precio)
-        : nombre(nombre), cantidad(cantidad), tipoEnvase(tipoEnvase), precio(precio) {}
+    Producto(const std::string& nombre, int cantidad, double precio)
+        : nombre(nombre), cantidad(cantidad), precio(precio) {}
 
-    Producto(const std::string& nombre,const std::string& tipoEnvase) : nombre(nombre),cantidad(0),tipoEnvase(tipoEnvase),precio(0){}
+    Producto(const std::string& nombre) : nombre(nombre),cantidad(0),precio(0){}
 
     void mostrarInfo() const
     {
-        std::cout << "Producto: " << nombre << " | Cantidad: " << cantidad
-             << " | Envase: " << tipoEnvase << " | Precio: " << precio << "\n";
+
+        std::cout << "Producto: " << nombre << " | Cantidad: " << cantidad<< " | Precio: " << precio << "\n";
+        
     }
 
     virtual ~Producto() {}

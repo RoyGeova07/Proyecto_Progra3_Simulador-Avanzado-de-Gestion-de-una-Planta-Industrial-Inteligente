@@ -5,7 +5,7 @@
 #include <vector>
 #include <string>
 #include <string.h>
-#include "Ingrediente.h"
+#include "Frutas.h"
 #include <Producto.h>
 #include <Maquina.h>
 #include <Empleado.h>
@@ -16,7 +16,7 @@ class Gestor_De_Planta
 private:
   
 std::vector<Producto> productos;
-std::vector<Ingrediente> ingredientes;
+std::vector<Frutas> FRUTAS;
 std::vector<Maquina> maquinas;
 std::vector<Empleado> empleado;
 
@@ -27,7 +27,6 @@ public:
 
     void agregarEmpleado(const std::string &nombre, const std::string &cargo);
     void agregarProducto(Producto* nuevoProducto);
-    void agregarMaquina(const std::string &nombre, const std::string &tipo);
 
     void listarEmpleados() const;
     void listarProductos() const;
@@ -35,7 +34,6 @@ public:
 
     void eliminarEmpleado(int id);
     void eliminarProducto(const std::string &nombre);
-    void eliminarMaquina(int id);
     
 
 };

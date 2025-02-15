@@ -1,25 +1,28 @@
 #ifndef ALMACEN_H
 #define ALMACEN_H
 #include <Producto.h>
-#include <MateriaPrima.h>
+#include <Frutas.h>
 
 class Almacen
 {
 private:
-    vector<MateriaPrima> materiasPrimas;
-    vector<Producto> productos;
+    std::vector<Frutas> frutita;
+    Frutas tipo;
+    std::vector<Producto> productos;
 
 public:
 
     //aqui sobrecarga de funciones para agregar stock
-    void agregarMateriaPrima(const MateriaPrima& materia)
+    void AgregarFrutas(const Frutas& materia)
     {
-        materiasPrimas.push_back(materia);
+
+        frutita.push_back(materia);
+        
     }
 
-    void agregarMateriaPrima(const std::string& nombre, double cantidad,const std::string& unidad){
+    void AgregarFrutas(Frutas nombre, double costo,int cantidad){
 
-        materiasPrimas.push_back(MateriaPrima(nombre,cantidad,unidad));
+        //frutita.push_back(Frutas(nombre,costo,cantidad));
 
     }
 
@@ -28,25 +31,28 @@ public:
         productos.push_back(producto);
     }
 
-    void agregarProducto(const std::string& nombre,int cantidad,const std::string& tipoEnvase,double precio){
+    void agregarProducto(const std::string& nombre,int cantidad,const std::string  &tipoEnvase,double precio){
 
-        productos.push_back(Producto(nombre,cantidad,tipoEnvase,precio));
+        productos.push_back(Producto(nombre,cantidad,precio));
 
     }
 
     void mostrarStock() const
     {
-        cout << "\n--- Stock de Materias Primas ---\n";
-        for (const auto &materia : materiasPrimas)
+        std::cout << "\n--- Stock de frutas  ---\n";
+        for (const auto &fruts : frutita)
         {
 
-            materia.mostrarInfo();
+           fruts.MostrarInfo();
 
         }
-        cout << "\n--- Stock de Productos ---\n";
+        //almacen de de los jugos...
+        std::cout << "\n--- Stock de Productos ---\n";
         for (const auto &producto : productos)
         {
+
             producto.mostrarInfo();
+            
         }
     }
 };
