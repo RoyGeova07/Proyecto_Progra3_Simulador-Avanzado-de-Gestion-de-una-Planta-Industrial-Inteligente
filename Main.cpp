@@ -156,7 +156,7 @@ void ConfigurarParametrosIniciales()
             precio=NumeroValido("Ingrese el precio por unidad de la fruta: ", 1, 100);
 
             inventarioFrutas.push_back(Frutas(static_cast<Frutas::Fruta>(opcion),precio,cantidad));
-            cout<<"Se agregaron "<<cantidad<<" unidades de la fruta seleccionada aun precio de $";
+            cout<<"Se agregaron "<<cantidad<<" unidades de la fruta "<<opcion<<" aun precio de $"<<precio;
 
           
         }
