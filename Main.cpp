@@ -15,6 +15,8 @@
 #include <MaquinaLavadora.h>
 #include <Pasteurizador.h>
 #include <Extractor.h>
+#include <set>
+
 
 
 using namespace std;
@@ -44,6 +46,46 @@ int NumeroValido(string mensaje,int minimo,int maximo){
 
     }
     
+
+}
+
+vector<string> ObtenerListaDeNombres() {
+    return {
+        "Carlos Gonzalez", "Maria Lopez", "Juan Martinez", "Ana Rodriguez", "Luis Perez",
+        "Elena Sanchez", "Pedro Diaz", "Carmen Vega", "Jose Ruiz", "Sofia Fernandez",
+        "Andres Castro", "Raquel Navarro", "Diego Mendoza", "Victoria Jimenez", "Fernando Rojas",
+        "Paula Silva", "Jorge Acosta", "Natalia Herrera", "Manuel Morales", "Rosa Torres",
+        "Ismael Gutierrez", "Gloria Figueroa", "Roberto Ortega", "Beatriz Paredes", "Daniel Escobar",
+        "Gabriela Miranda", "Rodrigo Cabrera", "Martina Castillo", "Sebastian Fuentes", "Clara Rivas",
+        "Hugo Salazar", "Valeria Villanueva", "Oscar Delgado", "Lucia Guzman", "Ramiro Peña",
+        "Adriana Cardenas", "Victor Solis", "Daniela Campos", "Ricardo Espinoza", "Margarita Montoya",
+        "Emilio Nunez", "Estefania Tapia", "Raul Olivares", "Patricia Bermudez", "Julian Serrano",
+        "Melissa Duarte", "Alberto Valenzuela", "Lorena Meza", "Francisco Arce", "Renata Ibarra"
+    };
+}
+
+vector<string> ObtenerNombresAleatorios(int cantidad){
+
+    vector<string> NombresBase=ObtenerListaDeNombres();
+    set<int> IndiceSeleccionado;
+    vector<string> nombresAleatorios;
+
+    while (IndiceSeleccionado.size()<cantidad)
+    {
+        
+        int index=rand()%NombresBase.size();//aqui se selecciona un indice aleatorio
+        if (IndiceSeleccionado.find(index)==IndiceSeleccionado.end())
+        {
+            
+            IndiceSeleccionado.insert(index);
+            nombresAleatorios.push_back(NombresBase[index]);
+
+        }
+        
+
+    }
+    return nombresAleatorios;
+
 
 }
 
@@ -80,7 +122,8 @@ void ConfigurarParametrosIniciales()
     double capitalInicial = 10000;
     double capitalAdicional;
     vector<Frutas> inventarioFrutas;
-    vector<Empleado*> empleados;
+    vector<Empleado*> empleados;//se usa como tipo puntero porque se usara polimorfismo, tambien para no 
+    //perder informacion, facilita el gestion dinamica de memoria
     vector<Maquina*> maquinas;
     int cantidadEmpleados;
 
@@ -100,10 +143,11 @@ void ConfigurarParametrosIniciales()
 
     while (true)
     {
+
         respuesta=obtenerRespuestaSN("\n¿Desea agregar frutas a la planta? (s/n): ");
 
 
-        if (respuesta =='n'||respuesta=='N')break;
+        if (respuesta=='n'||respuesta=='N')break;
 
         if (respuesta=='s'|| respuesta=='S')
         {
@@ -127,10 +171,10 @@ void ConfigurarParametrosIniciales()
 
     respuesta2=obtenerRespuestaSN("\nEl capital inicial de la planta es de $10,000. ¿Desea agregar mas dinero? (s/n): ");
     cin >> respuesta;
-    if (respuesta == 's' || respuesta == 'S')
+    if (respuesta=='s'||respuesta=='S')
     {
 
-        capitalAdicional=NumeroValido("Ingrese la cantidad a adicionar: ",0,50000);
+        capitalAdicional=NumeroValido("Ingrese la cantidad a adicionar: ",1,50000);
         capitalInicial+=capitalAdicional;
 
     }
@@ -138,10 +182,12 @@ void ConfigurarParametrosIniciales()
     //aqui se agregan los empleados
     cantidadEmpleados=NumeroValido("\nIngrese la cantidad de empleados a contratar (maximo de planta 50): ",1,50);
 
+    vector<string> nombresGenerados=ObtenerNombresAleatorios(cantidadEmpleados);
+
     for (int i = 0; i < cantidadEmpleados; i++)
     {
         
-        NombreEmpleado=GenerarNombreAleatorio();
+        NombreEmpleado=nombresGenerados[i];
         tipoEmpleado=rand()%3;
         Empleado* NuevoEmpleado;//Puntero
 
@@ -163,7 +209,7 @@ void ConfigurarParametrosIniciales()
             
         }
         
-        empleados.push_back(NuevoEmpleado);
+        empleados.push_back(NuevoEmpleado);// con el pushbac se agrega nuevos elementos
 
     }
 
@@ -173,7 +219,10 @@ void ConfigurarParametrosIniciales()
     maquinas.push_back(new MaquinaLavadora());
 
     //aqui se asigna el estado aleatorio si esta bien o mal
-    for(auto &maquina : maquinas){
+    //auto sirve para la deduccion de autamtica de tipo ejem maquinas, se el "&" porque maquina no es una
+    //copia, si no una referencia al elemento del vector
+    for(auto &maquina : maquinas){ 
+
 
         bool estado=rand()%2;//50% de probabilidad de estar operativa o no
         maquina->setEnUso(estado);
@@ -191,7 +240,7 @@ void ConfigurarParametrosIniciales()
     cout << "Agua disponible: " << aguaLitros << " litros\n";
     // MOSTRAR EL ESTADO DE LAS MAQUINAS
 
-    cout << "Frutas en inventario:\n";
+    cout << "\nFrutas en inventario:\n";
     if (inventarioFrutas.empty())
     {
 
@@ -203,6 +252,7 @@ void ConfigurarParametrosIniciales()
         {
 
             cout << " " << fruta.getNombre() << " - Cantidad: " << fruta.getCosto() << "\n";
+
         }
     }
 
@@ -246,90 +296,29 @@ void MenuPrincipal()
 
             //AGREGAR FUNCION
 
-        }
-        else if (opcion == 2)
-        {
+        }else if (opcion == 2){
 
             //AGREGAR FUNCION
 
-        }
-        else if (opcion == 3)
-        {
+        }else if (opcion == 3){
 
             //AGREGAR FUNCION
 
-        }
-        else if (opcion == 4)
-        {
+        }else if (opcion == 4){
 
             //AGREGAR FUNCION
 
-        }
-        else if (opcion == 5)
-        {
+        }else if (opcion == 5){
 
             cout << "Proyecto terminado" << endl;
-        }
-        else
-        {
+
+        }else{
 
             cout << "Opcion no valida" << endl;
         }
     }
 }
 
-void Menu_De_Planta()
-{
-
-    int opcion1;
-
-    cout << "\n=============================\n";
-    cout << "  Menu de la planta\n";
-    cout << "=============================\n";
-    cout << "1. Agregar Empleado\n";
-    cout << "2. Ver Ingredientes\n";
-    cout << "3. Ver Productos\n";
-    cout << "4. Ver Empleados\n";
-    cout << "5. Ver estado de las Maquinas\n";
-    cout << "6. Salir\n";
-    cout << "Seleccione una opcion: ";
-    cin >> opcion1;
-
-    if (opcion1 == 1)
-    {
-    }
-    else if (opcion1 == 2)
-    {
-    }
-    else if (opcion1 == 3)
-    {
-    }
-    else if (opcion1 == 4)
-    {
-    }
-    else if (opcion1 == 5)
-    {
-    }
-    else if (opcion1 == 6)
-    {
-    }
-    else if (opcion1 == 7)
-    {
-    }
-    else if (opcion1 == 8)
-    {
-    }
-    else if (opcion1 == 9)
-    {
-
-        cout << "Saliendo del menu de la planta" << endl;
-    }
-    else
-    {
-
-        cout << "Opcion no valida" << endl;
-    }
-}
 
 int main()
 {
