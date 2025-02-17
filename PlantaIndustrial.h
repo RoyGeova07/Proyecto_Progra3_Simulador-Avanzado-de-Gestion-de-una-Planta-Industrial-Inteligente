@@ -37,12 +37,4 @@ public:
 };
 
 
-
-
-
-
-
-
-
-
 #endif //PLANTA_H

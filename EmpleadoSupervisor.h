@@ -1,6 +1,6 @@
 #ifndef SUPERVISOR_H
 #define SUPERVISOR_H
-#include <Empleado.h>
+#include "Empleado.h"
 
 
 class EmpleadoSuperVisor : public Empleado

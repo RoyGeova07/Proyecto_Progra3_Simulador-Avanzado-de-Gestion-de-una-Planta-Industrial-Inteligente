@@ -15,11 +15,13 @@ protected:
 
 public:
     Empleado(const std::string &nombre, const std::string &cargo)
-        : nombre(nombre), cargo(cargo), id(++contadorID) {} // Asigna un ID unico automaticamente
+        : nombre(nombre), cargo(cargo), id(++contadorID),salario(0) {} // Asigna un ID unico automaticamente
 
     virtual void MostrarInfo() const
     {
-        std::cout << "ID: " << id << " - Nombre: " << nombre << " - Cargo: " << cargo <<"Salario: "<<salario<<std::endl;
+
+        std::cout << "ID: " << id << " - Nombre: " << nombre << " - Cargo: " << cargo <<" - Salario: "<<salario<<std::endl;
+            
     }
 
     virtual void RealizarTarea() = 0; // funciona pura (obligatorio en subclases)
@@ -33,7 +35,7 @@ public:
 
     void setSalario(int nuevoSalario){
 
-        nuevoSalario=nuevoSalario;  
+        this->salario=nuevoSalario;  
 
     }
 

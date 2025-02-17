@@ -31,11 +31,11 @@ public:
 
     virtual ~Producto() {}
 
-    String getNombre() const { return nombre; }
+    std::string getNombre() const { return nombre; }
     int getCantidadProducida() const { return cantidad; }
 
     // Setters (const & en string para evitar copias innecesarias)
-    void setNombre(const String &nuevoNombre) { this->nombre = nuevoNombre; }
+    void setNombre(const std::string &nuevoNombre) { this->nombre = nuevoNombre; }
     void setCantidadProducida(int nuevaCantidad) { this->cantidad = nuevaCantidad; }
 
 };

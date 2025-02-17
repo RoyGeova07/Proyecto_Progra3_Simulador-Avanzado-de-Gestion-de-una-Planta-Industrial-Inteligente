@@ -29,6 +29,7 @@ public:
     {
 
         std::cout << "ID: " << this->id << " - Maquina: " << this->nombre << " - Tipo: " << this->tipo << " - Estado: " << (this->operativa ? "En uso" : "Apagada") << std::endl;
+        
     }
 
     int getId() const { return id; }

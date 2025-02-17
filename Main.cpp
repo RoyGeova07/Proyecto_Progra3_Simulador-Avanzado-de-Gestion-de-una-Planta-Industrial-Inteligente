@@ -4,17 +4,17 @@
 #include <string.h>
 #include <limits>
 #include <stdlib.h>
-#include <Frutas.h>
 #include <ctime>
 #include <cstdlib>//para seed random
 #include "Empleado.h"
-#include <EmpleadoTecnico.h>
-#include <EmpleadoOperario.h>
-#include <EmpleadoSupervisor.h>
-#include <Maquina.h>
-#include <MaquinaLavadora.h>
-#include <Pasteurizador.h>
-#include <Extractor.h>
+#include "EmpleadoTecnico.h"
+#include "EmpleadoOperario.h"
+#include "EmpleadoSupervisor.h"
+#include "Maquina.h"
+#include "MaquinaLavadora.h"
+#include "Pasteurizador.h"
+#include "Extractor.h"
+#include "Frutas.h"
 #include <set>
 
 
@@ -66,35 +66,29 @@ vector<string> ObtenerListaDeNombres() {
 
 vector<string> ObtenerNombresAleatorios(int cantidad){
 
-    vector<string> NombresBase=ObtenerListaDeNombres();
-    set<int> IndiceSeleccionado;
-    vector<string> nombresAleatorios;
+    vector<string> NombresBase=ObtenerListaDeNombres();//desde aqui se obtienen la lista de los 50 nombres
+    set<int> IndiceSeleccionado;//aqui se usa un set para guardar los indices unicos
+    vector<string> nombresAleatorios;//aqui la lista final de nombres aleatorios
 
+    // Se usa un while para asegurarse de que se seleccionen exactamente cantidad nombres sin repeticiones
     while (IndiceSeleccionado.size()<cantidad)
     {
         
-        int index=rand()%NombresBase.size();//aqui se selecciona un indice aleatorio
-        if (IndiceSeleccionado.find(index)==IndiceSeleccionado.end())
+        int index=rand()%NombresBase.size();//aqui se selecciona un indice aleatorio entre 0 y 49
+
+        if (IndiceSeleccionado.find(index)==IndiceSeleccionado.end())//aqui se verifica si el indice ya fue usado
         {
             
-            IndiceSeleccionado.insert(index);
-            nombresAleatorios.push_back(NombresBase[index]);
+            IndiceSeleccionado.insert(index);//aqui se agrega el indice set para evitar repetidos
+            nombresAleatorios.push_back(NombresBase[index]);//y aqui agrega el nombre
 
         }
         
 
     }
-    return nombresAleatorios;
+    
+    return nombresAleatorios;//finalmente aqui retona los nombres aleatorios sin repetir
 
-
-}
-
-string GenerarNombreAleatorio(){
-
-    vector<string> nombres = {"Carlos", "Maria", "Juan", "Ana", "Luis", "Elena", "Pedro", "Carmen", "Jose", "Sofia"};
-    vector<string> apellidos = {"Gonzalez", "Fernandez", "Lopez", "Martinez", "Rodriguez", "Perez", "Sanchez", "Diaz", "Vega", "Ruiz"};
-
-    return nombres[rand()%nombres.size()]+ " "+apellidos[rand()%apellidos.size()];
 
 }
 
@@ -155,7 +149,6 @@ void ConfigurarParametrosIniciales()
             opcion=NumeroValido("\nSeleccione una fruta para agregar:\n"
                                          "1. Limon\n2. Naranja\n3. Piña\n4. Sandia\n5. Fresa\n6. Tamarindo\n7. Coco\n8. Terminar\n"
                                     "Opcion: ", 1, 8);
-            cin >> opcion;
 
             if (opcion==8) break;
 
@@ -163,14 +156,13 @@ void ConfigurarParametrosIniciales()
             precio=NumeroValido("Ingrese el precio por unidad de la fruta: ", 1, 100);
 
             inventarioFrutas.push_back(Frutas(static_cast<Frutas::Fruta>(opcion),precio,cantidad));
-            cout<<"Se agregaron "<<cantidad<<"unidades de la fruta seleccionada aun precio de $";
+            cout<<"Se agregaron "<<cantidad<<" unidades de la fruta seleccionada aun precio de $";
 
           
         }
     }
 
     respuesta2=obtenerRespuestaSN("\nEl capital inicial de la planta es de $10,000. ¿Desea agregar mas dinero? (s/n): ");
-    cin >> respuesta;
     if (respuesta=='s'||respuesta=='S')
     {
 
@@ -251,7 +243,7 @@ void ConfigurarParametrosIniciales()
         for (const auto &fruta : inventarioFrutas)
         {
 
-            cout << " " << fruta.getNombre() << " - Cantidad: " << fruta.getCosto() << "\n";
+            cout << " " << fruta.getNombre() << " - Cantidad: " << fruta.getCantidad() << "\n";
 
         }
     }
@@ -294,7 +286,7 @@ void MenuPrincipal()
         if (opcion == 1)
         {
 
-            //AGREGAR FUNCION
+            ConfigurarParametrosIniciales();
 
         }else if (opcion == 2){
 

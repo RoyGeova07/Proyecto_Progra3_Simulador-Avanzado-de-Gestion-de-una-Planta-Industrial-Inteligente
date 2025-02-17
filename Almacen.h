@@ -1,7 +1,7 @@
 #ifndef ALMACEN_H
 #define ALMACEN_H
-#include <Producto.h>
-#include <Frutas.h>
+#include "Producto.h"
+#include "Frutas.h"
 #include <vector>
 
 class Almacen

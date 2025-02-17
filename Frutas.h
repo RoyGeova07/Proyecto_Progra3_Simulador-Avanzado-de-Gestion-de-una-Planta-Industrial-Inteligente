@@ -56,6 +56,7 @@ public:
     }
 
     double getCosto() const {return costo;}
+    int getCantidad() const {return cantidad;}
 
     void MostrarInfo() const {
 

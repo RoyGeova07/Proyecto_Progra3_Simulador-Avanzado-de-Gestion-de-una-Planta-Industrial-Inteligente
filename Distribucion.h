@@ -1,6 +1,6 @@
 #ifndef DISTRIBUCION_H
 #define DISTRIBUCION_H
-#include <Producto.h>
+#include "Producto.h"
 
 class Distribucion
 {
@@ -37,4 +37,4 @@ public:
     }
 };
 
-#endif DISTRIBUCION_H
+#endif //DISTRIBUCION_H

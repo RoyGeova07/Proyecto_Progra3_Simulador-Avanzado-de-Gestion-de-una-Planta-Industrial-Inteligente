@@ -1,6 +1,6 @@
 #ifndef OPERARIO_H
 #define OPERARIO_H
-#include <Empleado.h>
+#include "Empleado.h"
 
 class EmpleadoOperario : public Empleado
 {

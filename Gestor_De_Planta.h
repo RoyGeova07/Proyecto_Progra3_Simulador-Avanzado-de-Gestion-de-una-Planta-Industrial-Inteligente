@@ -6,9 +6,9 @@
 #include <string>
 #include <string.h>
 #include "Frutas.h"
-#include <Producto.h>
-#include <Maquina.h>
-#include <Empleado.h>
+#include "Producto.h"
+#include "Maquina.h"
+#include "Empleado.h"
 
 
 class Gestor_De_Planta
@@ -30,7 +30,6 @@ public:
 
     void listarEmpleados() const;
     void listarProductos() const;
-    void listarMaquinas() const;
 
     void eliminarEmpleado(int id);
     void eliminarProducto(const std::string &nombre);

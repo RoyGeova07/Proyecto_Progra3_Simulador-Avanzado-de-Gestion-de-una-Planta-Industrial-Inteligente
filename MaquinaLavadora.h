@@ -1,6 +1,6 @@
 #ifndef LAVADORA_H
 #define LAVADORA_H
-#include <Maquina.h>
+#include "Maquina.h"
 
 class MaquinaLavadora : public Maquina {
     public:
