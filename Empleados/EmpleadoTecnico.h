@@ -2,10 +2,10 @@
 #define TECNICO_H
 #include <Empleado.h>
 
-class TecnicoMantenimiento : public Empleado {
+class EmpleadoTecnico : public Empleado {
     public:
 
-        TecnicoMantenimiento(std::string nombre) : Empleado(nombre, "Tecnico de Mantenimiento") {}
+        EmpleadoTecnico(std::string nombre) : Empleado(nombre, "Tecnico de Mantenimiento") {}
 
     };
     

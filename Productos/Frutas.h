@@ -50,7 +50,7 @@ public:
         case Tamarindo: return "Tamarindo";
         case Coco: return "Coco";
         
-        default: return "a";
+        default: return "Desconocido";
         }
 
     }

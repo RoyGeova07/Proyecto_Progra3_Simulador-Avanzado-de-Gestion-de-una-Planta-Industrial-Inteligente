@@ -2,12 +2,18 @@
 #define OPERARIO_H
 #include <Empleado.h>
 
-class Operario : public Empleado
+class EmpleadoOperario : public Empleado
 {
 public:
 
 
-    Operario(std::string nombre) : Empleado(nombre, "Operario") {}
+    EmpleadoOperario(std::string nombre) : Empleado(nombre, "EmpleadoOperario") {}
+
+    void RealizarTarea() override{
+
+        std::cout<<nombre<<" esta realizando la tarea de generar los reportes de la planta.\n";
+
+    }
 
 
 };

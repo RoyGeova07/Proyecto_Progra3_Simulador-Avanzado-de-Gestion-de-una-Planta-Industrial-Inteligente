@@ -14,7 +14,7 @@ protected:
     static int contadorID;
 
 public:
-    Empleado(const String &nombre, const String &cargo)
+    Empleado(const std::string &nombre, const std::string &cargo)
         : nombre(nombre), cargo(cargo), id(++contadorID) {} // Asigna un ID unico automaticamente
 
     virtual void MostrarInfo() const

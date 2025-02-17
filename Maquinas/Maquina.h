@@ -10,7 +10,7 @@ using String = std::string;
 class Maquina
 {
 private:
-    static int contadorID; // este es un contador estatico para generar IDs unicos
+
     int id;
     String nombre;
     String tipo;
@@ -19,7 +19,7 @@ private:
 public:
     Maquina(std::string nombre) : nombre(nombre), operativa(true)
     {
-        id = ++contadorID;
+     
     }
 
     void Encender() { this->operativa = true; }
@@ -36,13 +36,12 @@ public:
     String getTipo() const { return tipo; }
     bool isEnUso() const { return operativa; }
 
-    void setNombre(const String &Nuevonombre) { nombre = Nuevonombre; }
-    void setTipo(const String &NuevoTipo) { tipo = NuevoTipo; }
-    void setEnUso(bool estado) { operativa = estado; }
+    void setNombre(const String &Nuevonombre) { this->nombre = Nuevonombre; }
+    void setTipo(const String &NuevoTipo) {  this->tipo = NuevoTipo; }
+    void setEnUso(bool estado) {  this->operativa = estado; }
 
     virtual ~Maquina() {}
 };
 
-int Maquina::contadorID = 0;
 
 #endif // MAQUINA_H

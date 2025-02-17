@@ -3,12 +3,18 @@
 #include <Empleado.h>
 
 
-class Supervisor : public Empleado
+class EmpleadoSuperVisor : public Empleado
 {
 public:
 
 
-    Supervisor(std::string nombre) : Empleado(nombre, "Supervisor") {}
+    EmpleadoSuperVisor(std::string nombre) : Empleado(nombre, "EmpleadoSuperVisor") {}
+
+    void RealizarTarea() override{
+
+        std::cout<<nombre<<" esta realizando la tarea de supervisar las maquinas.\n";
+
+    }
 
 
 };

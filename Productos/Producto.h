@@ -25,7 +25,7 @@ public:
     void mostrarInfo() const
     {
 
-        std::cout << "Producto: " << nombre << " | Cantidad: " << cantidad<< " | Precio: " << precio << "\n";
+        std::cout << "Jugo: " << nombre << " | Cantidad: " << cantidad<< " | Precio: " << precio << "\n";
         
     }
 
@@ -35,8 +35,8 @@ public:
     int getCantidadProducida() const { return cantidad; }
 
     // Setters (const & en string para evitar copias innecesarias)
-    void setNombre(const String &nuevoNombre) { nombre = nuevoNombre; }
-    void setCantidadProducida(int nuevaCantidad) { cantidad = nuevaCantidad; }
+    void setNombre(const String &nuevoNombre) { this->nombre = nuevoNombre; }
+    void setCantidadProducida(int nuevaCantidad) { this->cantidad = nuevaCantidad; }
 
 };
 

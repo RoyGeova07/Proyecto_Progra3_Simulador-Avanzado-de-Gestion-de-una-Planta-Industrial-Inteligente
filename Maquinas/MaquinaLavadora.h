@@ -2,9 +2,11 @@
 #define LAVADORA_H
 #include <Maquina.h>
 
-class Lavadora : public Maquina {
+class MaquinaLavadora : public Maquina {
     public:
-        Lavadora() : Maquina("Lavadora de Frutas") {}
+    
+        MaquinaLavadora() : Maquina("MaquinaLavadora de Frutas") {}
+
     };
 
 #endif //LAVADORA_H

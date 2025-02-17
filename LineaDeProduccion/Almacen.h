@@ -2,12 +2,12 @@
 #define ALMACEN_H
 #include <Producto.h>
 #include <Frutas.h>
+#include <vector>
 
 class Almacen
 {
 private:
     std::vector<Frutas> frutita;
-    Frutas tipo;
     std::vector<Producto> productos;
 
 public:
@@ -20,15 +20,17 @@ public:
         
     }
 
-    void AgregarFrutas(Frutas nombre, double costo,int cantidad){
+    void AgregarFrutas(Frutas::Fruta tipo, double costo,int cantidad){
 
-        //frutita.push_back(Frutas(nombre,costo,cantidad));
+        frutita.push_back(Frutas(tipo,costo,cantidad));
 
     }
 
     void agregarProducto(const Producto &producto)
     {
+
         productos.push_back(producto);
+        
     }
 
     void agregarProducto(const std::string& nombre,int cantidad,const std::string  &tipoEnvase,double precio){
