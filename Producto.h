@@ -33,6 +33,9 @@ public:
 
     std::string getNombre() const { return nombre; }
     int getCantidadProducida() const { return cantidad; }
+    int getCantidad() const {return cantidad;}
+    double getPrecio() const {return precio;}
+
 
     // Setters (const & en string para evitar copias innecesarias)
     void setNombre(const std::string &nuevoNombre) { this->nombre = nuevoNombre; }

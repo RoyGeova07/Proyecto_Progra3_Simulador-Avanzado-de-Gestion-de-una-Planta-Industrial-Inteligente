@@ -2,6 +2,8 @@
 #define DISTRIBUCION_H
 #include "Producto.h"
 
+
+//aqui se maneja el proceso de pedidos, que se dara aleatorioamente
 class Distribucion
 {
 private:

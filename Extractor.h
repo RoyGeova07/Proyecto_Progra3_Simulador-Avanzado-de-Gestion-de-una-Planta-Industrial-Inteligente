@@ -5,7 +5,9 @@
 class Extractor : public Maquina
 {
 public:
+
     Extractor() : Maquina("Extractor de Jugo") {}
+    
 };
 
 #endif //EXTRACTOR_H

@@ -15,6 +15,7 @@
 #include "Pasteurizador.h"
 #include "Extractor.h"
 #include "Frutas.h"
+#include "Gestor_De_Planta.h"
 #include <set>
 
 
@@ -101,7 +102,7 @@ char obtenerRespuestaSN(string mensaje) {
         cin >> respuesta;
         respuesta = tolower(respuesta);  
         if (respuesta == 's' || respuesta == 'n') return respuesta;
-        cout << "Entrada invalida. Ingrese 's' para si o 'n' para no.\n";
+        cout << "Entrada invalida. Ingrese 's' para si o 'n' para no.\n";   
 
     }
 
@@ -163,6 +164,7 @@ void ConfigurarParametrosIniciales()
     }
 
     respuesta2=obtenerRespuestaSN("\nEl capital inicial de la planta es de $10,000. ¿Desea agregar mas dinero? (s/n): ");
+    cin>>respuesta;
     if (respuesta=='s'||respuesta=='S')
     {
 
@@ -215,7 +217,6 @@ void ConfigurarParametrosIniciales()
     //copia, si no una referencia al elemento del vector
     for(auto &maquina : maquinas){ 
 
-
         bool estado=rand()%2;//50% de probabilidad de estar operativa o no
         maquina->setEnUso(estado);
 
@@ -263,6 +264,48 @@ void ConfigurarParametrosIniciales()
         cout<<" "<<maquinasfab->getNombre()<<" - Estado: "<<(maquinasfab->isEnUso()? "En BUEN estado" : "En MAL estado")<<"\n";
 
     }
+    
+
+}
+
+void MiniMenu(){
+
+    int opcionmini;
+
+    cout<<"1. Listar Empleados";
+    cout<<"2. Eliminar Empleados";
+    cout<<"3. Listar Frutas";
+    cout<<"4. Eliminar Frutas";
+    cout<<"5. Volver menu Principal";
+
+    if (opcionmini==1)
+    {
+        
+
+
+    }
+    else if (opcionmini==2){
+
+
+        
+    }
+    else if(opcionmini==3){
+    
+        
+    }else if(opcionmini==4){
+
+
+
+    }else if(opcionmini==5){
+
+
+    }else{
+
+        cout<<"Opcion invalida";
+
+    }
+    
+    
     
 
 }
