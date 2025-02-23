@@ -15,8 +15,6 @@ Gestor_De_Planta::~Gestor_De_Planta(){
     }
     empleado.clear();
 
-    
-
 
 }
 
@@ -80,7 +78,7 @@ void Gestor_De_Planta::VerEstadoMaquina() const {
 
     cout << "\n--- Estado de las Maquinas ---\n";
     for (const auto &maquina : maquinas) {
-        cout << "Máquina: " << maquina->getNombre()
+        cout << "Maquina: " << maquina->getNombre()
              << " | Estado: " << (maquina->isEnUso() ? "Operativa" : "No operativa") << endl;
     }
 }

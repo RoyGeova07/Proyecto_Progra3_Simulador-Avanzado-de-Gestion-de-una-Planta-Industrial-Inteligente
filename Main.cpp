@@ -17,37 +17,83 @@
 #include "Frutas.h"
 #include "Gestor_De_Planta.h"
 #include <set>
+#include <sstream>
 
 
 
 using namespace std;
 
-int NumeroValido(string mensaje,int minimo,int maximo){
+int NumeroValido(string mensaje, int minimo, int maximo) {
 
     int valor;
-    while (true)
-    {
+    string entrada;
+    char extra;
+    while (true) {
 
-        cout<<mensaje;
-        cin>>valor;
+        cout << mensaje;
+        getline(cin, entrada);
+        istringstream iss(entrada);
 
-        if (cin.fail() ||valor<minimo||valor>maximo)
-        {
-            
-            cin.clear();
-            cin.ignore(10000,'\n');
-            cout<<"Error: Entrada no valida. Intente de nuevo: \n";
+        //aqui se extraer el entero
+        if (!(iss >> valor)) {
 
-        }else{
-
-            return valor;
+            cout << "Error: Entrada no valida. Intente de nuevo.\n";
+            continue;
 
         }
-        
+        //aqui verificamos que no haya caracteres adicionales (por ejemplo, el ".4" de "3.4")
+
+        if (iss>>extra) {
+
+            cout<<"Error: Entrada no valida. Intente de nuevo.\n";
+            continue;
+
+        }
+        if (valor<minimo||valor>maximo) {
+
+            cout<<"Error: Entrada fuera de rango. Intente de nuevo.\n";
+            continue;
+
+        }
+        return valor;
 
     }
-    
+}
 
+template <typename T>
+T NumeroTemplate(string mensaje, T minimo, T Maximo) {
+
+    T valor;
+    string auxiliar;
+    char extra;
+    while (true) {
+
+        cout << mensaje;
+        getline(cin, auxiliar);
+        istringstream iss(auxiliar);
+
+        //aqui se  extrae el valor del tipo T
+        if (!(iss>>valor)) {
+
+            cout << "Error: Entrada no valida. Intente de nuevo.\n";
+            continue;
+
+        }
+        // Verificamos si quedaron caracteres adicionales usando 'iss' y no 'cin'
+        if (iss>>extra) {
+
+            cout<<"Error: Entrada no valida. Intente de nuevo.\n";
+            continue;
+
+        }
+        if (valor<minimo||valor>Maximo) {
+
+            cout << "Error: Entrada fuera de rango. Intente de nuevo.\n";
+            continue;
+
+        }
+        return valor;
+    }
 }
 
 vector<string> ObtenerListaDeNombres() {
@@ -95,12 +141,14 @@ vector<string> ObtenerNombresAleatorios(int cantidad){
 
 char obtenerRespuestaSN(string mensaje) {
 
+    string auxiliar;
     char respuesta;
     while (true) {
 
         cout << mensaje;
-        cin >> respuesta;
-        respuesta = tolower(respuesta);  
+        getline(cin,auxiliar);
+        if(auxiliar.empty())continue;
+        respuesta = tolower(auxiliar[0]);  
         if (respuesta == 's' || respuesta == 'n') return respuesta;
         cout << "Entrada invalida. Ingrese 's' para si o 'n' para no.\n";   
 
@@ -132,7 +180,6 @@ void ConfigurarParametrosIniciales()
 
     int opcion, cantidad;
     double precio;
-    char respuesta2;
     string NombreEmpleado;
 
 
@@ -154,7 +201,7 @@ void ConfigurarParametrosIniciales()
             if (opcion==8) break;
 
             cantidad=NumeroValido("Ingrese la cantidad de la fruta: ", 1, 1000);
-            precio=NumeroValido("Ingrese el precio por unidad de la fruta: ", 1, 100);
+            precio=NumeroTemplate("Ingrese el precio por unidad de la fruta: ", 1.0, 100.0);
 
             inventarioFrutas.push_back(Frutas(static_cast<Frutas::Fruta>(opcion),precio,cantidad));
             cout<<"Se agregaron "<<cantidad<<" unidades de la fruta "<<opcion<<" aun precio de $"<<precio;
@@ -163,12 +210,11 @@ void ConfigurarParametrosIniciales()
         }
     }
 
-    respuesta2=obtenerRespuestaSN("\nEl capital inicial de la planta es de $10,000. ¿Desea agregar mas dinero? (s/n): ");
-    cin>>respuesta;
+    respuesta=obtenerRespuestaSN("\nEl capital inicial de la planta es de $10,000. ¿Desea agregar mas dinero? (s/n): ");
     if (respuesta=='s'||respuesta=='S')
     {
 
-        capitalAdicional=NumeroValido("Ingrese la cantidad a adicionar: ",1,50000);
+        capitalAdicional=NumeroTemplate("Ingrese la cantidad a adicionar: ",1.0,50000.0);
         capitalInicial+=capitalAdicional;
 
     }

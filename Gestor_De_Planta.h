@@ -33,8 +33,6 @@ public:
     void listarProductos() const;
     void ListarFrutas() const;
     void VerEstadoMaquina() const;
-
-
     void eliminarEmpleado(int id);
     
     
