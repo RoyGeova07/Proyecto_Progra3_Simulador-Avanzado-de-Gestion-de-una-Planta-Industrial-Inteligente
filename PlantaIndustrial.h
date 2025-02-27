@@ -9,7 +9,7 @@
 
 class PlantaIndustrial
 {
-private:
+public:
     
     int cantidadEmpleados;
     int Dinero_De_la_Planta;
