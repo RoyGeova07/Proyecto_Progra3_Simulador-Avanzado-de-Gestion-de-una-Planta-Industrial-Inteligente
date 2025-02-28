@@ -27,7 +27,7 @@ void Pasteurizador::pasteurizar() {
     }
     if(!pasteurizadorOperativo){
 
-        logProgreso.push_back("[pasteurizar] Falló: No hay pasteurizador operativo.");
+        logProgreso.push_back("[pasteurizar] Fallo: No hay pasteurizador operativo.");
         return;
 
     }
