@@ -18,10 +18,17 @@
 #include "Gestor_De_Planta.h"
 #include <set>
 #include <sstream>
+#include <chrono>
+
 
 
 
 using namespace std;
+
+vector<Frutas> inventarioFrutas;
+vector<Empleado*> empleados;//se usa como tipo puntero porque se usara polimorfismo, tambien para no 
+//perder informacion, facilita el gestion dinamica de memoria
+vector<Maquina*> maquinas;
 
 int NumeroValido(string mensaje, int minimo, int maximo) {
 
@@ -35,7 +42,7 @@ int NumeroValido(string mensaje, int minimo, int maximo) {
         istringstream iss(entrada);
 
         //aqui se extraer el entero
-        if (!(iss >> valor)) {
+        if (!(iss>>valor)) {
 
             cout << "Error: Entrada no valida. Intente de nuevo.\n";
             continue;
@@ -61,32 +68,32 @@ int NumeroValido(string mensaje, int minimo, int maximo) {
 }
 
 template <typename T>
-T NumeroTemplate(string mensaje, T minimo, T Maximo) {
+T NumeroTemplate(string mensaje, T minimo, T Maximo){
 
     T valor;
     string auxiliar;
     char extra;
-    while (true) {
+    while (true){
 
         cout << mensaje;
         getline(cin, auxiliar);
         istringstream iss(auxiliar);
 
         //aqui se  extrae el valor del tipo T
-        if (!(iss>>valor)) {
+        if(!(iss>>valor)){
 
             cout << "Error: Entrada no valida. Intente de nuevo.\n";
             continue;
 
         }
         // Verificamos si quedaron caracteres adicionales usando 'iss' y no 'cin'
-        if (iss>>extra) {
+        if(iss>>extra){
 
             cout<<"Error: Entrada no valida. Intente de nuevo.\n";
             continue;
 
         }
-        if (valor<minimo||valor>Maximo) {
+        if(valor<minimo||valor>Maximo){
 
             cout << "Error: Entrada fuera de rango. Intente de nuevo.\n";
             continue;
@@ -96,8 +103,9 @@ T NumeroTemplate(string mensaje, T minimo, T Maximo) {
     }
 }
 
-vector<string> ObtenerListaDeNombres() {
+vector<string> ObtenerListaDeNombres(){
     return {
+
         "Carlos Gonzalez", "Maria Lopez", "Juan Martinez", "Ana Rodriguez", "Luis Perez",
         "Elena Sanchez", "Pedro Diaz", "Carmen Vega", "Jose Ruiz", "Sofia Fernandez",
         "Andres Castro", "Raquel Navarro", "Diego Mendoza", "Victoria Jimenez", "Fernando Rojas",
@@ -108,6 +116,7 @@ vector<string> ObtenerListaDeNombres() {
         "Adriana Cardenas", "Victor Solis", "Daniela Campos", "Ricardo Espinoza", "Margarita Montoya",
         "Emilio Nunez", "Estefania Tapia", "Raul Olivares", "Patricia Bermudez", "Julian Serrano",
         "Melissa Duarte", "Alberto Valenzuela", "Lorena Meza", "Francisco Arce", "Renata Ibarra"
+        
     };
 }
 
@@ -139,17 +148,17 @@ vector<string> ObtenerNombresAleatorios(int cantidad){
 
 }
 
-char obtenerRespuestaSN(string mensaje) {
+char obtenerRespuestaSN(string mensaje){
 
     string auxiliar;
     char respuesta;
-    while (true) {
+    while(true){
 
-        cout << mensaje;
+        cout<<mensaje;
         getline(cin,auxiliar);
         if(auxiliar.empty())continue;
         respuesta = tolower(auxiliar[0]);  
-        if (respuesta == 's' || respuesta == 'n') return respuesta;
+        if(respuesta=='s'||respuesta=='n')return respuesta;
         cout << "Entrada invalida. Ingrese 's' para si o 'n' para no.\n";   
 
     }
@@ -162,15 +171,11 @@ void ConfigurarParametrosIniciales()
     srand(time(0));//aqui se inicializa el random
 
     string nombrePlanta;
-    double capitalInicial = 10000;
+    double capitalInicial=10000;
     double capitalAdicional;
-    vector<Frutas> inventarioFrutas;
-    vector<Empleado*> empleados;//se usa como tipo puntero porque se usara polimorfismo, tambien para no 
-    //perder informacion, facilita el gestion dinamica de memoria
-    vector<Maquina*> maquinas;
     int cantidadEmpleados;
 
-    int aguaLitros = 100; // Agua por defecto
+    int aguaLitros=100; // Agua por defecto
     char respuesta;
     int tipoEmpleado;
 
@@ -198,7 +203,7 @@ void ConfigurarParametrosIniciales()
                                          "1. Limon\n2. Naranja\n3. Piña\n4. Sandia\n5. Fresa\n6. Tamarindo\n7. Coco\n8. Terminar\n"
                                     "Opcion: ", 1, 8);
 
-            if (opcion==8) break;
+            if(opcion==8)break;
 
             cantidad=NumeroValido("Ingrese la cantidad de la fruta: ", 1, 1000);
             precio=NumeroTemplate("Ingrese el precio por unidad de la fruta: ", 1.0, 100.0);
@@ -211,7 +216,7 @@ void ConfigurarParametrosIniciales()
     }
 
     respuesta=obtenerRespuestaSN("\nEl capital inicial de la planta es de $10,000. ¿Desea agregar mas dinero? (s/n): ");
-    if (respuesta=='s'||respuesta=='S')
+    if(respuesta=='s'||respuesta=='S')
     {
 
         capitalAdicional=NumeroTemplate("Ingrese la cantidad a adicionar: ",1.0,50000.0);
@@ -224,7 +229,7 @@ void ConfigurarParametrosIniciales()
 
     vector<string> nombresGenerados=ObtenerNombresAleatorios(cantidadEmpleados);
 
-    for (int i = 0; i < cantidadEmpleados; i++)
+    for(int i=0;i<cantidadEmpleados;i++)
     {
         
         NombreEmpleado=nombresGenerados[i];
@@ -234,7 +239,7 @@ void ConfigurarParametrosIniciales()
         if (tipoEmpleado==0)
         {
             
-            NuevoEmpleado = new EmpleadoTecnico(NombreEmpleado);
+            NuevoEmpleado=new EmpleadoTecnico(NombreEmpleado);
             NuevoEmpleado->setSalario(2500);
 
         }else if (tipoEmpleado==1){
@@ -280,31 +285,34 @@ void ConfigurarParametrosIniciales()
     // MOSTRAR EL ESTADO DE LAS MAQUINAS
 
     cout << "\nFrutas en inventario:\n";
-    if (inventarioFrutas.empty())
+    if(inventarioFrutas.empty())
     {
 
         cout << "No se agregaron frutas.\n";
 
     }else{
 
-        for (const auto &fruta : inventarioFrutas)
+        for(const auto &fruta : inventarioFrutas)
         {
 
-            cout << " " << fruta.getNombre() << " - Cantidad: " << fruta.getCantidad() << "\n";
+            cout << " " <<fruta.getNombre()<<" - Cantidad: "<<fruta.getCantidad()<<"\n";
 
         }
     }
 
     //aqui se muestran los empleados contratados
     cout<<"\nEmpleados contratados:\n ";
-    for (const auto &empleadosfab : empleados)
+    for(const auto &empleadosfab : empleados)
     {
         
         empleadosfab->MostrarInfo();
 
     }
 
-    cout<<"\nEstado de las maquins:\n ";
+   
+    cout<<"\nEstado de las maquinaaaaaas:\n ";
+    cout<<"\nMaquinas agregadas\n";
+    cout<<"Total: "<<maquinas.size()<<"\n";
     for(const auto &maquinasfab : maquinas ){
 
         cout<<" "<<maquinasfab->getNombre()<<" - Estado: "<<(maquinasfab->isEnUso()? "En BUEN estado" : "En MAL estado")<<"\n";
@@ -316,41 +324,59 @@ void ConfigurarParametrosIniciales()
 
 void MiniMenu(){
 
-    int opcionmini;
-
-    cout<<"1. Listar Empleados";
-    cout<<"2. Eliminar Empleados";
-    cout<<"3. Listar Frutas";
-    cout<<"4. Eliminar Frutas";
-    cout<<"5. Volver menu Principal";
-
-    if (opcionmini==1)
+    int opcionmini=0;
+    //Gestor_De_Planta gestor; no me ejecuta la instancia por el compilador 
+  
+    while (opcionmini!=5)
     {
         
-
-
-    }
-    else if (opcionmini==2){
-
-
+        cout<<"1. Listar Planta";
+        cout<<"2. Eliminar Empleados";
+        cout<<"3. Espacio de Maquinas";
+        cout<<"4. Comprar Frutas";
+        cout<<"5. Ver pedidos";
+        cout<<"6. Volver";
+        cout<<"Ingrese una opcion: ";
+        cin>>opcionmini;
         
-    }
-    else if(opcionmini==3){
     
+        if(opcionmini==1)
+        {
+            
+            //listar empleados contratados
+            cout<<"\nEmpleados activos:\n ";
+            for(const auto &empleadosfab : empleados)
+            {
         
-    }else if(opcionmini==4){
+                empleadosfab->MostrarInfo();
 
+            }
 
+    
+        }else if (opcionmini==2){
+    
+            //AGREGAR FUNCION
+            
+        }else if(opcionmini==3){
+        
+            //AGREGAR FUNCION
+            
+        }else if(opcionmini==4){
+    
+            //AGREGAR FUNCION
+    
+        }else if(opcionmini==5){
+    
+            //AGREGAR FUNCION
 
-    }else if(opcionmini==5){
-
-
-    }else{
-
-        cout<<"Opcion invalida";
+        }else{
+    
+            cout<<"Opcion invalida";
+    
+        }
 
     }
-    
+        
     
     
 
@@ -379,7 +405,8 @@ void MenuPrincipal()
 
         }else if (opcion == 2){
 
-            //AGREGAR FUNCION
+            MiniMenu();
+           
 
         }else if (opcion == 3){
 

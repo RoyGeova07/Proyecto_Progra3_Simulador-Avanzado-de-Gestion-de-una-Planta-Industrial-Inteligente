@@ -41,7 +41,6 @@ public:
 
 };
 
-// aqui inicializacion del contador estatico
-int Empleado::contadorID = 0;
+
 
 #endif // EMPLEADO_H

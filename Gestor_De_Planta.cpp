@@ -1,12 +1,14 @@
 #include <iostream>
-#include <Gestor_De_Planta.h>
-#include <Producto.h>
+#include "Gestor_De_Planta.h"
+#include "Producto.h"
 #include <vector>
 
 using namespace std;
 
 //aqui se usa un destructor para liberar la memmoria de los vectores de puntero
 Gestor_De_Planta::~Gestor_De_Planta(){
+
+
 
     for(auto emp : empleado){
 
@@ -25,6 +27,7 @@ void Gestor_De_Planta::listarEmpleados()const {
         
         cout<<"NO HAY EMPLEADOS EN LA PLANTA\n";
         return;
+
     }
 
 
@@ -92,8 +95,8 @@ void Gestor_De_Planta::eliminarEmpleado(int id) {
         {
             
             cout<<"Empleado "<<(*limpiar)->getNombre()<<" eliminado.\n";
-            delete *limpiar;
-            empleado.erase(limpiar);
+            delete *limpiar;//delete aqui para eliminar memoria 
+            empleado.erase(limpiar);//aqui quitamos el vector
             return ;
 
         }
@@ -104,3 +107,10 @@ void Gestor_De_Planta::eliminarEmpleado(int id) {
     cout<<"No se encontro ningun empleado con ID"<<id<<".\n";
 
 }
+
+void Gestor_De_Planta::generarReporte()const{
+
+    //AQUI FUNCIONAR MEDIANTE ARCHIVOSSSSS
+
+}
+

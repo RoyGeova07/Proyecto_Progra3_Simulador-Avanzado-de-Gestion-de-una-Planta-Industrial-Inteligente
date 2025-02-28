@@ -1,0 +1,49 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Compilar Todo",
+            "type": "shell",
+            "command": "g++",
+            "args": [
+                "Main.cpp",
+                "Extractor.cpp",
+                "Gestor_De_Planta.cpp",
+                "MaquinaLavadora.cpp",
+                "Pasteurizador.cpp",
+                "Empleado.cpp",
+                "-o",
+                "Main.exe"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true   // ✅ Esto hace que "Compilar Todo" sea la tarea por defecto
+            },
+            "problemMatcher": [],
+            "detail": "Compila todos los archivos del proyecto en un solo ejecutable Main.exe."
+        },
+        {
+            "type": "cppbuild",
+            "label": "C/C++: g++.exe compilar archivo activo",
+            "command": "C:\\msys645\\ucrt64\\bin\\g++.exe",
+            "args": [
+                "-fdiagnostics-color=always",
+                "-g",
+                "${file}",
+                "-o",
+                "${fileDirname}\\${fileBasenameNoExtension}.exe"
+            ],
+            "options": {
+                "cwd": "${fileDirname}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": false  // ✅ Ya no es la predeterminada
+            },
+            "detail": "Tarea generada por el depurador."
+        }
+    ]
+}
