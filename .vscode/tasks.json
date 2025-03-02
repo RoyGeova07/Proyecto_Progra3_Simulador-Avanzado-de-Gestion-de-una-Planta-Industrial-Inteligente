@@ -12,12 +12,13 @@
                 "MaquinaLavadora.cpp",
                 "Pasteurizador.cpp",
                 "Empleado.cpp",
+                "EmpleadoTecnico.cpp",
                 "-o",
                 "Main.exe"
             ],
             "group": {
                 "kind": "build",
-                "isDefault": true   // ✅ Esto hace que "Compilar Todo" sea la tarea por defecto
+                "isDefault": true   //  Esto hace que "Compilar Todo" sea la tarea por defecto
             },
             "problemMatcher": [],
             "detail": "Compila todos los archivos del proyecto en un solo ejecutable Main.exe."
@@ -41,7 +42,7 @@
             ],
             "group": {
                 "kind": "build",
-                "isDefault": false  // ✅ Ya no es la predeterminada
+                "isDefault": false  //  Ya no es la predeterminada
             },
             "detail": "Tarea generada por el depurador."
         }

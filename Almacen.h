@@ -39,24 +39,6 @@ public:
 
     }
 
-    void mostrarStock() const
-    {
-        std::cout << "\n--- Stock de frutas  ---\n";
-        for (const auto &fruts : frutita)
-        {
-
-           fruts.MostrarInfo();
-
-        }
-        //almacen de de los jugos...
-        std::cout << "\n--- Stock de Productos ---\n";
-        for (const auto &producto : productos)
-        {
-
-            producto.mostrarInfo();
-            
-        }
-    }
 };
 
 #endif ALMACEN_H

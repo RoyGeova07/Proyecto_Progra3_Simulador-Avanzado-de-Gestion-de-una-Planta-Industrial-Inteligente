@@ -24,6 +24,8 @@ public:
             
     }
 
+    
+
     virtual void RealizarTarea() = 0; // funciona pura (obligatorio en subclases)
     virtual ~Empleado() = default;    // Destructor virtual
 

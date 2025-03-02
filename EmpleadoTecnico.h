@@ -1,6 +1,11 @@
 #ifndef TECNICO_H
 #define TECNICO_H
 #include "Empleado.h"
+#include <thread>
+#include <mutex>
+#include <vector>
+#include <string>
+#include "Maquina.h"
 
 class EmpleadoTecnico : public Empleado {
     public:
@@ -12,6 +17,8 @@ class EmpleadoTecnico : public Empleado {
             std::cout<<nombre<<" esta realizando la tarea de mantenimiento tecnico.\n";
 
         }
+
+        static void RepararMaquina(Maquina& maquina, const std::vector<EmpleadoTecnico*>& tecnicos);
 
     };
     

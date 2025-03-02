@@ -57,10 +57,16 @@ public:
 
     double getCosto() const {return costo;}
     int getCantidad() const {return cantidad;}
+    
+    void setCantidad(int nuevaCantidad) {
+        
+        this->cantidad=nuevaCantidad;
+        
+    }
 
     void MostrarInfo() const {
 
-        std::cout<<"Fruta: "<<getNombre()<<", Costo $ "<<costo<<"\n";
+        std::cout<<"Fruta: "<<getNombre()<<", Unidades $ "<<cantidad<<"\n";
 
     }
 

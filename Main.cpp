@@ -19,53 +19,13 @@
 #include <set>
 #include <sstream>
 #include <chrono>
-
-
+#include "NumeroValido.h"
 
 
 using namespace std;
 
-vector<Frutas> inventarioFrutas;
-vector<Empleado*> empleados;//se usa como tipo puntero porque se usara polimorfismo, tambien para no 
-//perder informacion, facilita el gestion dinamica de memoria
-vector<Maquina*> maquinas;
+bool ParametrosConfigurados=false;
 
-int NumeroValido(string mensaje, int minimo, int maximo) {
-
-    int valor;
-    string entrada;
-    char extra;
-    while (true) {
-
-        cout << mensaje;
-        getline(cin, entrada);
-        istringstream iss(entrada);
-
-        //aqui se extraer el entero
-        if (!(iss>>valor)) {
-
-            cout << "Error: Entrada no valida. Intente de nuevo.\n";
-            continue;
-
-        }
-        //aqui verificamos que no haya caracteres adicionales (por ejemplo, el ".4" de "3.4")
-
-        if (iss>>extra) {
-
-            cout<<"Error: Entrada no valida. Intente de nuevo.\n";
-            continue;
-
-        }
-        if (valor<minimo||valor>maximo) {
-
-            cout<<"Error: Entrada fuera de rango. Intente de nuevo.\n";
-            continue;
-
-        }
-        return valor;
-
-    }
-}
 
 template <typename T>
 T NumeroTemplate(string mensaje, T minimo, T Maximo){
@@ -165,17 +125,70 @@ char obtenerRespuestaSN(string mensaje){
 
 }
 
-void ConfigurarParametrosIniciales()
+void MiniMenuDos(Gestor_De_Planta& gestor){
+
+    int opcion;
+    
+
+    cout<<"\nMenu de maquinas\n";
+    cout<<"1. Maquina Lavadora\n";
+    cout<<"2. Extractor\n";
+    cout<<"3. Pasteurizador\n";
+    cout<<"4. Volver\n";
+    opcion=NumeroValido("Ingrese una opcion: ",1,4);
+
+
+    if (opcion==1)
+    {
+        
+        //aqui buscamos la lavadora que cree en el gestor
+        MaquinaLavadora* lavadora=nullptr;
+
+        for(auto& maquina:gestor.getMaquinas()){
+
+            lavadora=dynamic_cast<MaquinaLavadora*>(maquina);
+            if(lavadora)break;//se encontroooooo
+
+        }
+
+        if(lavadora){
+
+            lavadora->MenuMaquinaLavadora(gestor.getInventarioFrutas(),gestor.getEmpleados());
+
+        }else{
+
+            cout<<"No se encontro la lavadora en el sistema.\n";
+
+        }
+
+
+    }else if (opcion==2){
+        
+
+
+    }else if(opcion==3){
+
+
+
+    }else if(opcion==4){
+
+        return;
+
+    }
+    
+
+}
+
+void ConfigurarParametrosIniciales(Gestor_De_Planta& gestor)
 {
 
     srand(time(0));//aqui se inicializa el random
+    
 
     string nombrePlanta;
-    double capitalInicial=10000;
     double capitalAdicional;
     int cantidadEmpleados;
 
-    int aguaLitros=100; // Agua por defecto
     char respuesta;
     int tipoEmpleado;
 
@@ -185,7 +198,6 @@ void ConfigurarParametrosIniciales()
 
     int opcion, cantidad;
     double precio;
-    string NombreEmpleado;
 
 
     while (true)
@@ -208,7 +220,8 @@ void ConfigurarParametrosIniciales()
             cantidad=NumeroValido("Ingrese la cantidad de la fruta: ", 1, 1000);
             precio=NumeroTemplate("Ingrese el precio por unidad de la fruta: ", 1.0, 100.0);
 
-            inventarioFrutas.push_back(Frutas(static_cast<Frutas::Fruta>(opcion),precio,cantidad));
+            Frutas fruta(Frutas(static_cast<Frutas::Fruta>(opcion),precio,cantidad));
+            gestor.AgregarFruta(fruta);
             cout<<"Se agregaron "<<cantidad<<" unidades de la fruta "<<opcion<<" aun precio de $"<<precio;
 
           
@@ -220,122 +233,90 @@ void ConfigurarParametrosIniciales()
     {
 
         capitalAdicional=NumeroTemplate("Ingrese la cantidad a adicionar: ",1.0,50000.0);
-        capitalInicial+=capitalAdicional;
-
+        
     }
+    gestor.agregarCapital(capitalAdicional);
 
     //aqui se agregan los empleados
     cantidadEmpleados=NumeroValido("\nIngrese la cantidad de empleados a contratar (maximo de planta 50): ",1,50);
 
     vector<string> nombresGenerados=ObtenerNombresAleatorios(cantidadEmpleados);
 
-    for(int i=0;i<cantidadEmpleados;i++)
+    for(const auto& nombre:nombresGenerados)
     {
-        
-        NombreEmpleado=nombresGenerados[i];
+
         tipoEmpleado=rand()%3;
         Empleado* NuevoEmpleado;//Puntero
 
         if (tipoEmpleado==0)
         {
             
-            NuevoEmpleado=new EmpleadoTecnico(NombreEmpleado);
+            NuevoEmpleado=new EmpleadoTecnico(nombre);
             NuevoEmpleado->setSalario(2500);
 
         }else if (tipoEmpleado==1){
          
-            NuevoEmpleado=new EmpleadoSuperVisor(NombreEmpleado);
+            NuevoEmpleado=new EmpleadoSuperVisor(nombre);
             NuevoEmpleado->setSalario(3500);
 
         }else if(tipoEmpleado==2){
 
-            NuevoEmpleado=new EmpleadoOperario(NombreEmpleado);
+            NuevoEmpleado=new EmpleadoOperario(nombre);
             NuevoEmpleado->setSalario(1800);
             
         }
-        
-        empleados.push_back(NuevoEmpleado);// con el pushbac se agrega nuevos elementos
-
+        gestor.AgregarEmpleado(NuevoEmpleado);
+      
     }
 
-    //aqui se confuiguran las maquinas
-    maquinas.push_back(new Extractor());
-    maquinas.push_back(new Pasteurizador());
-    maquinas.push_back(new MaquinaLavadora());
+    MaquinaLavadora* lavadora=new MaquinaLavadora();
+    lavadora->setEnUso(rand()%2==0);
+    gestor.AgregarMaquina(lavadora);
 
-    //aqui se asigna el estado aleatorio si esta bien o mal
-    //auto sirve para la deduccion de autamtica de tipo ejem maquinas, se el "&" porque maquina no es una
-    //copia, si no una referencia al elemento del vector
-    for(auto &maquina : maquinas){ 
-
-        bool estado=rand()%2;//50% de probabilidad de estar operativa o no
-        maquina->setEnUso(estado);
-
-    }
+    //HACER LO MISMO CON LAS 2 MAQUINAS, DESPUES DE AGREGAR SU RESPECTIVO ARCHIVO CPP
+    //HACER LO MISMO CON LAS 2 MAQUINAS, DESPUES DE AGREGAR SU RESPECTIVO ARCHIVO CPP
+    //HACER LO MISMO CON LAS 2 MAQUINAS, DESPUES DE AGREGAR SU RESPECTIVO ARCHIVO CPP
+    //HACER LO MISMO CON LAS 2 MAQUINAS, DESPUES DE AGREGAR SU RESPECTIVO ARCHIVO CPP
+    gestor.AgregarMaquina(new Extractor());
+    gestor.AgregarMaquina(new Pasteurizador());
     
-    
-
     // Mostrar configuracion final
     cout << "\n=============================\n";
     cout << "Configuracion inicial de la planta\n";
     cout << "=============================\n";
     cout << "Nombre de la planta: " << nombrePlanta << "\n";
-    cout << "Capital inicial: $" << capitalInicial << "\n";
-    cout << "Agua disponible: " << aguaLitros << " litros\n";
+    cout << "Capital inicial: $" << gestor.getCapital() << "\n";
+    cout << "Agua disponible: " << gestor.getAgua() << " litros\n";
     // MOSTRAR EL ESTADO DE LAS MAQUINAS
 
     cout << "\nFrutas en inventario:\n";
-    if(inventarioFrutas.empty())
-    {
+    gestor.ListarFrutas();
 
-        cout << "No se agregaron frutas.\n";
-
-    }else{
-
-        for(const auto &fruta : inventarioFrutas)
-        {
-
-            cout << " " <<fruta.getNombre()<<" - Cantidad: "<<fruta.getCantidad()<<"\n";
-
-        }
-    }
 
     //aqui se muestran los empleados contratados
     cout<<"\nEmpleados contratados:\n ";
-    for(const auto &empleadosfab : empleados)
-    {
-        
-        empleadosfab->MostrarInfo();
-
-    }
+    gestor.listarEmpleados();
 
    
-    cout<<"\nEstado de las maquinaaaaaas:\n ";
-    cout<<"\nMaquinas agregadas\n";
-    cout<<"Total: "<<maquinas.size()<<"\n";
-    for(const auto &maquinasfab : maquinas ){
-
-        cout<<" "<<maquinasfab->getNombre()<<" - Estado: "<<(maquinasfab->isEnUso()? "En BUEN estado" : "En MAL estado")<<"\n";
-
-    }
+    cout<<"\nEstado de las maquina:\n ";
+    gestor.VerEstadoMaquina();
     
 
 }
 
-void MiniMenu(){
+void MiniMenu(Gestor_De_Planta& gestor){
 
     int opcionmini=0;
-    //Gestor_De_Planta gestor; no me ejecuta la instancia por el compilador 
   
     while (opcionmini!=5)
     {
-        
-        cout<<"1. Listar Planta";
-        cout<<"2. Eliminar Empleados";
-        cout<<"3. Espacio de Maquinas";
-        cout<<"4. Comprar Frutas";
-        cout<<"5. Ver pedidos";
-        cout<<"6. Volver";
+        cout<<"\n**Menu de la planta**\n";
+        cout<<"1. Listar Planta\n";
+        cout<<"2. Despedir Empleados\n";
+        cout<<"3. Espacio de Maquinas\n";
+        cout<<"4. Comprar Frutas\n";
+        cout<<"5. Ver pedidos\n";
+        cout<<"6. Volver\n";
         cout<<"Ingrese una opcion: ";
         cin>>opcionmini;
         
@@ -345,21 +326,36 @@ void MiniMenu(){
             
             //listar empleados contratados
             cout<<"\nEmpleados activos:\n ";
-            for(const auto &empleadosfab : empleados)
-            {
-        
-                empleadosfab->MostrarInfo();
+            gestor.listarEmpleados();
 
-            }
+            //aqui se listas las frutas
+            cout<<"\nFrutas en inventario:\n";
+            gestor.ListarFrutas();
 
+            cout<<"\nAgua disponible: "<<gestor.getAgua()<<" litros\n";
+            
+            cout<<"\nEstado de las maquinas actualmente:\n";
+            gestor.VerEstadoMaquina();
     
         }else if (opcionmini==2){
+            int id;
     
-            //AGREGAR FUNCION
+           //listar empleados contratados
+           cout<<"\nEmpleados activos:\n ";
+            gestor.listarEmpleados();
+
+
+           
+           id=NumeroValido("Ingrese el ID del empleado a despedir: ",1,50);
+           
+           gestor.eliminarEmpleado(id);
+
+           gestor.listarEmpleados();
+
             
         }else if(opcionmini==3){
         
-            //AGREGAR FUNCION
+            MiniMenuDos(gestor);
             
         }else if(opcionmini==4){
     
@@ -377,15 +373,16 @@ void MiniMenu(){
 
     }
         
-    
-    
 
 }
+
+
 
 void MenuPrincipal()
 {
 
     int opcion;
+    Gestor_De_Planta gestor;
 
     while (opcion != 5)
     {
@@ -401,12 +398,22 @@ void MenuPrincipal()
         if (opcion == 1)
         {
 
-            ConfigurarParametrosIniciales();
+            ConfigurarParametrosIniciales(gestor);
+            ParametrosConfigurados=true;
 
         }else if (opcion == 2){
 
-            MiniMenu();
-           
+            if (!ParametrosConfigurados)
+            {
+                
+                cout<<"\nERROR: Debe configurar los parametros iniciales antes de ejecutar la simuacion\n";
+
+            }else{
+
+                MiniMenu(gestor);
+
+            }
+            
 
         }else if (opcion == 3){
 
