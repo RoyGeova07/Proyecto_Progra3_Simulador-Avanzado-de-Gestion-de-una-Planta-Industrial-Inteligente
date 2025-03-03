@@ -12,6 +12,7 @@
                 "MaquinaLavadora.cpp",
                 "Pasteurizador.cpp",
                 "Empleado.cpp",
+                "Maquina.cpp",
                 "EmpleadoTecnico.cpp",
                 "-o",
                 "Main.exe"

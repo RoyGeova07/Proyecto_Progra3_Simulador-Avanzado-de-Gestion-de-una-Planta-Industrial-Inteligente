@@ -8,6 +8,8 @@
 #include <mutex>
 #include "Empleado.h"
 
+using namespace std;
+
 
 class MaquinaLavadora : public Maquina {
 
@@ -33,6 +35,13 @@ class MaquinaLavadora : public Maquina {
         void MenuMaquinaLavadora(std::vector<Frutas>& inventarioFrutas,std::vector<Empleado*>& empleados);
 
         MaquinaLavadora():Maquina("Lava frutas") {}
+
+        //aplicando polimorfismo
+        void VerEstadoMaquina() const override{
+
+            cout<<"Maquina lavadora: "<<(getEstado()?"En buena estado":"En mal estado")<<endl;
+
+        }
              
         ~MaquinaLavadora() override; 
 

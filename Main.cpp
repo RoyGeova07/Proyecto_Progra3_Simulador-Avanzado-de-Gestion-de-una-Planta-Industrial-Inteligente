@@ -26,7 +26,7 @@ using namespace std;
 
 bool ParametrosConfigurados=false;
 
-
+//Clase template para obtener un numero de tipo T
 template <typename T>
 T NumeroTemplate(string mensaje, T minimo, T Maximo){
 
@@ -125,59 +125,14 @@ char obtenerRespuestaSN(string mensaje){
 
 }
 
-void MiniMenuDos(Gestor_De_Planta& gestor){
-
-    int opcion;
-    
-
-    cout<<"\nMenu de maquinas\n";
-    cout<<"1. Maquina Lavadora\n";
-    cout<<"2. Extractor\n";
-    cout<<"3. Pasteurizador\n";
-    cout<<"4. Volver\n";
-    opcion=NumeroValido("Ingrese una opcion: ",1,4);
+//AQUI PONER MENU MAQUINAS
+//AQUI PONER MENU MAQUINAS
+//AQUI PONER MENU MAQUINAS
+//AQUI PONER MENU MAQUINAS
+//AQUI PONER MENU MAQUINAS
+//AQUI PONER MENU MAQUINAS
 
 
-    if (opcion==1)
-    {
-        
-        //aqui buscamos la lavadora que cree en el gestor
-        MaquinaLavadora* lavadora=nullptr;
-
-        for(auto& maquina:gestor.getMaquinas()){
-
-            lavadora=dynamic_cast<MaquinaLavadora*>(maquina);
-            if(lavadora)break;//se encontroooooo
-
-        }
-
-        if(lavadora){
-
-            lavadora->MenuMaquinaLavadora(gestor.getInventarioFrutas(),gestor.getEmpleados());
-
-        }else{
-
-            cout<<"No se encontro la lavadora en el sistema.\n";
-
-        }
-
-
-    }else if (opcion==2){
-        
-
-
-    }else if(opcion==3){
-
-
-
-    }else if(opcion==4){
-
-        return;
-
-    }
-    
-
-}
 
 void ConfigurarParametrosIniciales(Gestor_De_Planta& gestor)
 {
@@ -211,9 +166,7 @@ void ConfigurarParametrosIniciales(Gestor_De_Planta& gestor)
         if (respuesta=='s'|| respuesta=='S')
         {
 
-            opcion=NumeroValido("\nSeleccione una fruta para agregar:\n"
-                                         "1. Limon\n2. Naranja\n3. Piña\n4. Sandia\n5. Fresa\n6. Tamarindo\n7. Coco\n8. Terminar\n"
-                                    "Opcion: ", 1, 8);
+            opcion=NumeroValido("\nSeleccione una fruta para agregar:\n" "1. Limon\n2. Naranja\n3. Piña\n4. Sandia\n5. Fresa\n6. Tamarindo\n7. Coco\n8. Terminar\n""Opcion: ", 1, 8);
 
             if(opcion==8)break;
 
@@ -270,15 +223,23 @@ void ConfigurarParametrosIniciales(Gestor_De_Planta& gestor)
     }
 
     MaquinaLavadora* lavadora=new MaquinaLavadora();
-    lavadora->setEnUso(rand()%2==0);
+    lavadora->setEnUso(true);
     gestor.AgregarMaquina(lavadora);
 
-    //HACER LO MISMO CON LAS 2 MAQUINAS, DESPUES DE AGREGAR SU RESPECTIVO ARCHIVO CPP
-    //HACER LO MISMO CON LAS 2 MAQUINAS, DESPUES DE AGREGAR SU RESPECTIVO ARCHIVO CPP
-    //HACER LO MISMO CON LAS 2 MAQUINAS, DESPUES DE AGREGAR SU RESPECTIVO ARCHIVO CPP
-    //HACER LO MISMO CON LAS 2 MAQUINAS, DESPUES DE AGREGAR SU RESPECTIVO ARCHIVO CPP
-    gestor.AgregarMaquina(new Extractor());
-    gestor.AgregarMaquina(new Pasteurizador());
+    
+    //AGREGAR SU ARCHIVO CPP DESPUESSSSSSS
+    //AGREGAR SU ARCHIVO CPP DESPUESSSSSSS
+    //AGREGAR SU ARCHIVO CPP DESPUESSSSSSS
+    //AGREGAR SU ARCHIVO CPP DESPUESSSSSSS
+    //AGREGAR SU ARCHIVO CPP DESPUESSSSSSS
+    Extractor* extractoJugo=new Extractor();
+    extractoJugo->setEnUso(true);
+    gestor.AgregarMaquina(extractoJugo);
+
+    Pasteurizador* pasteurizador=new Pasteurizador();
+    pasteurizador->setEnUso(true);
+    gestor.AgregarMaquina(pasteurizador);
+    
     
     // Mostrar configuracion final
     cout << "\n=============================\n";
@@ -289,92 +250,21 @@ void ConfigurarParametrosIniciales(Gestor_De_Planta& gestor)
     cout << "Agua disponible: " << gestor.getAgua() << " litros\n";
     // MOSTRAR EL ESTADO DE LAS MAQUINAS
 
-    cout << "\nFrutas en inventario:\n";
     gestor.ListarFrutas();
 
-
-    //aqui se muestran los empleados contratados
-    cout<<"\nEmpleados contratados:\n ";
     gestor.listarEmpleados();
 
-   
-    cout<<"\nEstado de las maquina:\n ";
     gestor.VerEstadoMaquina();
     
 
 }
 
-void MiniMenu(Gestor_De_Planta& gestor){
-
-    int opcionmini=0;
-  
-    while (opcionmini!=5)
-    {
-        cout<<"\n**Menu de la planta**\n";
-        cout<<"1. Listar Planta\n";
-        cout<<"2. Despedir Empleados\n";
-        cout<<"3. Espacio de Maquinas\n";
-        cout<<"4. Comprar Frutas\n";
-        cout<<"5. Ver pedidos\n";
-        cout<<"6. Volver\n";
-        cout<<"Ingrese una opcion: ";
-        cin>>opcionmini;
-        
-    
-        if(opcionmini==1)
-        {
-            
-            //listar empleados contratados
-            cout<<"\nEmpleados activos:\n ";
-            gestor.listarEmpleados();
-
-            //aqui se listas las frutas
-            cout<<"\nFrutas en inventario:\n";
-            gestor.ListarFrutas();
-
-            cout<<"\nAgua disponible: "<<gestor.getAgua()<<" litros\n";
-            
-            cout<<"\nEstado de las maquinas actualmente:\n";
-            gestor.VerEstadoMaquina();
-    
-        }else if (opcionmini==2){
-            int id;
-    
-           //listar empleados contratados
-           cout<<"\nEmpleados activos:\n ";
-            gestor.listarEmpleados();
-
-
-           
-           id=NumeroValido("Ingrese el ID del empleado a despedir: ",1,50);
-           
-           gestor.eliminarEmpleado(id);
-
-           gestor.listarEmpleados();
-
-            
-        }else if(opcionmini==3){
-        
-            MiniMenuDos(gestor);
-            
-        }else if(opcionmini==4){
-    
-            //AGREGAR FUNCION
-    
-        }else if(opcionmini==5){
-    
-            //AGREGAR FUNCION
-
-        }else{
-    
-            cout<<"Opcion invalida";
-    
-        }
-
-    }
-        
-
-}
+//AQUI PONER MENUGESTOR
+//AQUI PONER MENUGESTOR
+//AQUI PONER MENUGESTOR
+//AQUI PONER MENUGESTOR
+//AQUI PONER MENUGESTOR
+//AQUI PONER MENUGESTOR
 
 
 
@@ -410,7 +300,8 @@ void MenuPrincipal()
 
             }else{
 
-                MiniMenu(gestor);
+                gestor.MiniMenuGestor();
+                
 
             }
             
@@ -434,10 +325,10 @@ void MenuPrincipal()
     }
 }
 
-
 int main()
 {
 
+    
     MenuPrincipal();
 
     return 0;

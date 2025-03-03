@@ -58,9 +58,9 @@ void MaquinaLavadora::MenuMaquinaLavadora(std::vector<Frutas>& inventarioFrutas,
         if (opcion==1)
         {
     
-            if(!isEnUso()){
+            if(!getEstado()){
     
-                cout<<"La maquina lavadora esta en mal estado. Debe repararse antes de usar.\n";
+                cout<<"\nLa maquina lavadora esta en mal estado. Debe repararse antes de usar.\n";
                 continue;
     
             }
@@ -111,7 +111,7 @@ void MaquinaLavadora::MenuMaquinaLavadora(std::vector<Frutas>& inventarioFrutas,
     
         }else if (opcion==2){
     
-            if(isEnUso()){
+            if(getEstado()){
 
                 cout<<"La lavadora ya esta en buen estado, No necesita reparacion\n";
 

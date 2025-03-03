@@ -18,7 +18,7 @@ void Pasteurizador::pasteurizar() {
     
     bool pasteurizadorOperativo=false;
     for(auto&m:maquinas){
-        if(m->getNombre()=="Pasteurizador" && m->isEnUso()){
+        if(m->getNombre()=="Pasteurizador" && m->getEstado()){
 
             pasteurizadorOperativo=true;
             break;

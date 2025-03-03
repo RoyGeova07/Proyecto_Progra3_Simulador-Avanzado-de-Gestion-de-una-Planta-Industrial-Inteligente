@@ -4,6 +4,9 @@
 #include <vector>
 #include "Producto.h"
 
+using namespace std;
+
+
 class Extractor : public Maquina
 {
 
@@ -19,6 +22,14 @@ private:
 
 public:
     Extractor() : Maquina("Extractor de Jugo") {}
+
+    //aqui aplicando polimorfismo
+    void VerEstadoMaquina() const override{
+
+        cout<<"Maquina Extractor: "<<(getEstado()?"En buena estado":"En mal estado")<<endl;
+
+    }
+
     ~Extractor() override;  
     
 };

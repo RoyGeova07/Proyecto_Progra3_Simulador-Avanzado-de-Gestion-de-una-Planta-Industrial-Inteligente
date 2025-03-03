@@ -7,6 +7,8 @@
 #include "EmpleadoOperario.h"
 #include "EmpleadoSupervisor.h"
 #include "EmpleadoTecnico.h"
+#include "NumeroValido.h"
+#include "Maquina.h"
 
 using namespace std;
 
@@ -94,8 +96,9 @@ void Gestor_De_Planta::VerEstadoMaquina() const {
 
     cout << "\n--- Estado de las Maquinas ---\n";
     for (const auto &maquina : maquinas) {
-        cout << "Maquina: " << maquina->getNombre()
-             << " | Estado: " << (maquina->isEnUso() ? "En Mal estado" : "En buen estado") << endl;
+
+        maquina->VerEstadoMaquina();//aqui se llama la funcion polimorfica.
+
     }
 }
 
@@ -162,6 +165,7 @@ Empleado* Gestor_De_Planta::BuscarEmpleadoPorId(int id){
 
 }
 
+
 int Gestor_De_Planta::CantidadEmpleados() const{
 
     return empleado.size();
@@ -187,6 +191,85 @@ void Gestor_De_Planta::AgregarMaquina(Maquina* maq){
 void Gestor_De_Planta::generarReporte()const{
 
     //AQUI FUNCIONAR MEDIANTE ARCHIVOSSSSS
+
+}
+
+void Gestor_De_Planta::MiniMenuGestor(){
+
+    int opcionmini=0;
+  
+    while (opcionmini!=5)
+    {
+        cout<<"\n**Menu de la planta**\n";
+        cout<<"1. Listar Planta\n";
+        cout<<"2. Despedir Empleados\n";
+        cout<<"3. Espacio de Maquinas\n";
+        cout<<"4. Comprar Frutas\n";
+        cout<<"5. Ver pedidos\n";
+        cout<<"6. Volver\n";
+        cout<<"Ingrese una opcion: ";
+        cin>>opcionmini;
+        
+    
+        if(opcionmini==1)
+        {
+            
+            //listar empleados contratados
+            cout<<"\nEmpleados activos:\n ";
+            listarEmpleados();
+
+            //aqui se listas las frutas
+            cout<<"\nFrutas en inventario:\n";
+            ListarFrutas();
+
+            cout<<"\nAgua disponible: "<<getAgua()<<" litros\n";
+            
+            cout<<"\nEstado de las maquinas actualmente:\n";
+            VerEstadoMaquina();
+    
+        }else if (opcionmini==2){
+            int id;
+    
+           //listar empleados contratados
+           cout<<"\nEmpleados activos:\n ";
+            listarEmpleados();
+
+
+           
+           id=NumeroValido("Ingrese el ID del empleado a despedir: ",1,50);
+           
+           eliminarEmpleado(id);
+
+           listarEmpleados();
+
+            
+        }else if(opcionmini==3){
+        
+            //AQUI VA EL MENU DE MAQUINAS
+            //AQUI VA EL MENU DE MAQUINAS
+            //AQUI VA EL MENU DE MAQUINAS
+            //AQUI VA EL MENU DE MAQUINAS
+            //AQUI VA EL MENU DE MAQUINAS
+            //AQUI VA EL MENU DE MAQUINAS
+            Maquina::MenuMaquinas(*this);
+            //MiniMenuDos(gestor);
+            
+        }else if(opcionmini==4){
+    
+            //AGREGAR FUNCION
+    
+        }else if(opcionmini==5){
+    
+            //AGREGAR FUNCION
+
+        }else{
+    
+            cout<<"Opcion invalida";
+    
+        }
+
+    }
+        
 
 }
 

@@ -5,6 +5,9 @@
 #include <vector>
 #include "Frutas.h"
 
+using namespace std;
+
+
 
 // consiste en el tratamiento del calor de un producto para matar todas las bacterias patogenas y reducir la actividad enzimatica
 class Pasteurizador : public Maquina
@@ -22,6 +25,13 @@ private:
 public:
     
     Pasteurizador() : Maquina("Pasteurizador") {}
+
+    //aqui aplicando polimorfismos
+    void VerEstadoMaquina() const override{
+
+        cout<<"Maquina Pasterizador: "<<(getEstado()?"En buena estado":"En mal estado")<<endl;
+
+    }
     ~Pasteurizador() override;
     
 };

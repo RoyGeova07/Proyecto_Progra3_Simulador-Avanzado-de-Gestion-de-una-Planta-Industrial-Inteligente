@@ -8,6 +8,7 @@ SRCS = Main.cpp \
        Empleado.cpp \
        MaquinaLavadora.cpp \
        EmpleadoTecnico.cpp \
+       Maquina.cpp \
        Pasteurizador.cpp
 
 # Archivos objeto (.o) generados automáticamente

@@ -17,7 +17,7 @@ void Extractor::extraerJugo(){
     bool extractorOperativo=false;
     for(auto&m:maquinas){
 
-        if (m->getNombre()=="Extractor de Jugo" && m->isEnUso()){
+        if (m->getNombre()=="Extractor de Jugo" && m->getEstado()){
 
             extractorOperativo=true;
             break;
