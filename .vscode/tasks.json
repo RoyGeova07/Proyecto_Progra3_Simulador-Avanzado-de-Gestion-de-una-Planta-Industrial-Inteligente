@@ -7,7 +7,7 @@
             "command": "g++",
             "args": [
                 "Main.cpp",
-                "Extractor.cpp",
+                "ProcesadorFrutas.cpp",
                 "Gestor_De_Planta.cpp",
                 "MaquinaLavadora.cpp",
                 "Pasteurizador.cpp",

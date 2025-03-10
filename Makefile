@@ -3,7 +3,7 @@ TARGET = main.exe
 
 # Lista de archivos fuente (.cpp)
 SRCS = Main.cpp \
-       Extractor.cpp \
+       ProcesadorFrutas.cpp \
        Gestor_De_Planta.cpp \
        Empleado.cpp \
        MaquinaLavadora.cpp \

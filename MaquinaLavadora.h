@@ -23,7 +23,7 @@ class MaquinaLavadora : public Maquina {
        
         void MostrarCronometro(int segundos,const std::string& frutaNombre )const;
 
-        void LavarFruta(const std::string& frutaNombre);
+        void LavarFruta(Frutas& fruta);
 
         bool VerificarFallo();
 
@@ -32,7 +32,7 @@ class MaquinaLavadora : public Maquina {
     public:
 
         
-        void MenuMaquinaLavadora(std::vector<Frutas>& inventarioFrutas,std::vector<Empleado*>& empleados);
+        void MenuMaquinaLavadora(std::vector<Frutas>& inventarioFrutas,std::vector<Empleado*>& empleados,Gestor_De_Planta& gestor);
 
         MaquinaLavadora():Maquina("Lava frutas") {}
 

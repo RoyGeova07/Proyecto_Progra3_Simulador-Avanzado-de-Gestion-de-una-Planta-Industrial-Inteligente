@@ -6,6 +6,7 @@
 #include "Gestor_De_Planta.h"
 #include "EmpleadoTecnico.h"
 #include "NumeroValido.h"
+#include "ProcesadorFrutas.h"
 
 
 using namespace std;
@@ -18,7 +19,7 @@ void Maquina::MenuMaquinas(Gestor_De_Planta& gestor){
 
     cout<<"\nMenu de maquinas\n";
     cout<<"1. Maquina Lavadora\n";
-    cout<<"2. Extractor\n";
+    cout<<"2. ProcesadorFrutas\n";
     cout<<"3. Pasteurizador\n";
     cout<<"4. Volver\n";
     opcion=NumeroValido("Ingrese una opcion: ",1,4);
@@ -39,7 +40,7 @@ void Maquina::MenuMaquinas(Gestor_De_Planta& gestor){
 
         if(lavadora){
 
-            lavadora->MenuMaquinaLavadora(gestor.getInventarioFrutas(),gestor.getEmpleados());
+            lavadora->MenuMaquinaLavadora(gestor.getInventarioFrutas(),gestor.getEmpleados(),gestor);
 
         }else{
 
@@ -50,10 +51,26 @@ void Maquina::MenuMaquinas(Gestor_De_Planta& gestor){
 
     }else if (opcion==2){
         
-        //PENDIENTEEEEEEEEEEEEEEEEEE
-        //PENDIENTEEEEEEEEEEEEEEEEEE
-        //PENDIENTEEEEEEEEEEEEEEEEEE
-        //PENDIENTEEEEEEEEEEEEEEEEEE
+        ProcesadorFrutas* procesador=nullptr;
+
+        for(auto& maquina:gestor.getMaquinas()){
+
+            procesador=dynamic_cast<ProcesadorFrutas*>(maquina);
+            if(procesador)break;
+
+        }
+
+        if (procesador)
+        {
+            
+            procesador->MenuProcesadorFrutas(gestor.getInventarioFrutas(),gestor.getEmpleados(),gestor);
+
+        }else{
+
+            cout<<"No se encontro el procesador de frutas en el sistema.\n";
+
+        }
+        
 
     }else if(opcion==3){
 

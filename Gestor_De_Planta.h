@@ -56,6 +56,7 @@ public:
     void setAgua(int litros) { AguaLitros = litros; }
     int getAgua() const { return AguaLitros; }
     void MiniMenuGestor();
+    void ReducirAgua(double litros);
 
     std::vector<Maquina*>& getMaquinas() { return maquinas; }
     std::vector<Frutas>& getInventarioFrutas() { return FRUTAS; }

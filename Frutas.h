@@ -23,6 +23,7 @@ public:
 
 private:
 
+    bool lavada=false;
     Fruta tipo;
     double costo;
     int cantidad;
@@ -57,6 +58,9 @@ public:
 
     double getCosto() const {return costo;}
     int getCantidad() const {return cantidad;}
+    void setLavada(bool estado) {lavada=estado;}
+
+    bool isLavada()const{return lavada;}
     
     void setCantidad(int nuevaCantidad) {
         

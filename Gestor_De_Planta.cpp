@@ -28,6 +28,22 @@ Gestor_De_Planta::~Gestor_De_Planta(){
 
 }
 
+void Gestor_De_Planta::ReducirAgua(double litros){
+
+    if (AguaLitros>=litros)
+    {
+        
+        AguaLitros-=litros;
+
+    }else{
+
+        AguaLitros=0;//aqui evita que el agua sea negativa
+
+    }
+    
+
+}
+
 void Gestor_De_Planta::AgregarEmpleado(Empleado* emp) {
 
     empleado.push_back(emp);

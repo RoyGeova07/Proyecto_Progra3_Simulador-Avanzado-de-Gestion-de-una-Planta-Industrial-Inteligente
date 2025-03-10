@@ -6,7 +6,7 @@
 #include "Gestor_De_Planta.h"
 #include "EmpleadoTecnico.h"
 #include "NumeroValido.h"
-
+                
 
 using namespace std;
 
@@ -30,22 +30,26 @@ void MaquinaLavadora::MostrarCronometro(int segundos,const string& frutaNombre)c
 
 }
 
-void MaquinaLavadora::LavarFruta(const string& frutaNombre){
+void MaquinaLavadora::LavarFruta(Frutas& fruta){
 
-    MostrarCronometro(5,frutaNombre);
+    MostrarCronometro(5,fruta.getNombre());
+    //aqui se marca la fruta como lavada
+    fruta.setLavada(true);
+    cout << fruta.getNombre() << " ha sido lavada y ahora esta lista para ser procesada.\n";
 
 }
 
 bool MaquinaLavadora::VerificarFallo(){
 
-    return (rand()%4==0);
+    return (rand()%4==0);//25 porciento de probabilidaddddd 
 
 }
 
-void MaquinaLavadora::MenuMaquinaLavadora(std::vector<Frutas>& inventarioFrutas,std::vector<Empleado*>& empleados){
+void MaquinaLavadora::MenuMaquinaLavadora(std::vector<Frutas>& inventarioFrutas,std::vector<Empleado*>& empleados,Gestor_De_Planta& gestor){
 
     int opcion;
     int frutaSeleccionada;
+    const double AguaPorFruta=0.5;
 
     do{
 
@@ -73,6 +77,9 @@ void MaquinaLavadora::MenuMaquinaLavadora(std::vector<Frutas>& inventarioFrutas,
             }
 
             cout<<"Frutas Diponibles para lavar:\n";
+            //size_t es un tipo de dato que se usa para almacenar tamaños e indices 
+            //Sirve para especificar la longitud de una cadena, la cantidad de bytes que ocupa un puntero, 
+            //o el tamaño de un elemento. 
             for (size_t i=0; i<inventarioFrutas.size(); i++)
             {
                 
@@ -83,32 +90,51 @@ void MaquinaLavadora::MenuMaquinaLavadora(std::vector<Frutas>& inventarioFrutas,
             frutaSeleccionada=NumeroValido("Selecciona una fruta para lavar (numero):  ",1,inventarioFrutas.size());
             Frutas& fruta=inventarioFrutas[frutaSeleccionada-1];
 
-            cout<<"Iniciando lavado de: "<<fruta.getNombre()<<"\n";
+            cout<<"\nIniciando lavado de todas las "<<fruta.getNombre()<<" disponibles...\n";
 
-            //aqui se crea un hilo para lavar esta fruta
-            thread HiloLavadoFruta(&MaquinaLavadora::LavarFruta,this,fruta.getNombre());
-            HiloLavadoFruta.join();
+            // Lavar todas las frutas de esta categoría en un bucle
+            while (fruta.getCantidad() > 0) {
+                if (!getEstado()) {
+                    cout << "\n¡La maquina lavadora se ha dañado! Debe repararse antes de continuar.\n";
+                    break;
+                }
 
-            //aqui se resta la fruta del inventario, se simula que se lava una por llamada
-            fruta.setCantidad(fruta.getCantidad()-1);
-            if(fruta.getCantidad()<=0){
+                if(gestor.getAgua()<AguaPorFruta) {
+                    cout << "\nNo hay suficiente agua para continuar el lavado. Debe reabastecer agua.\n";
+                    break;
+                }
 
-                inventarioFrutas.erase(inventarioFrutas.begin()+frutaSeleccionada-1);
+                cout<<"\nLavando una "<<fruta.getNombre()<<"...\n";
+                //aqui se crea un hilo para lavar esta fruta    ref pasa por referencia ala fruta
+                thread HiloLavadoFruta(&MaquinaLavadora::LavarFruta,this,ref(fruta));
+                HiloLavadoFruta.join();
+
+                //aqui se resta la fruta del inventario, se simula que se lava una por llamada
+                fruta.setCantidad(fruta.getCantidad()-1);
+
+                gestor.ReducirAgua(AguaPorFruta);
+                cout << "Se han consumido " << AguaPorFruta << " litros de agua en el lavado.\n";
+
+                if(VerificarFallo()){
+
+                    cout<<"LA LAVADORA SUFRIO UN DESPERFECTO. DEBE REPARASE.\n";
+                    setEnUso(false);
+                    break;
+
+                }else{
+
+                    cout<<"Lavado completado correctamente. Quedan "<<fruta.getCantidad()<<" "<<fruta.getNombre()<<" por lavar.\n";
+
+                }
+            }
+            if (fruta.getCantidad()<=0) {
+
+                cout<<"\nTodas las " << fruta.getNombre() << " han sido lavadas y removidas del inventario.\n";
+                fruta.setCantidad(0);
+                //inventarioFrutas.erase(inventarioFrutas.begin() + frutaSeleccionada - 1);
 
             }
 
-            if(VerificarFallo()){
-
-                cout<<"LA LAVADORA SUFRIO UN DESPERFECTO. DEBE REPARASE.\n";
-                setEnUso(false);
-
-            }else{
-
-                cout<<"Lavado completado correctamente.\n";
-
-            }
-
-    
         }else if (opcion==2){
     
             if(getEstado()){

@@ -14,7 +14,7 @@
             "MIMode": "gdb",
             "setupCommands": [
                 {
-                    "description": "Habilitar impresión de formato bonito",
+                    "description": "Habilitar impresion de formato bonito",
                     "text": "-enable-pretty-printing",
                     "ignoreFailures": true
                 }

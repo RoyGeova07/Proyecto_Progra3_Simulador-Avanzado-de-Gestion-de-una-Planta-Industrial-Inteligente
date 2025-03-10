@@ -13,7 +13,7 @@
 #include "Maquina.h"
 #include "MaquinaLavadora.h"
 #include "Pasteurizador.h"
-#include "Extractor.h"
+#include "ProcesadorFrutas.h"
 #include "Frutas.h"
 #include "Gestor_De_Planta.h"
 #include <set>
@@ -25,6 +25,7 @@
 using namespace std;
 
 bool ParametrosConfigurados=false;
+bool PrimerConfiguracion=true;
 
 //Clase template para obtener un numero de tipo T
 template <typename T>
@@ -125,20 +126,12 @@ char obtenerRespuestaSN(string mensaje){
 
 }
 
-//AQUI PONER MENU MAQUINAS
-//AQUI PONER MENU MAQUINAS
-//AQUI PONER MENU MAQUINAS
-//AQUI PONER MENU MAQUINAS
-//AQUI PONER MENU MAQUINAS
-//AQUI PONER MENU MAQUINAS
-
-
 
 void ConfigurarParametrosIniciales(Gestor_De_Planta& gestor)
 {
 
     srand(time(0));//aqui se inicializa el random
-    
+    PrimerConfiguracion=false;
 
     string nombrePlanta;
     double capitalAdicional;
@@ -232,9 +225,10 @@ void ConfigurarParametrosIniciales(Gestor_De_Planta& gestor)
     //AGREGAR SU ARCHIVO CPP DESPUESSSSSSS
     //AGREGAR SU ARCHIVO CPP DESPUESSSSSSS
     //AGREGAR SU ARCHIVO CPP DESPUESSSSSSS
-    Extractor* extractoJugo=new Extractor();
-    extractoJugo->setEnUso(true);
-    gestor.AgregarMaquina(extractoJugo);
+    ProcesadorFrutas* procesarFrutas=new ProcesadorFrutas();
+    procesarFrutas->setEnUso(true);
+    gestor.AgregarMaquina(procesarFrutas);
+    
 
     Pasteurizador* pasteurizador=new Pasteurizador();
     pasteurizador->setEnUso(true);
@@ -259,14 +253,6 @@ void ConfigurarParametrosIniciales(Gestor_De_Planta& gestor)
 
 }
 
-//AQUI PONER MENUGESTOR
-//AQUI PONER MENUGESTOR
-//AQUI PONER MENUGESTOR
-//AQUI PONER MENUGESTOR
-//AQUI PONER MENUGESTOR
-//AQUI PONER MENUGESTOR
-
-
 
 void MenuPrincipal()
 {
@@ -282,19 +268,26 @@ void MenuPrincipal()
         cout << "3. Generar reportes del estado de la planta" << endl;
         cout << "4. Guardar y Cargar simulaciones desde archivos" << endl;
         cout << "5. Salir del programa" << endl;
-        cout << "Escoja una opcion: ";
-        cin >> opcion;
+        opcion=NumeroValido("Escoja una opcion: ",1,5);
 
         if (opcion == 1)
         {
+            if (!PrimerConfiguracion)
+            {
+                
+                cout<<"\nNo puedes volver a acceder a configurar los parametros\n";
 
-            ConfigurarParametrosIniciales(gestor);
-            ParametrosConfigurados=true;
+            }else{
+
+                ConfigurarParametrosIniciales(gestor);
+                ParametrosConfigurados=true;
+
+            }
 
         }else if (opcion == 2){
 
-            if (!ParametrosConfigurados)
-            {
+            if(!ParametrosConfigurados)
+            {   
                 
                 cout<<"\nERROR: Debe configurar los parametros iniciales antes de ejecutar la simuacion\n";
 
