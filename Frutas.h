@@ -25,6 +25,7 @@ private:
 
     bool lavada=false;
     Fruta tipo;
+    int CantidadLavada;//contador que me ayuda a contar las frutas ya lavadas
     double costo;
     int cantidad;
 
@@ -33,7 +34,7 @@ public:
     
     //constructor
     // en C++ es mejor inicializar los atributos directamente en la lista de inicializacion
-    Frutas(Fruta tipo, double costo,int cantidad) : tipo(tipo),costo(costo), cantidad(cantidad) {}
+    Frutas(Fruta tipo, double costo,int cantidad) : tipo(tipo),costo(costo), cantidad(cantidad),CantidadLavada(0) {}
 
     //funcion para obtener la informacion de las frutas
 
@@ -58,14 +59,43 @@ public:
 
     double getCosto() const {return costo;}
     int getCantidad() const {return cantidad;}
+    int getCantidadLavada()const {return CantidadLavada;}
     void setLavada(bool estado) {lavada=estado;}
-
+    void setCantidadLavada(int NuevaCantidad) {CantidadLavada=NuevaCantidad;}
+    
     bool isLavada()const{return lavada;}
     
     void setCantidad(int nuevaCantidad) {
         
         this->cantidad=nuevaCantidad;
         
+    }
+
+    void IncrementarLavada(){
+
+        if (cantidad>0)
+        {
+            
+            cantidad--;
+            CantidadLavada++;
+
+        }
+        
+
+    }
+
+    bool hayFrutasLavadas()const{return CantidadLavada>0;}
+
+    void DecrementarLavada(){
+
+        if (CantidadLavada>0)
+        {
+            
+            CantidadLavada--;
+
+        }
+        
+
     }
 
     void MostrarInfo() const {

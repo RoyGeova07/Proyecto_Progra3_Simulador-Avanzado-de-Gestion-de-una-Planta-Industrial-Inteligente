@@ -33,9 +33,13 @@ void MaquinaLavadora::MostrarCronometro(int segundos,const string& frutaNombre)c
 void MaquinaLavadora::LavarFruta(Frutas& fruta){
 
     MostrarCronometro(5,fruta.getNombre());
+
+    //aqui en vez de reducir la cantidad, simplemente incrementamos las lavadassssss
+    fruta.IncrementarLavada();
+
     //aqui se marca la fruta como lavada
-    fruta.setLavada(true);
-    cout << fruta.getNombre() << " ha sido lavada y ahora esta lista para ser procesada.\n";
+    //fruta.setLavada(true);
+    cout << fruta.getNombre() << " ha sido lavada y ahora esta lista para ser procesada."<<"(Unidades lavadas: "<<fruta.getCantidadLavada()<<")\n";
 
 }
 
@@ -88,6 +92,7 @@ void MaquinaLavadora::MenuMaquinaLavadora(std::vector<Frutas>& inventarioFrutas,
             }
 
             frutaSeleccionada=NumeroValido("Selecciona una fruta para lavar (numero):  ",1,inventarioFrutas.size());
+            
             Frutas& fruta=inventarioFrutas[frutaSeleccionada-1];
 
             cout<<"\nIniciando lavado de todas las "<<fruta.getNombre()<<" disponibles...\n";
@@ -104,13 +109,10 @@ void MaquinaLavadora::MenuMaquinaLavadora(std::vector<Frutas>& inventarioFrutas,
                     break;
                 }
 
-                cout<<"\nLavando una "<<fruta.getNombre()<<"...\n";
+                cout<<"\nLavando "<<fruta.getNombre()<<"...\n";
                 //aqui se crea un hilo para lavar esta fruta    ref pasa por referencia ala fruta
                 thread HiloLavadoFruta(&MaquinaLavadora::LavarFruta,this,ref(fruta));
                 HiloLavadoFruta.join();
-
-                //aqui se resta la fruta del inventario, se simula que se lava una por llamada
-                fruta.setCantidad(fruta.getCantidad()-1);
 
                 gestor.ReducirAgua(AguaPorFruta);
                 cout << "Se han consumido " << AguaPorFruta << " litros de agua en el lavado.\n";
@@ -130,8 +132,7 @@ void MaquinaLavadora::MenuMaquinaLavadora(std::vector<Frutas>& inventarioFrutas,
             if (fruta.getCantidad()<=0) {
 
                 cout<<"\nTodas las " << fruta.getNombre() << " han sido lavadas y removidas del inventario.\n";
-                fruta.setCantidad(0);
-                //inventarioFrutas.erase(inventarioFrutas.begin() + frutaSeleccionada - 1);
+                inventarioFrutas.erase(inventarioFrutas.begin() + frutaSeleccionada - 1);//esto hace que borre la lista de frutas cuando estan en 0
 
             }
 

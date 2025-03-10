@@ -103,51 +103,31 @@ void ProcesadorFrutas::MenuProcesadorFrutas(std::vector<Frutas>&inventarioFrutas
 
             }
 
-            cout<<"--\n Frutas disponibles para procesar -- \n";
-            vector<size_t> IndiceLavadas;
+            cout<<"--\n Frutas disponibles para procesar (solo lavadas) -- \n";
             bool HayFrutasLavadas=false;
             for (size_t i=0;i<inventarioFrutas.size();i++)
             {
                 //si la fruta esta lavada se mostran las disponibles
-                if (inventarioFrutas[i].isLavada()&&inventarioFrutas[i].getCantidad()>0)
+                if (inventarioFrutas[i].hayFrutasLavadas())
                 {
 
-                    cout<<i+1<<". "<<inventarioFrutas[i].getNombre()<<" - Cantidad: "<<inventarioFrutas[i].getCantidad()<<"\n";
-                    IndiceLavadas.push_back(i);
-                    //HayFrutasLavadas=true;
+                    cout<<i+1<<". "<<inventarioFrutas[i].getNombre()<<" - Cantidad: "<<inventarioFrutas[i].getCantidadLavada()<<"\n";
+                    HayFrutasLavadas=true;
                     
                 }
             
 
             }
-            if (IndiceLavadas.empty())
+            if (!HayFrutasLavadas)
             {
                 
                 cout<<"No hay frutas lavadas disponibles para procesar.\n";
                 return;
 
             }
-            
-            do
-            {
                 
-                FrutaSeleccionada=NumeroValido("Seleccione una fruta para procesar (numero): ",1,inventarioFrutas.size());    
+            FrutaSeleccionada=NumeroValido("Seleccione una fruta para procesar (numero): ",1,inventarioFrutas.size());    
                 
-                if(!inventarioFrutas[FrutaSeleccionada-1].isLavada())
-                {
-                    
-                    cout << "ERROR: La fruta seleccionada no ha sido lavada aun. Seleccione otra.\n";
-
-                }else{
-
-                    break;
-
-                }
-                
-
-            } while (true);
-            
-            
             Frutas& fruta=inventarioFrutas[FrutaSeleccionada-1];
 
             cout<<"\nIniciando proceso de "<<fruta.getNombre()<<"...\n";
@@ -161,8 +141,8 @@ void ProcesadorFrutas::MenuProcesadorFrutas(std::vector<Frutas>&inventarioFrutas
             HiloExtraeJuguito.join();
 
 
-            //aqui es donde se reducira la cantidad de frutas del inventario
-            fruta.setCantidad(fruta.getCantidad()-1);
+            fruta.DecrementarLavada();
+            cout<<"Se proceso 1 unidad de "<<fruta.getNombre()<< ". Unidades restantes lavadas: "<<fruta.getCantidadLavada()<<"\n";
             if (fruta.getCantidad()<=0)
             {
                 
