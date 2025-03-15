@@ -118,6 +118,44 @@ void Gestor_De_Planta::VerEstadoMaquina() const {
     }
 }
 
+void Gestor_De_Planta::TransferirFrutaLavada(const Frutas& frutaLavada){
+
+    for(auto& fruta:FRUTAS_LAVADAS){
+
+        if (fruta.getNombre()==frutaLavada.getNombre()&&fruta.getCosto()==frutaLavada.getCosto())
+        {
+            
+            fruta.setCantidad(fruta.getCantidad()+frutaLavada.getCantidad());
+            return;
+
+        }
+        
+    }
+    //aqui si la fruta no esta en la lista de lavadas, se agrega
+    FRUTAS_LAVADAS.push_back(frutaLavada);
+
+}
+
+void Gestor_De_Planta::ListarFrutasLavadas()const{
+
+    if (FRUTAS_LAVADAS.empty())
+    {
+
+        cout<<"No hay frutas lavadaaaas\n";
+        return;
+        
+    }
+    
+
+    cout<<"\n--- Lista de Frutas Lavadas ---\n";
+    for(const auto& fruta : FRUTAS_LAVADAS){
+        cout << "Nombre: " << fruta.getNombre()
+             << " | Cantidad Lavada: " << fruta.getCantidad()
+             << " | Precio: $" << fruta.getCosto() << endl;
+    }
+
+}
+
 //aqui funcion para eliminar un empleado por el id
 //el find_id me ayuda a recorrer el vector empleado, buscando el primer elemento que cumpla con una condiciion
 //begin apunta al primer elemento del vector y end al final
@@ -192,6 +230,20 @@ int Gestor_De_Planta::CantidadEmpleados() const{
 
 void Gestor_De_Planta::AgregarFruta(const Frutas& fruta) {
 
+    for(auto& EstaDuplicadoEl:FRUTAS){
+
+        if (EstaDuplicadoEl.getNombre()==fruta.getNombre()&&EstaDuplicadoEl.getCosto()==fruta.getCosto())
+        {
+            
+            //aqui si la fruta ya existe con el mismo nombre, se aumenta la cantidad 
+            EstaDuplicadoEl.setCantidad(EstaDuplicadoEl.getCantidad()+fruta.getCantidad());
+            return;//aqui evita agregar nombre duplicados
+
+        }
+        
+
+    }
+    //aqui si no se encontro se agrega, lo agrega como fruta nueva 
     FRUTAS.push_back(fruta);
 
 }
@@ -199,6 +251,12 @@ void Gestor_De_Planta::AgregarFruta(const Frutas& fruta) {
 void Gestor_De_Planta::AgregarMaquina(Maquina* maq){
 
     maquinas.push_back(maq);
+
+}
+
+void Gestor_De_Planta::ListaJugosFaltanIngredientesYEnvases()const{
+
+    
 
 }
 
@@ -237,6 +295,9 @@ void Gestor_De_Planta::MiniMenuGestor(){
             //aqui se listas las frutas
             cout<<"\nFrutas en inventario:\n";
             ListarFrutas();
+
+            cout<<"\nFrutas lavadas en el invetario:\n";
+            ListarFrutasLavadas();
 
             cout<<"\nAgua disponible: "<<getAgua()<<" litros\n";
             

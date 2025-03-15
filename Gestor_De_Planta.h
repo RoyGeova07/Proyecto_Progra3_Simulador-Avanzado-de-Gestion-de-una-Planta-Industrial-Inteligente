@@ -29,6 +29,7 @@ private:
   
     std::vector<Producto> productos;
     std::vector<Frutas> FRUTAS;
+    std::vector<Frutas> FRUTAS_LAVADAS;
     std::vector<Maquina*> maquinas;
     std::vector<Empleado*> empleado;
     double CapitalInicial=100000;
@@ -49,12 +50,15 @@ public:
     Empleado* BuscarEmpleadoPorId(int id);
     int CantidadEmpleados() const;
     
+    void TransferirFrutaLavada(const Frutas& fruta);
+    void ListarFrutasLavadas()const;
+    void ListaJugosFaltanIngredientesYEnvases()const;
     void AgregarFruta(const Frutas& fruta);
     void mostrarEstadoInicial(const std::string& nombrePlanta) const;
     double getCapital() const { return CapitalInicial; }
     void agregarCapital(double adicional) { CapitalInicial += adicional; }
     void setAgua(int litros) { AguaLitros = litros; }
-    int getAgua() const { return AguaLitros; }
+    int getAgua()const{ return AguaLitros;}
     void MiniMenuGestor();
     void ReducirAgua(double litros);
 

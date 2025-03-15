@@ -291,6 +291,7 @@ void MenuPrincipal()
                 
                 cout<<"\nERROR: Debe configurar los parametros iniciales antes de ejecutar la simuacion\n";
 
+                
             }else{
 
                 gestor.MiniMenuGestor();

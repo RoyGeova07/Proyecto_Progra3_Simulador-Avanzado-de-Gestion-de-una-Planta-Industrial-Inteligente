@@ -16,6 +16,9 @@ private:
     double precio;
 
 public:
+
+    enum Jugos{Limonada,JugoNaranja,JugoPilla,JugoSandia,JugoFresa,JugoTamarindo,AguaCoco};
+
     //aqui sobrecarga de constructores
     Producto(const std::string& nombre, int cantidad, double precio)
         : nombre(nombre), cantidad(cantidad), precio(precio) {}

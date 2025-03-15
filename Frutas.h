@@ -76,7 +76,6 @@ public:
         if (cantidad>0)
         {
             
-            cantidad--;
             CantidadLavada++;
 
         }

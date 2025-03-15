@@ -30,16 +30,41 @@ void MaquinaLavadora::MostrarCronometro(int segundos,const string& frutaNombre)c
 
 }
 
-void MaquinaLavadora::LavarFruta(Frutas& fruta){
+void MaquinaLavadora::LavarFruta(Frutas& fruta,Gestor_De_Planta& gestor){
 
+    
+    int CantidadSinLavar=fruta.getCantidad()-fruta.getCantidadLavada();
+    if (CantidadSinLavar<=0)
+    {
+        
+        cout<<"No hay frutas sin lavar de este tipo\n";
+        return;
+
+    }
+    
+    double ConsumoAgua=0.5*CantidadSinLavar;//aqui consumo de agua proporcional
+    if (gestor.getAgua()<ConsumoAgua)
+    {
+        
+        cout<<"\nNo hay suficiente agua para lavar todas las frutas. Se lavaran las posibles\n";
+        CantidadSinLavar=gestor.getAgua()/0.5;//aqui se ajusta la cantidad de frutas lavadas
+        ConsumoAgua=CantidadSinLavar*0.5;
+
+    }
     MostrarCronometro(5,fruta.getNombre());
 
-    //aqui en vez de reducir la cantidad, simplemente incrementamos las lavadassssss
-    fruta.IncrementarLavada();
+    gestor.ReducirAgua(ConsumoAgua);
+    fruta.setCantidadLavada(fruta.getCantidadLavada()+CantidadSinLavar);
+    
+    //aqui se crea una nuev fruta lavadacon la misma info se transfieren 
+    Frutas frutaLavada(fruta);
+    frutaLavada.setCantidad(CantidadSinLavar);
+    gestor.TransferirFrutaLavada(frutaLavada);
 
-    //aqui se marca la fruta como lavada
-    //fruta.setLavada(true);
-    cout << fruta.getNombre() << " ha sido lavada y ahora esta lista para ser procesada."<<"(Unidades lavadas: "<<fruta.getCantidadLavada()<<")\n";
+    
+    cout << fruta.getNombre() << " ha sido lavada y ahora esta lista para ser procesada. "
+         << "(Unidades lavadas: " << fruta.getCantidadLavada() << ")\n";
+    cout << "Se han consumido " << ConsumoAgua << " litros de agua en el lavado.\n";
 
 }
 
@@ -49,8 +74,7 @@ bool MaquinaLavadora::VerificarFallo(){
 
 }
 
-void MaquinaLavadora::MenuMaquinaLavadora(std::vector<Frutas>& inventarioFrutas,std::vector<Empleado*>& empleados,Gestor_De_Planta& gestor){
-
+void MaquinaLavadora::MenuMaquinaLavadora(std::vector<Frutas>& inventarioFrutas, std::vector<Empleado*>& empleados, Gestor_De_Planta& gestor) {
     int opcion;
     int frutaSeleccionada;
     const double AguaPorFruta=0.5;
@@ -63,112 +87,119 @@ void MaquinaLavadora::MenuMaquinaLavadora(std::vector<Frutas>& inventarioFrutas,
         cout<<"3. Regresar\n";
         opcion=NumeroValido("Ingrese una opcion: ",1,3);
     
-        if (opcion==1)
-        {
-    
+        if(opcion==1){
             if(!getEstado()){
-    
-                cout<<"\nLa maquina lavadora esta en mal estado. Debe repararse antes de usar.\n";
+
+                cout << "\nLa maquina lavadora esta en mal estado. Debe repararse antes de usar.\n";
                 continue;
-    
+
             }
 
             if(inventarioFrutas.empty()){
 
-                cout<<"El inventario de frutas esta vacio.\n";
+                cout << "El inventario de frutas esta vacio.\n";
                 continue;
 
             }
 
-            cout<<"Frutas Diponibles para lavar:\n";
-            //size_t es un tipo de dato que se usa para almacenar tamaños e indices 
-            //Sirve para especificar la longitud de una cadena, la cantidad de bytes que ocupa un puntero, 
-            //o el tamaño de un elemento. 
-            for (size_t i=0; i<inventarioFrutas.size(); i++)
-            {
-                
-                cout<<i+1<<". "<<inventarioFrutas[i].getNombre()<<"- Cantidad: "<<inventarioFrutas[i].getCantidad()<<"\n";
+            cout << "Frutas Disponibles para lavar:\n";
+            bool HayFrutasParaLavar=false;
+
+            for(size_t i=0;i<inventarioFrutas.size();i++){
+
+                int CantidadSinLavar=inventarioFrutas[i].getCantidad()-inventarioFrutas[i].getCantidadLavada();
+
+                if(CantidadSinLavar>0){
+
+                    cout<<i+1<< ". " <<inventarioFrutas[i].getNombre()<<"- Cantidad sin lavar: "<<CantidadSinLavar<<"\n";
+                    HayFrutasParaLavar=true;
+
+                }
+
+            }
+            if(!HayFrutasParaLavar){
+
+                cout << "\nNo hay frutas para lavar\n";
+                return;
 
             }
 
-            frutaSeleccionada=NumeroValido("Selecciona una fruta para lavar (numero):  ",1,inventarioFrutas.size());
-            
+            do{
+
+                frutaSeleccionada=NumeroValido("Selecciona una fruta para lavar (numero):  ",1,inventarioFrutas.size());
+                Frutas& fruta=inventarioFrutas[frutaSeleccionada-1];
+                int CantidadSinLavar=fruta.getCantidad()-fruta.getCantidadLavada();
+                if(CantidadSinLavar>0){
+
+                    cout << "\nIniciando lavado de todas las " << fruta.getNombre() << " disponibles...\n";
+                    break;
+
+                }
+
+                cout<<"Error: La fruta seleccionada ya ha sido lavada completamente. Seleccione otra.\n";
+            }while(true);
+
             Frutas& fruta=inventarioFrutas[frutaSeleccionada-1];
 
-            cout<<"\nIniciando lavado de todas las "<<fruta.getNombre()<<" disponibles...\n";
+            cout<<"\nLavando "<< fruta.getNombre() << "...\n";
+            //aqui inicia el hilo
+            thread HiloLavadoFruta(&MaquinaLavadora::LavarFruta, this, ref(fruta), ref(gestor));
+            HiloLavadoFruta.join();
 
-            // Lavar todas las frutas de esta categoría en un bucle
-            while (fruta.getCantidad() > 0) {
-                if (!getEstado()) {
-                    cout << "\n¡La maquina lavadora se ha dañado! Debe repararse antes de continuar.\n";
-                    break;
-                }
+          
 
-                if(gestor.getAgua()<AguaPorFruta) {
-                    cout << "\nNo hay suficiente agua para continuar el lavado. Debe reabastecer agua.\n";
-                    break;
-                }
+            if(!getEstado()){
 
-                cout<<"\nLavando "<<fruta.getNombre()<<"...\n";
-                //aqui se crea un hilo para lavar esta fruta    ref pasa por referencia ala fruta
-                thread HiloLavadoFruta(&MaquinaLavadora::LavarFruta,this,ref(fruta));
-                HiloLavadoFruta.join();
+                cout<<"\n¡La maquina lavadora se ha dañado! Debe repararse antes de continuar.\n";
+                break;
 
-                gestor.ReducirAgua(AguaPorFruta);
-                cout << "Se han consumido " << AguaPorFruta << " litros de agua en el lavado.\n";
-
-                if(VerificarFallo()){
-
-                    cout<<"LA LAVADORA SUFRIO UN DESPERFECTO. DEBE REPARASE.\n";
-                    setEnUso(false);
-                    break;
-
-                }else{
-
-                    cout<<"Lavado completado correctamente. Quedan "<<fruta.getCantidad()<<" "<<fruta.getNombre()<<" por lavar.\n";
-
-                }
             }
-            if (fruta.getCantidad()<=0) {
+            if(gestor.getAgua()<AguaPorFruta){
 
-                cout<<"\nTodas las " << fruta.getNombre() << " han sido lavadas y removidas del inventario.\n";
-                inventarioFrutas.erase(inventarioFrutas.begin() + frutaSeleccionada - 1);//esto hace que borre la lista de frutas cuando estan en 0
+                cout << "\nNo hay suficiente agua para continuar el lavado. Debe reabastecer agua.\n";
+                break;
 
             }
 
-        }else if (opcion==2){
-    
+            if(VerificarFallo()){
+
+                cout << "LA LAVADORA SUFRIO UN DESPERFECTO. DEBE REPARARSE.\n";
+                setEnUso(false);
+                break;
+
+            }
+            if(fruta.getCantidadLavada()==fruta.getCantidad()) {
+
+                cout << "\nTodas las " << fruta.getNombre() << " han sido lavadas y marcadas como listas para procesar.\n";
+
+            }
+
+        }else if(opcion==2){
+
             if(getEstado()){
 
-                cout<<"La lavadora ya esta en buen estado, No necesita reparacion\n";
+                cout<< "La lavadora ya esta en buen estado, No necesita reparacion\n";
 
             }else{
 
                 vector<EmpleadoTecnico*> tecnicos;
+                for(auto& MessiMecanico : empleados){
 
-                for(auto& MessiMecanico:empleados){
-
-                    if(auto tecnico=dynamic_cast<EmpleadoTecnico*>(MessiMecanico)){
+                    if(auto tecnico=dynamic_cast<EmpleadoTecnico*>(MessiMecanico)) {
 
                         tecnicos.push_back(tecnico);
 
                     }
-
                 }
-                EmpleadoTecnico::RepararMaquina(*this,tecnicos);
-
+                EmpleadoTecnico::RepararMaquina(*this, tecnicos);
             }
-    
         }else if(opcion==3){
-    
-            return;
-    
-        }
-        
 
+            return;
+
+        }
     }while(opcion!=3);
     
-   
 
 
 }

@@ -58,7 +58,7 @@ void ProcesadorFrutas::ExtraerJugo(int segundos,const string&FrutaNombre)const{
     MostrarCronometro(segundos," Extraendo Jugo de: "+FrutaNombre);
 
     this->mtx.lock();
-    cout<<"Jugo de "<<FrutaNombre<<" extraido exitosamente.\n";
+    cout<<"Jugo de la fruta"<<FrutaNombre<<" extraido exitosamente.\n";
     this->mtx.unlock();
 
 }
@@ -130,6 +130,11 @@ void ProcesadorFrutas::MenuProcesadorFrutas(std::vector<Frutas>&inventarioFrutas
                 
             Frutas& fruta=inventarioFrutas[FrutaSeleccionada-1];
 
+            if (fruta.getCantidadLavada() <= 0) {
+                cout << "ERROR: La fruta seleccionada no ha sido lavada aun. Seleccione otra.\n";
+                continue;
+            }
+
             cout<<"\nIniciando proceso de "<<fruta.getNombre()<<"...\n";
 
             //hilo que tritura la fruta
@@ -142,11 +147,13 @@ void ProcesadorFrutas::MenuProcesadorFrutas(std::vector<Frutas>&inventarioFrutas
 
 
             fruta.DecrementarLavada();
+            fruta.setCantidad(fruta.getCantidad()-1);
             cout<<"Se proceso 1 unidad de "<<fruta.getNombre()<< ". Unidades restantes lavadas: "<<fruta.getCantidadLavada()<<"\n";
             if (fruta.getCantidad()<=0)
             {
                 
                 inventarioFrutas.erase(inventarioFrutas.begin()+FrutaSeleccionada-1);
+                cout<<"Se han agotado las frutas seleccionadaas.\n";
 
             }
 
@@ -174,7 +181,7 @@ void ProcesadorFrutas::MenuProcesadorFrutas(std::vector<Frutas>&inventarioFrutas
 
             }else{
 
-                vector<EmpleadoTecnico*> tecnicos;
+                vector<EmpleadoTecnico*>tecnicos;
 
                 for(auto& ToroMecanico:empleados){
 

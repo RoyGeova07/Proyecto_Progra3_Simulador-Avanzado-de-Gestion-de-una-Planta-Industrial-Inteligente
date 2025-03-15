@@ -7,6 +7,7 @@
 #include <chrono>
 #include <mutex>
 #include "Empleado.h"
+#include "Gestor_De_Planta.h"
 
 using namespace std;
 
@@ -23,7 +24,7 @@ class MaquinaLavadora : public Maquina {
        
         void MostrarCronometro(int segundos,const std::string& frutaNombre )const;
 
-        void LavarFruta(Frutas& fruta);
+        void LavarFruta(Frutas& fruta,Gestor_De_Planta& gestor);
 
         bool VerificarFallo();
 
