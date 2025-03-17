@@ -7,6 +7,7 @@
 #include "EmpleadoTecnico.h"
 #include "NumeroValido.h"
 #include "ProcesadorFrutas.h"
+#include "Envasadora.h"
 
 
 using namespace std;
@@ -20,7 +21,7 @@ void Maquina::MenuMaquinas(Gestor_De_Planta& gestor){
     cout<<"\nMenu de maquinas\n";
     cout<<"1. Maquina Lavadora\n";
     cout<<"2. ProcesadorFrutas\n";
-    cout<<"3. Pasteurizador\n";
+    cout<<"3. Envasadora\n";
     cout<<"4. Volver\n";
     opcion=NumeroValido("Ingrese una opcion: ",1,4);
 
@@ -74,10 +75,28 @@ void Maquina::MenuMaquinas(Gestor_De_Planta& gestor){
 
     }else if(opcion==3){
 
-        //PENDIENTEEEEEEEEEEEEEEEEEE
-        //PENDIENTEEEEEEEEEEEEEEEEEE
-        //PENDIENTEEEEEEEEEEEEEEEEEE
-        //PENDIENTEEEEEEEEEEEEEEEEEE
+        Envasadora* Envasador=nullptr;
+
+        for(auto& maquina:gestor.getMaquinas()){
+
+            Envasador=dynamic_cast<Envasadora*>(maquina);
+            if(Envasador){
+
+                break;
+
+            }
+            
+        }
+        
+        if(Envasador){
+
+            Envasador->MenuMaquinaEnvasadora(gestor.getInventarioJugos(),gestor.getEmpleados(),gestor);
+
+        }else{
+
+            cout<<"No se encontro el envasador de jugos de frutas en el sistema.\n";
+
+        }
 
     }else if(opcion==4){
 

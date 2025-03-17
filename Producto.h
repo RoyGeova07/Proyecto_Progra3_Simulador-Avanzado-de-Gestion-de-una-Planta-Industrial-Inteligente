@@ -14,6 +14,7 @@ private:
     std::string nombre;
     int cantidad;
     double precio;
+    int CantidadJugosSinIngredientes;
 
 public:
 
@@ -23,7 +24,7 @@ public:
     Producto(const std::string& nombre, int cantidad, double precio)
         : nombre(nombre), cantidad(cantidad), precio(precio) {}
 
-    Producto(const std::string& nombre) : nombre(nombre),cantidad(0),precio(0){}
+    Producto(const std::string& nombre) : nombre(nombre),cantidad(cantidad),precio(precio),CantidadJugosSinIngredientes(cantidad){}
 
     void mostrarInfo() const
     {
@@ -32,17 +33,35 @@ public:
         
     }
 
+
     virtual ~Producto() {}
 
     std::string getNombre() const { return nombre; }
     int getCantidadProducida() const { return cantidad; }
     int getCantidad() const {return cantidad;}
+    int getCantidadSinIngredientes()const{return CantidadJugosSinIngredientes;}
+    void setCantidadSinIngredientes(int NuevaCantidadJugosSinIngredientes){this->CantidadJugosSinIngredientes=NuevaCantidadJugosSinIngredientes;}
     double getPrecio() const {return precio;}
 
+    bool hayJugosSinIngredientes()const{return CantidadJugosSinIngredientes>0;}
 
     // Setters (const & en string para evitar copias innecesarias)
     void setNombre(const std::string &nuevoNombre) { this->nombre = nuevoNombre; }
     void setCantidadProducida(int nuevaCantidad) { this->cantidad = nuevaCantidad; }
+
+    void DecrementarJugosSinIngredientes(int CantidadProcesada){
+        
+        if(CantidadJugosSinIngredientes>=CantidadProcesada){
+
+            CantidadJugosSinIngredientes-=CantidadProcesada;
+
+        }else{
+
+            CantidadJugosSinIngredientes=0;
+
+        }
+
+    }
 
 };
 

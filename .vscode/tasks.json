@@ -10,7 +10,7 @@
                 "ProcesadorFrutas.cpp",
                 "Gestor_De_Planta.cpp",
                 "MaquinaLavadora.cpp",
-                "Pasteurizador.cpp",
+                "Envasadora.cpp",
                 "Empleado.cpp",
                 "Maquina.cpp",
                 "EmpleadoTecnico.cpp",

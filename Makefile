@@ -9,9 +9,9 @@ SRCS = Main.cpp \
        MaquinaLavadora.cpp \
        EmpleadoTecnico.cpp \
        Maquina.cpp \
-       Pasteurizador.cpp
+       Envasadora.cpp
 
-# Archivos objeto (.o) generados automáticamente
+# Archivos objeto (.o) generados automaticamente
 OBJS = $(SRCS:.cpp=.o)
 
 # Compilador y flags

@@ -9,10 +9,9 @@
 #include "Empleado.h"
 #include "EmpleadoTecnico.h"
 #include "EmpleadoOperario.h"
-#include "EmpleadoSupervisor.h"
 #include "Maquina.h"
 #include "MaquinaLavadora.h"
-#include "Pasteurizador.h"
+#include "Envasadora.h"
 #include "ProcesadorFrutas.h"
 #include "Frutas.h"
 #include "Gestor_De_Planta.h"
@@ -134,10 +133,14 @@ void ConfigurarParametrosIniciales(Gestor_De_Planta& gestor)
     PrimerConfiguracion=false;
 
     string nombrePlanta;
-    double capitalAdicional;
+    double capitalAdicional ;
     int cantidadEmpleados;
+    int Envases=0;
+    int Conservantes=0;
 
     char respuesta;
+    char respuesta2;
+    char respuesta3;
     int tipoEmpleado;
 
     cout << "\nIngrese el nombre de la planta: \n";
@@ -183,15 +186,34 @@ void ConfigurarParametrosIniciales(Gestor_De_Planta& gestor)
     }
     gestor.agregarCapital(capitalAdicional);
 
+    respuesta2=obtenerRespuestaSN("\nDisponemos con 50 envases. Quiere agregar mas? (s/n): ");
+    if (respuesta2=='s'||respuesta2=='S')
+    {
+        
+        Envases=NumeroValido("\nIngrese la cantidad de envases que quiere agregar (Maximo 100): ",1,100);
+
+    }
+    gestor.AgregarMasEnvases(Envases);
+
+    respuesta3=obtenerRespuestaSN("\nTenemos 50 conservantes. Quieres agregar mas? (s/n): ");
+    if(respuesta3=='s'||respuesta3=='S')
+    {
+        
+        Conservantes=NumeroValido("\nIngrese la cantidad de conservantes a agregar (Maximo 50): ",1,50);
+
+    }
+    gestor.AgregarMasConservantes(Conservantes);
+
     //aqui se agregan los empleados
     cantidadEmpleados=NumeroValido("\nIngrese la cantidad de empleados a contratar (maximo de planta 50): ",1,50);
 
     vector<string> nombresGenerados=ObtenerNombresAleatorios(cantidadEmpleados);
 
     for(const auto& nombre:nombresGenerados)
+
     {
 
-        tipoEmpleado=rand()%3;
+        tipoEmpleado=rand()%2;
         Empleado* NuevoEmpleado;//Puntero
 
         if (tipoEmpleado==0)
@@ -202,14 +224,10 @@ void ConfigurarParametrosIniciales(Gestor_De_Planta& gestor)
 
         }else if (tipoEmpleado==1){
          
-            NuevoEmpleado=new EmpleadoSuperVisor(nombre);
-            NuevoEmpleado->setSalario(3500);
-
-        }else if(tipoEmpleado==2){
-
+            
             NuevoEmpleado=new EmpleadoOperario(nombre);
             NuevoEmpleado->setSalario(1800);
-            
+
         }
         gestor.AgregarEmpleado(NuevoEmpleado);
       
@@ -219,38 +237,31 @@ void ConfigurarParametrosIniciales(Gestor_De_Planta& gestor)
     lavadora->setEnUso(true);
     gestor.AgregarMaquina(lavadora);
 
-    
-    //AGREGAR SU ARCHIVO CPP DESPUESSSSSSS
-    //AGREGAR SU ARCHIVO CPP DESPUESSSSSSS
-    //AGREGAR SU ARCHIVO CPP DESPUESSSSSSS
-    //AGREGAR SU ARCHIVO CPP DESPUESSSSSSS
-    //AGREGAR SU ARCHIVO CPP DESPUESSSSSSS
     ProcesadorFrutas* procesarFrutas=new ProcesadorFrutas();
     procesarFrutas->setEnUso(true);
-    gestor.AgregarMaquina(procesarFrutas);
-    
+    gestor.AgregarMaquina(procesarFrutas);    
 
-    Pasteurizador* pasteurizador=new Pasteurizador();
-    pasteurizador->setEnUso(true);
-    gestor.AgregarMaquina(pasteurizador);
+    Envasadora* envasadora=new Envasadora();
+    envasadora->setEnUso(true);
+    gestor.AgregarMaquina(envasadora);
     
     
     // Mostrar configuracion final
-    cout << "\n=============================\n";
-    cout << "Configuracion inicial de la planta\n";
-    cout << "=============================\n";
-    cout << "Nombre de la planta: " << nombrePlanta << "\n";
-    cout << "Capital inicial: $" << gestor.getCapital() << "\n";
-    cout << "Agua disponible: " << gestor.getAgua() << " litros\n";
-    // MOSTRAR EL ESTADO DE LAS MAQUINAS
+    cout<<"\n=============================\n";
+    cout<<"Configuracion inicial de la planta\n";
+    cout<<"=============================\n";
+    cout<<"Nombre de la planta: " << nombrePlanta << "\n";
+    cout<<"Capital inicial: $" << gestor.getCapital() << "\n";
+    cout<<"Agua disponible: " << gestor.getAgua() << " litros\n";
+    cout<<"Envases disponibles: "<<gestor.getEnvases()<<"Unidades \n";
+    cout<<"Conservantes disponibles: "<<gestor.getConservantes()<<"Unidades \n";
 
-    gestor.ListarFrutas();
+    gestor.ListarFrutas(); 
 
     gestor.listarEmpleados();
 
     gestor.VerEstadoMaquina();
     
-
 }
 
 

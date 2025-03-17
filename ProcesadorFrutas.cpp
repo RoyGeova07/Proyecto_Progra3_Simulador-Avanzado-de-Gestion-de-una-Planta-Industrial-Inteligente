@@ -15,7 +15,7 @@ using namespace std;
 ProcesadorFrutas::~ProcesadorFrutas(){}
 
 
-void ProcesadorFrutas::MostrarCronometro(int segundos, const string& Frutanombre)const{
+void ProcesadorFrutas::MostrarCronometro(int segundos,const string&Frutanombre)const{
 
     for (int i=1;i<segundos;i++)
     {
@@ -84,10 +84,10 @@ void ProcesadorFrutas::MenuProcesadorFrutas(std::vector<Frutas>&inventarioFrutas
         opcion=NumeroValido("Ingrese una opcion: ",1,3);
         
 
-        if (opcion==1)
+        if(opcion==1)
         {
             
-            if (!getEstado())
+            if(!getEstado())
             {
 
                 cout<<"\nLa maquina procesadora de frutas eta en mal estado. Debe repararse antes de usar\n";
@@ -95,7 +95,7 @@ void ProcesadorFrutas::MenuProcesadorFrutas(std::vector<Frutas>&inventarioFrutas
                 
             }
             
-            if (inventarioFrutas.empty())
+            if(inventarioFrutas.empty())
             {
                 
                 cout<<"El inventario de frutas esta vacio\n";
@@ -130,12 +130,16 @@ void ProcesadorFrutas::MenuProcesadorFrutas(std::vector<Frutas>&inventarioFrutas
                 
             Frutas& fruta=inventarioFrutas[FrutaSeleccionada-1];
 
-            if (fruta.getCantidadLavada() <= 0) {
+            if (fruta.getCantidadLavada()<=0) {
+
                 cout << "ERROR: La fruta seleccionada no ha sido lavada aun. Seleccione otra.\n";
                 continue;
+
             }
 
-            cout<<"\nIniciando proceso de "<<fruta.getNombre()<<"...\n";
+            int CantidadAProcesar=fruta.getCantidadLavada();
+
+            cout<<"\nIniciando proceso de "<<CantidadAProcesar<<" uniades de "<<fruta.getNombre()<<"..\n";
 
             //hilo que tritura la fruta
             thread HiloTritura(&ProcesadorFrutas::TriturarFruta,this,5,fruta.getNombre());  
@@ -145,10 +149,36 @@ void ProcesadorFrutas::MenuProcesadorFrutas(std::vector<Frutas>&inventarioFrutas
             thread HiloExtraeJuguito(&ProcesadorFrutas::ExtraerJugo,this,5,fruta.getNombre());
             HiloExtraeJuguito.join();
 
+            //aqui se convierte la fruta en jugo y se almacena en el vector de jugos sin ingredientes y envases
+            Producto::Jugos TipoJugo;
 
-            fruta.DecrementarLavada();
-            fruta.setCantidad(fruta.getCantidad()-1);
-            cout<<"Se proceso 1 unidad de "<<fruta.getNombre()<< ". Unidades restantes lavadas: "<<fruta.getCantidadLavada()<<"\n";
+            if(fruta.getNombre()=="Limon")TipoJugo=Producto::Limonada;
+            else if(fruta.getNombre()=="Naranja")TipoJugo=Producto::JugoNaranja;
+            else if(fruta.getNombre()=="Piña")TipoJugo=Producto::JugoPilla;
+            else if(fruta.getNombre()=="Sandia")TipoJugo=Producto::JugoSandia;
+            else if(fruta.getNombre()=="Fresa")TipoJugo=Producto::JugoFresa;
+            else if(fruta.getNombre()=="Tamarindo")TipoJugo=Producto::JugoTamarindo;
+            else if(fruta.getNombre()=="Coco")TipoJugo=Producto::AguaCoco;
+            
+            //Por los momentos el jugo valdra como la fruta
+            //Por los momentos el jugo valdra como la fruta
+            //Por los momentos el jugo valdra como la fruta
+            //Por los momentos el jugo valdra como la fruta
+            //Por los momentos el jugo valdra como la fruta
+            //Por los momentos el jugo valdra como la fruta
+            //Por los momentos el jugo valdra como la fruta
+            //Por los momentos el jugo valdra como la fruta
+
+            //aqui se asegura que el jugo se creee bien
+            Producto Jugo(fruta.getNombre(),CantidadAProcesar,fruta.getCosto());
+            Jugo.setCantidadSinIngredientes(CantidadAProcesar);//aqui se asegura que la cantidad es la correcta
+            
+            gestor.AgregarJugosSinIngredientesYEnvases(Jugo);
+            cout<<"Se ha creado "<<CantidadAProcesar<<" jugos de "<<fruta.getNombre()<<"\n";
+
+            fruta.DecrementarLavada(CantidadAProcesar);
+            fruta.setCantidad(fruta.getCantidad()-CantidadAProcesar);
+
             if (fruta.getCantidad()<=0)
             {
                 
@@ -185,6 +215,7 @@ void ProcesadorFrutas::MenuProcesadorFrutas(std::vector<Frutas>&inventarioFrutas
 
                 for(auto& ToroMecanico:empleados){
 
+                    //el dynamic cast me ayuda hacer conversionesde tipos de forma segura
                     if(auto tecnico=dynamic_cast<EmpleadoTecnico*>(ToroMecanico)){
 
                         tecnicos.push_back(tecnico);

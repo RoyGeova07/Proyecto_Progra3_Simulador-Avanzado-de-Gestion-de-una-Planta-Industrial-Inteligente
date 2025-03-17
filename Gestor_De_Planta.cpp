@@ -5,7 +5,6 @@
 #include <algorithm>
 #include "Empleado.h"
 #include "EmpleadoOperario.h"
-#include "EmpleadoSupervisor.h"
 #include "EmpleadoTecnico.h"
 #include "NumeroValido.h"
 #include "Maquina.h"
@@ -232,21 +231,22 @@ void Gestor_De_Planta::AgregarFruta(const Frutas& fruta) {
 
     for(auto& EstaDuplicadoEl:FRUTAS){
 
-        if (EstaDuplicadoEl.getNombre()==fruta.getNombre()&&EstaDuplicadoEl.getCosto()==fruta.getCosto())
+        if(EstaDuplicadoEl.getNombre()==fruta.getNombre())
         {
-            
-            //aqui si la fruta ya existe con el mismo nombre, se aumenta la cantidad 
+           
+            //aqui si la fruta ya existe, sumamos la cantidad y actulizamos el precio al ultimo valor
             EstaDuplicadoEl.setCantidad(EstaDuplicadoEl.getCantidad()+fruta.getCantidad());
-            return;//aqui evita agregar nombre duplicados
-
-        }
-        
+            EstaDuplicadoEl.setCosto(fruta.getCosto());//aqui se actualiza el precio al nuevo ingresado
+            return;
+           
+        } 
 
     }
-    //aqui si no se encontro se agrega, lo agrega como fruta nueva 
+    //aqui si no se encontro una fruta con el mismo nombre lo agrega
     FRUTAS.push_back(fruta);
 
 }
+
 
 void Gestor_De_Planta::AgregarMaquina(Maquina* maq){
 
@@ -254,13 +254,99 @@ void Gestor_De_Planta::AgregarMaquina(Maquina* maq){
 
 }
 
-void Gestor_De_Planta::ListaJugosFaltanIngredientesYEnvases()const{
+void Gestor_De_Planta::AgregarJugosSinIngredientesYEnvases(const Producto& jugo){
 
-    
+    for(auto&JugoCreado:JUGOS_SIN_INGREDIENTES){
+
+        if (JugoCreado.getNombre()==jugo.getNombre())
+        {
+            
+            JugoCreado.setCantidadSinIngredientes(JugoCreado.getCantidadSinIngredientes()+jugo.getCantidadSinIngredientes());
+            //JugoCreado.setNombre(jugo.getNombre());
+            return;//aqui evita los duplicados  
+
+        }
+        
+
+    }
+    Producto NuevoJugo(jugo.getNombre(),jugo.getCantidadProducida(),jugo.getPrecio());
+    NuevoJugo.setCantidadSinIngredientes(jugo.getCantidadProducida());//aqui se asegura que la cantidad sin ingredientes se refleje
+    JUGOS_SIN_INGREDIENTES.push_back(NuevoJugo);//aqui si no existe lo agrega
 
 }
 
+void Gestor_De_Planta::AgregarJugosDisponibles(const Producto& jugo,int cantidad){
 
+    for(auto& JugoFinal:JUGOS_DISPONIBLES){
+
+        if (JugoFinal.getNombre()==jugo.getNombre())
+        {
+            
+            JugoFinal.setCantidadProducida(JugoFinal.getCantidadProducida()+cantidad);
+            return;
+
+        }
+        
+    }
+    Producto NuevoJugo(jugo.getNombre(),cantidad,jugo.getPrecio());
+    JUGOS_DISPONIBLES.push_back(NuevoJugo);
+
+}
+
+void Gestor_De_Planta::ListaJugosDisponibles()const{
+
+    if(JUGOS_DISPONIBLES.empty())
+    {
+        
+        cout<<"\nNo hay jugos disponibles para la venta.\n";
+        return;
+
+    }
+
+    cout<<"\n -- Jugos Disponibles para la venta -- \n";
+    for(const auto& jugo:JUGOS_DISPONIBLES){
+
+        cout<<"Jugo: "<<jugo.getNombre()<<" - Cantidad Disponible: "<<jugo.getCantidad()<<" - Precio: $"<<jugo.getPrecio()<<"\n.";
+
+    }
+    
+}
+
+void Gestor_De_Planta::ListaJugosFaltanIngredientesYEnvases()const{
+
+    if(JUGOS_SIN_INGREDIENTES.empty())
+    {
+
+       cout<<"No hay jugos sin ingredientes aun";
+       return;
+        
+    }
+    cout<<"\n -- Jugos sin Ingredientes -- \n";
+    for(const auto& JugosSinSabor: JUGOS_SIN_INGREDIENTES){
+
+        std::cout<<"Jugo: "<<JugosSinSabor.getNombre()<<" Cantidad: "<<JugosSinSabor.getCantidadProducida()<<" - Sin Ingredientes\n";
+
+    }
+
+}
+
+//ESTA FUNCION POR SI ACASO LO NECESITE A FUTURO
+//EXPLICARE LA FUNCIONALIDAD DE ESTA FUNCION DESPUESSSSSS
+//EXPLICARE LA FUNCIONALIDAD DE ESTA FUNCION DESPUESSSSSS
+//EXPLICARE LA FUNCIONALIDAD DE ESTA FUNCION DESPUESSSSSS
+//EXPLICARE LA FUNCIONALIDAD DE ESTA FUNCION DESPUESSSSSS
+//EXPLICARE LA FUNCIONALIDAD DE ESTA FUNCION DESPUESSSSSS
+void Gestor_De_Planta::EliminarJugoSinIngredientes(const string& NombreJugo){
+
+    auto messi=remove_if(JUGOS_SIN_INGREDIENTES.begin(),JUGOS_SIN_INGREDIENTES.end(),[&NombreJugo](const Producto& jugo){return jugo.getNombre()==NombreJugo;});
+
+    if(messi!=JUGOS_SIN_INGREDIENTES.end()){
+
+        JUGOS_SIN_INGREDIENTES.erase(messi,JUGOS_SIN_INGREDIENTES.end());
+
+    }
+
+}
 
 void Gestor_De_Planta::generarReporte()const{
 
@@ -279,7 +365,7 @@ void Gestor_De_Planta::MiniMenuGestor(){
         cout<<"2. Despedir Empleados\n";
         cout<<"3. Espacio de Maquinas\n";
         cout<<"4. Comprar Frutas\n";
-        cout<<"5. Ver pedidos\n";
+        cout<<"5. Ver pedidos\nss";
         cout<<"6. Volver\n";
         cout<<"Ingrese una opcion: ";
         cin>>opcionmini;
@@ -299,7 +385,17 @@ void Gestor_De_Planta::MiniMenuGestor(){
             cout<<"\nFrutas lavadas en el invetario:\n";
             ListarFrutasLavadas();
 
+            cout<<"\nJugos sin Ingredientes y envases por Agregar:\n";
+            ListaJugosFaltanIngredientesYEnvases();
+
+            cout<<"\nJugos Disponibles:\n";
+            ListaJugosDisponibles();
+
             cout<<"\nAgua disponible: "<<getAgua()<<" litros\n";
+
+            cout<<"\nConservantes disponibles: "<<getConservantes()<<" unidades\n";
+
+            cout<<"\n Envases disponibles: "<<getEnvases()<<" unidades\n";
             
             cout<<"\nEstado de las maquinas actualmente:\n";
             VerEstadoMaquina();
@@ -310,8 +406,6 @@ void Gestor_De_Planta::MiniMenuGestor(){
            //listar empleados contratados
            cout<<"\nEmpleados activos:\n ";
             listarEmpleados();
-
-
            
            id=NumeroValido("Ingrese el ID del empleado a despedir: ",1,50);
            
@@ -322,14 +416,7 @@ void Gestor_De_Planta::MiniMenuGestor(){
             
         }else if(opcionmini==3){
         
-            //AQUI VA EL MENU DE MAQUINAS
-            //AQUI VA EL MENU DE MAQUINAS
-            //AQUI VA EL MENU DE MAQUINAS
-            //AQUI VA EL MENU DE MAQUINAS
-            //AQUI VA EL MENU DE MAQUINAS
-            //AQUI VA EL MENU DE MAQUINAS
             Maquina::MenuMaquinas(*this);
-            //MiniMenuDos(gestor);
             
         }else if(opcionmini==4){
     

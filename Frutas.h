@@ -70,6 +70,11 @@ public:
         this->cantidad=nuevaCantidad;
         
     }
+    void setCosto(int NuevoCosto){
+
+        this->costo=NuevoCosto;
+
+    }
 
     void IncrementarLavada(){
 
@@ -85,12 +90,16 @@ public:
 
     bool hayFrutasLavadas()const{return CantidadLavada>0;}
 
-    void DecrementarLavada(){
+    void DecrementarLavada(int cantidad){
 
-        if (CantidadLavada>0)
+        if (CantidadLavada>=cantidad)
         {
             
-            CantidadLavada--;
+            CantidadLavada-=cantidad;
+
+        }else{
+        
+            CantidadLavada=0;//esto para evitar valores negativos
 
         }
         

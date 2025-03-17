@@ -13,8 +13,6 @@ class ProcesadorFrutas : public Maquina
 
 private: 
 
-    
-
     std::vector<Maquina*> maquinas;
     std::vector<std::string> logProgreso;
     void extraerJugo();
@@ -45,7 +43,7 @@ public:
 
     void MenuProcesadorFrutas(std::vector<Frutas>& inventarioFrutas,std::vector<Empleado*>& empleados,Gestor_De_Planta& gestor);
 
-    ~ProcesadorFrutas() override;  
+    ~ProcesadorFrutas()override;  
     
 };
 
