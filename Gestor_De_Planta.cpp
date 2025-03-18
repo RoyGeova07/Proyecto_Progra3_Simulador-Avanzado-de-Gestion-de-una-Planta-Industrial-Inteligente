@@ -354,6 +354,11 @@ void Gestor_De_Planta::generarReporte()const{
 
 }
 
+void Gestor_De_Planta::agregarProducto(const Producto &producto) {
+    productos.push_back(producto);
+}
+
+
 void Gestor_De_Planta::MiniMenuGestor(){
 
     int opcionmini=0;

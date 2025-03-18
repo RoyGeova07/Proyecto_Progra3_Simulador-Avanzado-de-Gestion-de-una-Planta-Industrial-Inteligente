@@ -42,7 +42,9 @@ private:
 public:
 
     Gestor_De_Planta()=default;
-    ~Gestor_De_Planta();    
+    ~Gestor_De_Planta();
+    
+    void agregarProducto(const Producto &producto);
 
     void AgregarEmpleado(Empleado* emp);
     void AgregarMaquina(Maquina* maq);
