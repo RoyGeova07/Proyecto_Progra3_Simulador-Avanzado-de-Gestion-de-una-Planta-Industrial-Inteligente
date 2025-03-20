@@ -10,6 +10,7 @@ SRCS = Main.cpp \
        EmpleadoTecnico.cpp \
        Maquina.cpp \
        Envasadora.cpp
+       Distribucion.cpp
 
 # Archivos objeto (.o) generados automaticamente
 OBJS = $(SRCS:.cpp=.o)

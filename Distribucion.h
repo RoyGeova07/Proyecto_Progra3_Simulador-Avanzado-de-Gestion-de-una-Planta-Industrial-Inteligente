@@ -1,42 +1,26 @@
 #ifndef DISTRIBUCION_H
 #define DISTRIBUCION_H
+
 #include "Producto.h"
+#include <vector>
+#include <string>
 
-
-//aqui se maneja el proceso de pedidos, que se dara aleatorioamente
 class Distribucion
 {
 private:
-    std::vector<Producto> pedidos;
+    std::vector<Producto> pedidos;  
 
 public:
-    void agregarPedido(const Producto &producto)
-    {
+    // Constructor por defecto
+    Distribucion() = default;
 
-        pedidos.push_back(producto);
-        
-    }
+    void agregarPedido(const Producto &producto);
+    void mostrarPedidos() const;
 
-    void mostrarPedidos() const
-    {
-        std::cout << "\n--- Pedidos en Distribucion ---\n";
-        for (const auto &pedido : pedidos)
-        {
+    int calcularTiempoEntrega(int pedidosPendientes);
 
-            pedido.mostrarInfo();
-
-        }
-    }
-
-    //aqui una Funcion recursiva para calcular el tiempo estimado de entrega
-    int calcularTiempoEntrega(int pedidosPendientes)
-    {
-        if (pedidosPendientes <= 0)
-        {
-            return 0;
-        }
-        return 2 + calcularTiempoEntrega(pedidosPendientes - 1); // Cada pedido toma 2 unidades de tiempo
-    }
+    // Genera 'cantidad' pedidos aleatorios
+    void generarPedidosAleatorios(int cantidad);
 };
 
-#endif //DISTRIBUCION_H
+#endif // DISTRIBUCION_H
