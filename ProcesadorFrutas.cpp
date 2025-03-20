@@ -151,14 +151,15 @@ void ProcesadorFrutas::MenuProcesadorFrutas(std::vector<Frutas>&inventarioFrutas
 
             //aqui se convierte la fruta en jugo y se almacena en el vector de jugos sin ingredientes y envases
             Producto::Jugos TipoJugo;
+            double PrecioJugo;
 
-            if(fruta.getNombre()=="Limon")TipoJugo=Producto::Limonada;
-            else if(fruta.getNombre()=="Naranja")TipoJugo=Producto::JugoNaranja;
-            else if(fruta.getNombre()=="Piña")TipoJugo=Producto::JugoPilla;
-            else if(fruta.getNombre()=="Sandia")TipoJugo=Producto::JugoSandia;
-            else if(fruta.getNombre()=="Fresa")TipoJugo=Producto::JugoFresa;
-            else if(fruta.getNombre()=="Tamarindo")TipoJugo=Producto::JugoTamarindo;
-            else if(fruta.getNombre()=="Coco")TipoJugo=Producto::AguaCoco;
+            if(fruta.getNombre()=="Limon") {TipoJugo=Producto::Limonada; PrecioJugo=17.0;}
+            else if(fruta.getNombre()=="Naranja"){TipoJugo=Producto::JugoNaranja; PrecioJugo=15.0;}
+            else if(fruta.getNombre()=="Piña"){TipoJugo=Producto::JugoPilla; PrecioJugo=12.0;}
+            else if(fruta.getNombre()=="Sandia"){TipoJugo=Producto::JugoSandia; PrecioJugo=11.0;}
+            else if(fruta.getNombre()=="Fresa"){TipoJugo=Producto::JugoFresa; PrecioJugo=22.0;}
+            else if(fruta.getNombre()=="Tamarindo"){TipoJugo=Producto::JugoTamarindo; PrecioJugo=24.0;}
+            else if(fruta.getNombre()=="Coco"){TipoJugo=Producto::AguaCoco; PrecioJugo=30.0;}
             
             //Por los momentos el jugo valdra como la fruta
             //Por los momentos el jugo valdra como la fruta
@@ -168,7 +169,6 @@ void ProcesadorFrutas::MenuProcesadorFrutas(std::vector<Frutas>&inventarioFrutas
             //Por los momentos el jugo valdra como la fruta
             //Por los momentos el jugo valdra como la fruta
             //Por los momentos el jugo valdra como la fruta
-
             //aqui se asegura que el jugo se creee bien
             Producto Jugo(fruta.getNombre(),CantidadAProcesar,fruta.getCosto());
             Jugo.setCantidadSinIngredientes(CantidadAProcesar);//aqui se asegura que la cantidad es la correcta

@@ -8,6 +8,7 @@
 #include "EmpleadoTecnico.h"
 #include "NumeroValido.h"
 #include "Maquina.h"
+#include "Tienda.h"
 
 using namespace std;
 
@@ -37,7 +38,7 @@ void Gestor_De_Planta::ReducirAgua(double litros){
     }else{
 
         AguaLitros=0;//aqui evita que el agua sea negativa
-
+        
     }
     
 
@@ -406,8 +407,14 @@ void Gestor_De_Planta::MiniMenuGestor(){
            //listar empleados contratados
            cout<<"\nEmpleados activos:\n ";
             listarEmpleados();
-           
-           id=NumeroValido("Ingrese el ID del empleado a despedir: ",1,50);
+           cout<<"---Nota-- Presione 51 para volver al menu\n";
+           id=NumeroValido("Ingrese el ID del empleado a despedir: ",1,51);
+
+           if(id==51){
+
+            return;
+
+           }
            
            eliminarEmpleado(id);
 
@@ -420,7 +427,9 @@ void Gestor_De_Planta::MiniMenuGestor(){
             
         }else if(opcionmini==4){
     
-            //AGREGAR FUNCION
+            Tienda tienda;
+            tienda.MenuTienda(*this);
+            //Tienda::MenuTienda(*this);
     
         }else if(opcionmini==5){
     

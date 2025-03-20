@@ -2,7 +2,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Compilar Todo",
+            "label": "Compila Mierda XD",
             "type": "shell",
             "command": "g++",
             "args": [
@@ -13,6 +13,7 @@
                 "Envasadora.cpp",
                 "Empleado.cpp",
                 "Maquina.cpp",
+                "Tienda.cpp",
                 "EmpleadoTecnico.cpp",
                 "-o",
                 "Main.exe"

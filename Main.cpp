@@ -137,10 +137,12 @@ void ConfigurarParametrosIniciales(Gestor_De_Planta& gestor)
     int cantidadEmpleados;
     int Envases=0;
     int Conservantes=0;
+    int Agua=0;
 
     char respuesta;
     char respuesta2;
     char respuesta3;
+    char respuesta4;
     int tipoEmpleado;
 
     cout << "\nIngrese el nombre de la planta: \n";
@@ -204,6 +206,16 @@ void ConfigurarParametrosIniciales(Gestor_De_Planta& gestor)
     }
     gestor.AgregarMasConservantes(Conservantes);
 
+    respuesta4=obtenerRespuestaSN("\n Tenenemos 100 litros de agua. Quieres agregar mas? (s/n): ");
+    if (respuesta4=='s'||respuesta4=='S')
+    {
+        
+        Agua=NumeroTemplate("\nIngrese la cantidad agregar (Maximo: 1,000 litros ): ",1.0,1000.0);
+
+    }
+    gestor.AgregarAwuita(Agua);
+    
+
     //aqui se agregan los empleados
     cantidadEmpleados=NumeroValido("\nIngrese la cantidad de empleados a contratar (maximo de planta 50): ",1,50);
 
@@ -253,8 +265,8 @@ void ConfigurarParametrosIniciales(Gestor_De_Planta& gestor)
     cout<<"Nombre de la planta: " << nombrePlanta << "\n";
     cout<<"Capital inicial: $" << gestor.getCapital() << "\n";
     cout<<"Agua disponible: " << gestor.getAgua() << " litros\n";
-    cout<<"Envases disponibles: "<<gestor.getEnvases()<<"Unidades \n";
-    cout<<"Conservantes disponibles: "<<gestor.getConservantes()<<"Unidades \n";
+    cout<<"Envases disponibles: "<<gestor.getEnvases()<<" Unidades \n";
+    cout<<"Conservantes disponibles: "<<gestor.getConservantes()<<" Unidades \n";
 
     gestor.ListarFrutas(); 
 
@@ -295,7 +307,7 @@ void MenuPrincipal()
 
             }
 
-        }else if (opcion == 2){
+        }else if (opcion==2){
 
             if(!ParametrosConfigurados)
             {   
@@ -311,7 +323,7 @@ void MenuPrincipal()
             }
             
 
-        }else if (opcion == 3){
+        }else if (opcion==3){
 
             //AGREGAR FUNCION
 

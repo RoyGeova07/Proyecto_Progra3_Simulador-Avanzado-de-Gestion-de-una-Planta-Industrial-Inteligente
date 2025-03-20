@@ -35,7 +35,7 @@ private:
     std::vector<Maquina*> maquinas;
     std::vector<Empleado*> empleado;
     double CapitalInicial=100000;
-    int AguaLitros=100;
+    double AguaLitros=100;
     int Envases=50;
     int Conservantes=50;
 
@@ -72,6 +72,7 @@ public:
     int getConservantes()const {return Conservantes;}
     void MiniMenuGestor();
     void ReducirAgua(double litros);
+    void AgregarAwuita(double MasAwuita){AguaLitros+=MasAwuita;}
 
     void EliminarJugoSinIngredientes(const std::string& nombreJugo);
 

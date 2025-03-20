@@ -7,6 +7,7 @@ SRCS = Main.cpp \
        Gestor_De_Planta.cpp \
        Empleado.cpp \
        MaquinaLavadora.cpp \
+       Tienda.cpp \
        EmpleadoTecnico.cpp \
        Maquina.cpp \
        Envasadora.cpp
