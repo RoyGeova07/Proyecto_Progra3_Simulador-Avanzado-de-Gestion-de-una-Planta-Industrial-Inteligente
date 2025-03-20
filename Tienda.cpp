@@ -31,7 +31,7 @@ void Tienda::MenuTienda(Gestor_De_Planta& gestor) {
             case 3: ComprarEnvases(gestor); break;
             case 4: ComprarAgua(gestor); break;
             case 5: cout << "Saliendo de la Tienda...\n"; return;
-            default: cout << "❌ Opción inválida.\n"; break;
+            default: cout << "Opcion invalida.\n"; break;
         }
     }
 }
