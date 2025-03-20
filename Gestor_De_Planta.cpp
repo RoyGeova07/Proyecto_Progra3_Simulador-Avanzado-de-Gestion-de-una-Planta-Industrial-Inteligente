@@ -366,7 +366,7 @@ void Gestor_De_Planta::MiniMenuGestor(){
         cout<<"2. Despedir Empleados\n";
         cout<<"3. Espacio de Maquinas\n";
         cout<<"4. Comprar Frutas\n";
-        cout<<"5. Ver pedidos\nss";
+        cout<<"5. Ver pedidos\n";
         cout<<"6. Volver\n";
         cout<<"Ingrese una opcion: ";
         cin>>opcionmini;
