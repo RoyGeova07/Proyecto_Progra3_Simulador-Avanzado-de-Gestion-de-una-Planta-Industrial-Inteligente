@@ -19,6 +19,7 @@
 #include <sstream>
 #include <chrono>
 #include "NumeroValido.h"
+#include "Distribucion.h"
 
 
 using namespace std;
@@ -137,10 +138,12 @@ void ConfigurarParametrosIniciales(Gestor_De_Planta& gestor)
     int cantidadEmpleados;
     int Envases=0;
     int Conservantes=0;
+    int Agua=0;
 
     char respuesta;
     char respuesta2;
     char respuesta3;
+    char respuesta4;
     int tipoEmpleado;
 
     cout << "\nIngrese el nombre de la planta: \n";
@@ -149,6 +152,7 @@ void ConfigurarParametrosIniciales(Gestor_De_Planta& gestor)
 
     int opcion, cantidad;
     double precio;
+
 
 
     while (true)
@@ -204,6 +208,16 @@ void ConfigurarParametrosIniciales(Gestor_De_Planta& gestor)
     }
     gestor.AgregarMasConservantes(Conservantes);
 
+    respuesta4=obtenerRespuestaSN("\n Tenenemos 100 litros de agua. Quieres agregar mas? (s/n): ");
+    if (respuesta4=='s'||respuesta4=='S')
+    {
+        
+        Agua=NumeroTemplate("\nIngrese la cantidad agregar (Maximo: 1,000 litros ): ",1.0,1000.0);
+
+    }
+    gestor.AgregarAwuita(Agua);
+    
+
     //aqui se agregan los empleados
     cantidadEmpleados=NumeroValido("\nIngrese la cantidad de empleados a contratar (maximo de planta 50): ",1,50);
 
@@ -253,8 +267,8 @@ void ConfigurarParametrosIniciales(Gestor_De_Planta& gestor)
     cout<<"Nombre de la planta: " << nombrePlanta << "\n";
     cout<<"Capital inicial: $" << gestor.getCapital() << "\n";
     cout<<"Agua disponible: " << gestor.getAgua() << " litros\n";
-    cout<<"Envases disponibles: "<<gestor.getEnvases()<<"Unidades \n";
-    cout<<"Conservantes disponibles: "<<gestor.getConservantes()<<"Unidades \n";
+    cout<<"Envases disponibles: "<<gestor.getEnvases()<<" Unidades \n";
+    cout<<"Conservantes disponibles: "<<gestor.getConservantes()<<" Unidades \n";
 
     gestor.ListarFrutas(); 
 
@@ -265,11 +279,39 @@ void ConfigurarParametrosIniciales(Gestor_De_Planta& gestor)
 }
 
 
+void MenuDistribucion(Distribucion &dist)
+{
+    int opcionSub = 0;
+    while (opcionSub != 3) {
+        std::cout << "\n-- Menu Distribucion --\n";
+        std::cout << "1. Generar pedidos aleatorios\n";
+        std::cout << "2. Mostrar pedidos\n";
+        std::cout << "3. Regresar\n";
+        opcionSub = NumeroValido("Seleccione una opcion: ", 1, 3);
+        
+        if (opcionSub == 1) {
+            int cant = NumeroValido("¿Cuántos pedidos desea generar?: ", 1, 50);
+            dist.generarPedidosAleatorios(cant);
+        }
+        else if (opcionSub == 2) {
+            dist.mostrarPedidos();
+        }
+        else if (opcionSub == 3) {
+            std::cout << "Regresando al menu principal.\n";
+        }
+        else {
+            std::cout << "Opcion invalida.\n";
+        }
+    }
+}
+
+
 void MenuPrincipal()
 {
 
     int opcion;
     Gestor_De_Planta gestor;
+    Distribucion dist; 
 
     while (opcion != 5)
     {
@@ -278,7 +320,7 @@ void MenuPrincipal()
         cout << "2. Ejecutar simulacion paso a paso continua" << endl;
         cout << "3. Generar reportes del estado de la planta" << endl;
         cout << "4. Guardar y Cargar simulaciones desde archivos" << endl;
-        cout << "5. Salir del programa" << endl;
+        cout << "5. Menu Distribucion (Pedidos)" << endl;
         opcion=NumeroValido("Escoja una opcion: ",1,5);
 
         if (opcion == 1)
@@ -295,7 +337,7 @@ void MenuPrincipal()
 
             }
 
-        }else if (opcion == 2){
+        }else if (opcion==2){
 
             if(!ParametrosConfigurados)
             {   
@@ -311,8 +353,8 @@ void MenuPrincipal()
             }
             
 
-        }else if (opcion == 3){
-
+        }else if (opcion==3){
+                                                                                                                
             //AGREGAR FUNCION
 
         }else if (opcion == 4){
@@ -321,7 +363,7 @@ void MenuPrincipal()
 
         }else if (opcion == 5){
 
-            cout << "Proyecto terminado" << endl;
+            MenuDistribucion(dist);
 
         }else{
 
