@@ -192,6 +192,7 @@ void Envasadora::MenuMaquinaEnvasadora(std::vector<Producto>& InventarioJugos,st
             //se pasa referencia al gestor, permitiendo reducir los consevantes correctamente
             thread HiloEnvasar(&Envasadora::EnvasarJugos,this,producto.getNombre(),ref(gestor),CantidadAProcesar);
             HiloEnvasar.join();
+            IncrementarUso();
 
             gestor.AgregarJugosDisponibles(producto,CantidadAProcesar);
             producto.DecrementarJugosSinIngredientes(CantidadAProcesar);//aqui se restan los jugos procesados
@@ -235,7 +236,7 @@ void Envasadora::MenuMaquinaEnvasadora(std::vector<Producto>& InventarioJugos,st
                     }
 
                 }
-                EmpleadoTecnico::RepararMaquina(*this,tecnicos);
+                EmpleadoTecnico::RepararMaquina(*this,tecnicos,gestor);
 
             }
 

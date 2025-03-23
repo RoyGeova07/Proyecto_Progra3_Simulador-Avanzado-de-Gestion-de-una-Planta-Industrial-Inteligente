@@ -11,6 +11,7 @@ SRCS = Main.cpp \
        EmpleadoTecnico.cpp \
        Maquina.cpp \
        Distribucion.cpp \
+       EmpleadoOperario.cpp \
        Envasadora.cpp
 
 # Archivos objeto (.o) generados automaticamente

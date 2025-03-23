@@ -236,6 +236,7 @@ void Distribucion::procesarPedido(Gestor_De_Planta& gestor,int indice){
                 //aqui restara las unidades vendidas
                 jugo.setCantidadProducida(jugo.getCantidadProducida()-cantidad);
                 total+=cantidad*jugo.getPrecio();//sumara la gananciaaaaaaa
+                ventasPorJugo[nombre]+=cantidad;//aqui se registra la venta
                 break;
 
             }
@@ -248,6 +249,57 @@ void Distribucion::procesarPedido(Gestor_De_Planta& gestor,int indice){
 
     //este eliminara el pedido del vector
     pedidosPendientes.erase(pedidosPendientes.begin()+(indice-1));
+    
+
+}
+
+//EXPLICAR ESTA FUNCIONNN
+//EXPLICAR ESTA FUNCIONNN
+//EXPLICAR ESTA FUNCIONNN
+//EXPLICAR ESTA FUNCIONNN
+//EXPLICAR ESTA FUNCIONNN
+void Distribucion::MostrarRanking(std::ostream& messi)const{
+
+    if(ventasPorJugo.empty())
+    {
+        
+        messi<<"\n >> No se han registrado ventas de jugos aun\n";
+        return;
+
+    }
+    //aqui se convertira el mapa en vector para ordenar]
+    std::vector<std::pair<std::string,int>> ranking(ventasPorJugo.begin(),ventasPorJugo.end());
+
+    std::sort(ranking.begin(),ranking.end(),[](const auto& a, const auto& b){
+
+        return a.second>b.second; // Orden descendente por cantidad
+
+    });
+
+    messi<<"\n>> Ranking de Jugos Mas Vendidos:\n";
+    for(const auto& [nombre, cantidad] : ranking){
+
+        messi << "- " << nombre << ": " << cantidad << " unidades vendidas\n";
+
+    }
+
+    // Mostrar jugo estrella (mas vendido) y menos vendido (con al menos 1 venta)
+    const auto& estrella = ranking.front();
+    messi<<"\n>> Jugo estrella: "<<estrella.first<<" ("<<estrella.second<<" unidades)\n";
+
+    // Buscar el menos vendido que tenga al menos una venta
+    for (auto menos=ranking.rbegin();menos!=ranking.rend();++menos) {
+
+        if(menos->second>0){
+
+            messi<< ">> Jugo menos vendido: "<<menos->first<<" ("<<menos->second<<" unidades)\n";
+            break;
+
+        }
+    }
+
+    //std::ostream& "messi" me permitira imprimir en pantalla o escribir en archivos (como los reportes) con la misma funcion.
+ 
     
 
 }

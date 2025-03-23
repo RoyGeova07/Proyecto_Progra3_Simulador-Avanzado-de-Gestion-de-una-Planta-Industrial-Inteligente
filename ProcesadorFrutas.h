@@ -34,12 +34,7 @@ private:
 public:
     ProcesadorFrutas() : Maquina("ProcesadorFrutas de Jugo") {}
 
-    //aqui aplicando polimorfismo
-    void VerEstadoMaquina() const override{
-
-        cout<<"Maquina ProcesadorFrutas: "<<(getEstado()?"En buena estado":"En mal estado")<<endl;
-
-    }
+   
 
     void MenuProcesadorFrutas(std::vector<Frutas>& inventarioFrutas,std::vector<Empleado*>& empleados,Gestor_De_Planta& gestor);
 

@@ -30,7 +30,7 @@ void MostrarCronoMetroTecnico(int segundos,const std::string& mensaje){
 }
 
 //aqui funcion estatica para repara una maquina  usando multiples tecnicossssss
-void EmpleadoTecnico::RepararMaquina(Maquina& maquina, const vector<EmpleadoTecnico*>& tecnicos){
+void EmpleadoTecnico::RepararMaquina(Maquina& maquina, const vector<EmpleadoTecnico*>& tecnicos,Gestor_De_Planta& gestor){
 
     int TiempoBase=15;//aqui se define el tiempo base  que tardaria en reparar la maquina con un solo tecnico
     //el tiempo se divide entre el numero de tecnicos, porque mas tecnicos significan reparacion mas rapida
@@ -52,6 +52,7 @@ void EmpleadoTecnico::RepararMaquina(Maquina& maquina, const vector<EmpleadoTecn
 
     }
 
+    int totalPagado=0;
     vector<thread> hilosReparacion;//aqui se crea un nuevo hilo
     for(const auto& tecnico:tecnicos){
 
@@ -65,6 +66,17 @@ void EmpleadoTecnico::RepararMaquina(Maquina& maquina, const vector<EmpleadoTecn
         //tiempoPorTecnico se captura por copia (cada hilo tiene su propia copia del tiempo que le toca trabajar).
 
         MostrarCronoMetroTecnico(TiempoPorTenico,tecnico->getNombre()+" esta reparando");
+
+            //aqui se le pagara al empleado despeus de reparar la maquina
+            tecnico->AgregarPago(tecnico->getSalario());
+            gestor.agregarCapital(-tecnico->getSalario());//se le resta la capital
+            
+            mtx.lock();
+            cout<<"se ha pagado $"<<tecnico->getSalario()<<" a "<<tecnico->getNombre()<<" \n";
+            mtx.unlock();
+
+            //aqui suma total (fuera del lock para no bloquear mucho)
+            totalPagado+=tecnico->getSalario();
 
         });
 
@@ -80,7 +92,10 @@ void EmpleadoTecnico::RepararMaquina(Maquina& maquina, const vector<EmpleadoTecn
 
     mtx.lock();//protegido con mtx para evitar que otro hilo interfiera al escribir
     cout<<"La maquina "<<maquina.getNombre()<<" ha sido reparada y esta en buen estado.\n";
+    cout<<"Capital restante: $"<<gestor.getCapital()<<" \n";    
+    cout << "\nSe pagaron $" << totalPagado << " en total a los técnicos.\n";
     maquina.setEnUso(true);
+    maquina.IncrementarReparacion();
     mtx.unlock();
 
 }

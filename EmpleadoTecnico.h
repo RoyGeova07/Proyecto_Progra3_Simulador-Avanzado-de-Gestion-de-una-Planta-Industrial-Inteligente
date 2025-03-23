@@ -6,6 +6,7 @@
 #include <vector>
 #include <string>
 #include "Maquina.h"
+#include "Gestor_De_Planta.h"
 
 class EmpleadoTecnico : public Empleado {
     public:
@@ -18,7 +19,7 @@ class EmpleadoTecnico : public Empleado {
 
         }
 
-        static void RepararMaquina(Maquina& maquina, const std::vector<EmpleadoTecnico*>& tecnicos);
+        static void RepararMaquina(Maquina& maquina, const std::vector<EmpleadoTecnico*>& tecnicos,Gestor_De_Planta& gestor);
         //void MostrarCronoMetroTecnico(int segundos,const std::string& mensaje);
 
         //****inveestigar que es el uint******

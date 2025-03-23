@@ -145,7 +145,7 @@ void MaquinaLavadora::MenuMaquinaLavadora(std::vector<Frutas>& inventarioFrutas,
             //aqui inicia el hilo
             thread HiloLavadoFruta(&MaquinaLavadora::LavarFruta, this, ref(fruta), ref(gestor));
             HiloLavadoFruta.join();
-
+            IncrementarUso();
           
 
             if(!getEstado()){
@@ -191,7 +191,7 @@ void MaquinaLavadora::MenuMaquinaLavadora(std::vector<Frutas>& inventarioFrutas,
 
                     }
                 }
-                EmpleadoTecnico::RepararMaquina(*this, tecnicos);
+                EmpleadoTecnico::RepararMaquina(*this, tecnicos,gestor);
             }
         }else if(opcion==3){
 

@@ -11,6 +11,9 @@
 #include <cstdlib>
 #include <atomic>
 #include <thread>
+#include <utility> // Para std::pair
+#include <ostream>
+#include <vector>
 
 //ERRO DE CIRCULO DE DEPENDENCIAAASSSS  
 class Gestor_De_Planta;
@@ -41,6 +44,8 @@ private:
     std::thread hiloGeneradorPedidos;
     std::atomic<bool> activo;  // para controlar si el hilo sigue corriendo
 
+    std::map<std::string,int> ventasPorJugo;
+
 
 public:
     Distribucion();
@@ -59,6 +64,9 @@ public:
         this->gestorReferencia=gestor;
 
     }
+
+    std::pair<std::string, std::string> obtenerJugosMasYMenosVendidos() const;
+    void MostrarRanking(std::ostream& messi)const;
 
 
 };

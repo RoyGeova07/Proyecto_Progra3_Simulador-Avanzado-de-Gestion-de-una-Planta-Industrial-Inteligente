@@ -19,12 +19,26 @@
 #include <sstream>
 #include <chrono>
 #include "NumeroValido.h"
+#include "filesystem"
 
+namespace fs=std::filesystem;
 
 using namespace std;
 
 bool ParametrosConfigurados=false;
 bool PrimerConfiguracion=true;
+
+void AsegurarCarpetaReportes(){
+
+    std::string carpeta = "Plantas Industriales";
+    if(!fs::exists(carpeta)){
+
+        fs::create_directory(carpeta);
+        std::cout << "\n Carpeta 'Plantas Industriales' creada exitosamente.\n";
+
+    }
+
+}
 
 //Clase template para obtener un numero de tipo T
 template <typename T>
@@ -148,6 +162,7 @@ void ConfigurarParametrosIniciales(Gestor_De_Planta& gestor)
     cout << "\nIngrese el nombre de la planta: \n";
     cin.ignore();
     getline(cin, nombrePlanta);
+    gestor.setNombrePlanta(nombrePlanta);
 
     int opcion, cantidad;
     double precio;
@@ -262,7 +277,7 @@ void ConfigurarParametrosIniciales(Gestor_De_Planta& gestor)
     cout<<"\n=============================\n";
     cout<<"Configuracion inicial de la planta\n";
     cout<<"=============================\n";
-    cout<<"Nombre de la planta: " << nombrePlanta << "\n";
+    cout<<"Nombre de la planta: " << gestor.getNombrePLanta() << "\n";
     cout<<"Capital inicial: $" << gestor.getCapital() << "\n";
     cout<<"Agua disponible: " << gestor.getAgua() << " litros\n";
     cout<<"Envases disponibles: "<<gestor.getEnvases()<<" Unidades \n";
@@ -292,9 +307,8 @@ void MenuPrincipal()
         cout << "\n**Menu**" << endl;
         cout << "1. Configurar parametros iniciales para la simulacion" << endl;
         cout << "2. Ejecutar simulacion paso a paso continua" << endl;
-        cout << "3. Generar reportes del estado de la planta" << endl;
-        cout << "4. Guardar y Cargar simulaciones desde archivos" << endl;
-        cout << "5. Salir del programa" << endl;
+        cout << "3. Guardar y Cargar simulaciones desde archivos" << endl;
+        cout << "4. Salir del programa" << endl;
         opcion=NumeroValido("Escoja una opcion: ",1,5);
 
         if (opcion == 1)
@@ -333,10 +347,6 @@ void MenuPrincipal()
 
         }else if (opcion == 4){
 
-            //AGREGAR FUNCION
-
-        }else if (opcion == 5){
-
             cout << "Proyecto terminado" << endl;
 
         }else{
@@ -349,7 +359,7 @@ void MenuPrincipal()
 int main()
 {
 
-    
+    AsegurarCarpetaReportes();
     MenuPrincipal();
 
     return 0;

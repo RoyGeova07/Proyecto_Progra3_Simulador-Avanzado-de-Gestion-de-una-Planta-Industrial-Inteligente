@@ -41,12 +41,7 @@ public:
 
     void MenuMaquinaEnvasadora(std::vector<Producto>& InventarioJugos,std::vector<Empleado*>& Empleados,Gestor_De_Planta& gestor);
 
-    //aqui aplicando polimorfismos
-    void VerEstadoMaquina() const override{
-
-        cout<<"Maquina Pasterizador: "<<(getEstado()?"En buena estado":"En mal estado")<<endl;
-
-    }
+    
     ~Envasadora() override;
     
 };

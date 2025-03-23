@@ -148,6 +148,7 @@ void ProcesadorFrutas::MenuProcesadorFrutas(std::vector<Frutas>&inventarioFrutas
             //hilo para extraer el jugo despues de la trituracion
             thread HiloExtraeJuguito(&ProcesadorFrutas::ExtraerJugo,this,5,fruta.getNombre());
             HiloExtraeJuguito.join();
+            IncrementarUso();
 
             //aqui se convierte la fruta en jugo y se almacena en el vector de jugos sin ingredientes y envases
             Producto::Jugos TipoJugo;
@@ -216,7 +217,7 @@ void ProcesadorFrutas::MenuProcesadorFrutas(std::vector<Frutas>&inventarioFrutas
                     }
 
                 }
-                EmpleadoTecnico::RepararMaquina(*this,tecnicos);
+                EmpleadoTecnico::RepararMaquina(*this,tecnicos,gestor);
 
             }
             

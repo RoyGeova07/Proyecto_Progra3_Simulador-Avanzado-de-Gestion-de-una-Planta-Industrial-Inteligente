@@ -9,6 +9,7 @@
 #include "Producto.h"
 #include "Maquina.h"
 #include "Empleado.h"
+#include "EmpleadoOperario.h"
 
 
 //declaro esta clase aqui porque tenia un error de circulo de dependencias (circular dependency) entre Maquina.h y Gestor_De_Planta.h.
@@ -20,6 +21,7 @@
 //la solucion es Declarar class Maquina; en Gestor_De_Planta.h para que el compilador sepa que Maquina es una clase, sin necesidad de incluir toda la definicion de Maquina.
 class Maquina;
 class Distribucion;
+class EmpleadoOperario;
 
 //Gestor_De_Planta ya no incluye directamente Maquina.h.
 //Maquina.h ya no incluye directamente Gestor_De_Planta.h.
@@ -36,12 +38,13 @@ private:
     std::vector<Producto> JUGOS_DISPONIBLES;
     std::vector<Maquina*> maquinas;
     std::vector<Empleado*> empleado;
+    std::vector<std::string> EMPLEADOS_DESPEDIDOS;
     std::string NombreDelaPlanta;
     double CapitalInicial=100000;
     double AguaLitros=100;
     int Envases=50;
     int Conservantes=50;
-    Distribucion* distribucion=nullptr;//declaracion adelantada
+    Distribucion* distribucion=nullptr;//aqui puntero de distribucion
 
 public:
 
@@ -57,14 +60,15 @@ public:
     void eliminarEmpleado(int id);
     Empleado* BuscarEmpleadoPorId(int id);
     int CantidadEmpleados() const;
-    std::string getNombre()const{return NombreDelaPlanta;}
+
+    std::string getNombrePLanta()const{return NombreDelaPlanta;}
+    void setNombrePlanta(std::string& NuevoNombre) {NombreDelaPlanta=NuevoNombre;}
     
     void TransferirFrutaLavada(const Frutas& fruta);
     void ListarFrutasLavadas()const;
     void ListaJugosFaltanIngredientesYEnvases()const;
     void ListaJugosDisponibles()const;
     void AgregarFruta(const Frutas& fruta);
-    void AgregarNombre()const;
     void AgregarJugosSinIngredientesYEnvases(const Producto& jugo);
     void AgregarJugosDisponibles(const Producto& jugo,int cantidad);
     void mostrarEstadoInicial(const std::string& nombrePlanta) const;
@@ -87,14 +91,15 @@ public:
     std::vector<Producto>& getInventarioJugosSinIngredientes() {return JUGOS_SIN_INGREDIENTES;}
     std::vector<Producto>& getInventarioJugos() {return JUGOS_DISPONIBLES;}
     std::vector<Empleado*>& getEmpleados() { return empleado; }
-    
+    const std::vector<std::string>& getEmpleadosDespedidos()const{return EMPLEADOS_DESPEDIDOS;}
 
+    void setDistribucion(Distribucion* dist) { distribucion = dist; }
+    Distribucion* getDistribucion() const { return distribucion; }
+    // O si prefieres trabajar con referencia segura
+    // Distribucion& getDistribucion() const { return *distribucion; }
+    
     void empacar();
-
-    void generarReporte() const;
     
-    
-
 };
 
 

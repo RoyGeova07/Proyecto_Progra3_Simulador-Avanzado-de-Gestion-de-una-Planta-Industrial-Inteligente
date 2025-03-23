@@ -37,12 +37,7 @@ class MaquinaLavadora : public Maquina {
 
         MaquinaLavadora():Maquina("Lava frutas") {}
 
-        //aplicando polimorfismo
-        void VerEstadoMaquina() const override{
-
-            cout<<"Maquina lavadora: "<<(getEstado()?"En buena estado":"En mal estado")<<endl;
-
-        }
+       
              
         ~MaquinaLavadora() override; 
 

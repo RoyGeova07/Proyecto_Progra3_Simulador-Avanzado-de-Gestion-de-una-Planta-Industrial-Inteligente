@@ -12,15 +12,16 @@ protected:
     int salario;
     std::string cargo;
     static int contadorID;
+    int dineroGanado=0;
 
 public:
     Empleado(const std::string &nombre, const std::string &cargo)
-        : nombre(nombre), cargo(cargo), id(++contadorID),salario(0) {} // Asigna un ID unico automaticamente
+        : nombre(nombre), cargo(cargo), id(++contadorID),salario(0),dineroGanado(0) {} // Asigna un ID unico automaticamente
 
     virtual void MostrarInfo() const
     {
 
-        std::cout << "ID: " << id << " - Nombre: " << nombre << " - Cargo: " << cargo <<" - Salario: "<<salario<<std::endl;
+        std::cout << "ID: " << id << " - Nombre: " << nombre << " - Cargo: " << cargo <<" - Salario: "<<salario<<"- Pagado: $"<<dineroGanado<<std::endl;
             
     }
 
@@ -34,6 +35,8 @@ public:
     std::string getNombre() const { return nombre; }
     std::string getCargo() const { return cargo; }
     int getSalario() const {return salario;}
+    void AgregarPago(int cantidad) {dineroGanado+=cantidad;}
+    int getDineroGanado()const {return dineroGanado;}
 
     void setSalario(int nuevoSalario){
 

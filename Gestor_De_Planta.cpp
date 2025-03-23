@@ -198,6 +198,7 @@ void Gestor_De_Planta::eliminarEmpleado(int id) {
    if(es!=empleado.end()){
 
         cout<<"\n**Empleado "<<(*es)->getNombre()<<" ha sido despedido.**\n";
+        EMPLEADOS_DESPEDIDOS.push_back((*es)->getNombre());//aqui se guarda el nombre del empleado despedido
         delete *es;
         empleado.erase(es);
 
@@ -253,7 +254,6 @@ void Gestor_De_Planta::AgregarFruta(const Frutas& fruta) {
 
 }
 
-void Gestor_De_Planta::AgregarNombre()const{}
 
 void Gestor_De_Planta::AgregarMaquina(Maquina* maq){
 
@@ -356,12 +356,6 @@ void Gestor_De_Planta::EliminarJugoSinIngredientes(const string& NombreJugo){
 
 }
 
-void Gestor_De_Planta::generarReporte()const{
-
-    //AQUI FUNCIONAR MEDIANTE ARCHIVOSSSSS
-
-}
-
 void Gestor_De_Planta::MiniMenuGestor(){
 
     int opcionmini=0;
@@ -374,8 +368,9 @@ void Gestor_De_Planta::MiniMenuGestor(){
         cout<<"3. Espacio de Maquinas\n";
         cout<<"4. Comprar Frutas\n";
         cout<<"5. Ver pedidos\n";
-        cout<<"6. Salir de mi planta\n";
-        opcionmini=NumeroValido("Ingrese una opcion: ",1,6);
+        cout<<"6. Generar reporte de esta planta\n";
+        cout<<"7. Salir de mi planta\n";
+        opcionmini=NumeroValido("Ingrese una opcion: ",1,7);
         
     
         if(opcionmini==1)
@@ -386,13 +381,21 @@ void Gestor_De_Planta::MiniMenuGestor(){
             listarEmpleados();
 
             cout<<"----------------------------------------------------------------\n";
+
+            cout<<"\nNombre de la planta: "<<getNombrePLanta()<<"\n";
+
+            cout<<"----------------------------------------------------------------\n";
             //aqui se listas las frutas
             cout<<"\nFrutas en inventario:\n";
             ListarFrutas();
 
             cout<<"----------------------------------------------------------------\n";
 
-            cout<<"\nFrutas lavadas en el invetario:\n";
+            cout<<"\nCapital: $"<<getCapital()<<"\n";
+
+            cout<<"----------------------------------------------------------------\n";
+
+            cout<<"\nFrutas lavadas en general:\n";
             ListarFrutasLavadas();
 
             cout<<"----------------------------------------------------------------\n";
@@ -467,11 +470,26 @@ void Gestor_De_Planta::MiniMenuGestor(){
             }
             distribucion->mostrarMenuPedidos(*this);
 
-        }else{
+        }else if(opcionmini==6){
     
-            cout<<"Opcion invalida";
+            //GENERAR REPORTES DE LA PARTIDA DE LA PLANTA CON ARCHIVOS
+            //GENERAR REPORTES DE LA PARTIDA DE LA PLANTA CON ARCHIVOS
+            //GENERAR REPORTES DE LA PARTIDA DE LA PLANTA CON ARCHIVOS
+            //GENERAR REPORTES DE LA PARTIDA DE LA PLANTA CON ARCHIVOS
+            //GENERAR REPORTES DE LA PARTIDA DE LA PLANTA CON ARCHIVOS
+            EmpleadoOperario dummy(""); // No se usa directamente, pero sirve para invocar el metodo estatico
+            dummy.GenerarReportePlantaConHilos(*this, this->getEmpleados());
+
             
     
+        }else if(opcionmini==7){
+
+            //SALIR DE LA PARTIDAAAAAAAA
+
+        }else{
+
+            cout<<"Opcion no valida\n";
+
         }
 
     }

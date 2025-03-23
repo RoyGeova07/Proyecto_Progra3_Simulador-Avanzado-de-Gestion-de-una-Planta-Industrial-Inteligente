@@ -54,13 +54,13 @@ void Tienda::ComprarFrutas(Gestor_De_Planta &gestor) {
 
     double precioUnit;
     switch (tipoF) {
-        case 1: precioUnit = 2.4; break;
-        case 2: precioUnit = 3.4; break;
-        case 3: precioUnit = 5.6; break;
-        case 4: precioUnit = 7.8; break;
-        case 5: precioUnit = 2.0; break;
-        case 6: precioUnit = 4.0; break;
-        case 7: precioUnit = 2.1; break;
+        case 1: precioUnit=2.4;Limon++; break;
+        case 2: precioUnit=3.4;Naranja++; break;
+        case 3: precioUnit=5.6;Pilla++; break;
+        case 4: precioUnit=7.8;Sandia++;break;
+        case 5: precioUnit=2.0;Fresa++; break;
+        case 6: precioUnit=4.0;Tamarindo++; break;
+        case 7: precioUnit=2.1;Coco++; break;
     }
 
     double costoTotal = cantidad * precioUnit;
@@ -71,6 +71,9 @@ void Tienda::ComprarFrutas(Gestor_De_Planta &gestor) {
 
     gestor.AgregarFruta(Frutas((Frutas::Fruta)tipoF, precioUnit, cantidad));
     gestor.agregarCapital(-costoTotal);  // Restar capital
+
+    FrutasCompradas+=cantidad;
+    DineroGastadoEnTodaLaTienda+=costoTotal;//DINERO GASTADO EN TOTAL EN ESTE TIENDA 
 
     cout << "Compra exitosa. Nuevo capital: $" << gestor.getCapital() << "\n";
 }
@@ -89,7 +92,9 @@ void Tienda::ComprarConservantes(Gestor_De_Planta &gestor) {
     }
 
     gestor.AgregarMasConservantes(cantidad);
+    ConservantesComprados+=cantidad;
     gestor.agregarCapital(-costo);
+    DineroGastadoEnTodaLaTienda+=costo;
 
     cout << "Conservantes comprados exitosamente. Capital restante: $" << gestor.getCapital() << "\n";
 }
@@ -108,7 +113,10 @@ void Tienda::ComprarEnvases(Gestor_De_Planta &gestor) {
     }
 
     gestor.AgregarMasEnvases(cantidad);
+    EnvasesComprados+=cantidad;
     gestor.agregarCapital(-costo);
+    DineroGastadoEnTodaLaTienda += costo;
+
 
     cout << "Envases comprados exitosamente. Capital restante: $" << gestor.getCapital() << "\n";
 }
@@ -128,7 +136,10 @@ void Tienda::ComprarAgua(Gestor_De_Planta &gestor) {
     }
 
     gestor.setAgua(gestor.getAgua() + cantidad);
+    AguaComprada+=cantidad;
     gestor.agregarCapital(-costo);
+    DineroGastadoEnTodaLaTienda += costo;
+
 
     cout << "Agua comprada correctamente. Capital restante: $" << gestor.getCapital() << "\n";
 }
