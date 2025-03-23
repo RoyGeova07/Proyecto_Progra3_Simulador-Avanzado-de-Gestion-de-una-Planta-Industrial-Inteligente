@@ -19,6 +19,9 @@ class EmpleadoTecnico : public Empleado {
         }
 
         static void RepararMaquina(Maquina& maquina, const std::vector<EmpleadoTecnico*>& tecnicos);
+        //void MostrarCronoMetroTecnico(int segundos,const std::string& mensaje);
+
+        //****inveestigar que es el uint******
 
     };
     

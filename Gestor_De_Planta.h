@@ -10,6 +10,7 @@
 #include "Maquina.h"
 #include "Empleado.h"
 
+
 //declaro esta clase aqui porque tenia un error de circulo de dependencias (circular dependency) entre Maquina.h y Gestor_De_Planta.h.
 //pasa porque Gestor_De_Planta.h incluye a Maquina.h porque tiene un vector<Maquina*>.
 //Maquina.h incluye a Gestor_De_Planta.h porque MenuMaquinas tiene un parametro Gestor_De_Planta& gestor.
@@ -18,6 +19,7 @@
 //Esto hace que el compilador no sepa que archivo incluir primero.
 //la solucion es Declarar class Maquina; en Gestor_De_Planta.h para que el compilador sepa que Maquina es una clase, sin necesidad de incluir toda la definicion de Maquina.
 class Maquina;
+class Distribucion;
 
 //Gestor_De_Planta ya no incluye directamente Maquina.h.
 //Maquina.h ya no incluye directamente Gestor_De_Planta.h.
@@ -34,14 +36,16 @@ private:
     std::vector<Producto> JUGOS_DISPONIBLES;
     std::vector<Maquina*> maquinas;
     std::vector<Empleado*> empleado;
+    std::string NombreDelaPlanta;
     double CapitalInicial=100000;
     double AguaLitros=100;
     int Envases=50;
     int Conservantes=50;
+    Distribucion* distribucion=nullptr;//declaracion adelantada
 
 public:
 
-    Gestor_De_Planta()=default;
+    Gestor_De_Planta();
     ~Gestor_De_Planta();    
 
     void AgregarEmpleado(Empleado* emp);
@@ -53,12 +57,14 @@ public:
     void eliminarEmpleado(int id);
     Empleado* BuscarEmpleadoPorId(int id);
     int CantidadEmpleados() const;
+    std::string getNombre()const{return NombreDelaPlanta;}
     
     void TransferirFrutaLavada(const Frutas& fruta);
     void ListarFrutasLavadas()const;
     void ListaJugosFaltanIngredientesYEnvases()const;
     void ListaJugosDisponibles()const;
     void AgregarFruta(const Frutas& fruta);
+    void AgregarNombre()const;
     void AgregarJugosSinIngredientesYEnvases(const Producto& jugo);
     void AgregarJugosDisponibles(const Producto& jugo,int cantidad);
     void mostrarEstadoInicial(const std::string& nombrePlanta) const;

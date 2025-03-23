@@ -273,6 +273,10 @@ void ConfigurarParametrosIniciales(Gestor_De_Planta& gestor)
     gestor.listarEmpleados();
 
     gestor.VerEstadoMaquina();
+
+    gestor.MiniMenuGestor();
+
+    cout<<"=================================================================================\n";
     
 }
 

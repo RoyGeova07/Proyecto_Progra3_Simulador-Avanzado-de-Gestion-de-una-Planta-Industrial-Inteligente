@@ -80,7 +80,7 @@ void MaquinaLavadora::MenuMaquinaLavadora(std::vector<Frutas>& inventarioFrutas,
     const double AguaPorFruta=0.5;
 
     do{
-
+        cout<<"=========================================================\n";
         cout<<"\n --Menu Maquina Lavadora-- \n";
         cout<<"1. Lavar Frutas\n";
         cout<<"2. Reparar Maquina\n";
@@ -102,7 +102,7 @@ void MaquinaLavadora::MenuMaquinaLavadora(std::vector<Frutas>& inventarioFrutas,
 
             }
 
-            cout << "Frutas Disponibles para lavar:\n";
+            cout << "\nFrutas Disponibles para lavar:\n";
             bool HayFrutasParaLavar=false;
 
             for(size_t i=0;i<inventarioFrutas.size();i++){

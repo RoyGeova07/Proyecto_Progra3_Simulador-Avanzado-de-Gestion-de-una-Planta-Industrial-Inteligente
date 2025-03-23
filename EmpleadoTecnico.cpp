@@ -64,7 +64,7 @@ void EmpleadoTecnico::RepararMaquina(Maquina& maquina, const vector<EmpleadoTecn
         //& captura todo por referncia,(incluye mtx y el resto de variables del contexto)
         //tiempoPorTecnico se captura por copia (cada hilo tiene su propia copia del tiempo que le toca trabajar).
 
-        MostrarCronoMetroTecnico(TiempoPorTenico,tecnico->getNombre()+" esta reparando ");
+        MostrarCronoMetroTecnico(TiempoPorTenico,tecnico->getNombre()+" esta reparando");
 
         });
 

@@ -100,7 +100,7 @@ void Envasadora::MenuMaquinaEnvasadora(std::vector<Producto>& InventarioJugos,st
     
     do
     {
-        
+        cout<<"===================================================\n";
         cout<<"\n -- Menu de Maquina Envadora -- \n";
         cout<<"1. Envasar y agregar ingredientes\n";
         cout<<"2. Reparar Maquina\n";

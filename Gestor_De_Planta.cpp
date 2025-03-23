@@ -9,23 +9,23 @@
 #include "NumeroValido.h"
 #include "Maquina.h"
 #include "Tienda.h"
+#include "Distribucion.h"
 
 using namespace std;
 
 
 //aqui se usa un destructor para liberar la memmoria de los vectores de puntero
-Gestor_De_Planta::~Gestor_De_Planta(){
+Gestor_De_Planta::Gestor_De_Planta(){
 
+    distribucion=new Distribucion();
+    distribucion->setGestor(this);
 
+}
 
-    for(auto emp : empleado){
-
-        delete emp;
-
-    }
+Gestor_De_Planta::~Gestor_De_Planta() {
+    delete distribucion;
+    for (auto emp : empleado) delete emp;
     empleado.clear();
-
-
 }
 
 void Gestor_De_Planta::ReducirAgua(double litros){
@@ -122,10 +122,15 @@ void Gestor_De_Planta::TransferirFrutaLavada(const Frutas& frutaLavada){
 
     for(auto& fruta:FRUTAS_LAVADAS){
 
-        if (fruta.getNombre()==frutaLavada.getNombre()&&fruta.getCosto()==frutaLavada.getCosto())
+        if (fruta.getNombre()==frutaLavada.getNombre())
         {
             
             fruta.setCantidad(fruta.getCantidad()+frutaLavada.getCantidad());
+
+            //aqui si el costo cambio, puedes decidir si actualizarlo o mantener el anterior:
+            fruta.setCosto(frutaLavada.getCosto());  // Opcional
+
+
             return;
 
         }
@@ -248,6 +253,7 @@ void Gestor_De_Planta::AgregarFruta(const Frutas& fruta) {
 
 }
 
+void Gestor_De_Planta::AgregarNombre()const{}
 
 void Gestor_De_Planta::AgregarMaquina(Maquina* maq){
 
@@ -276,6 +282,7 @@ void Gestor_De_Planta::AgregarJugosSinIngredientesYEnvases(const Producto& jugo)
 
 }
 
+// estos son los que  ya se pueden vender 
 void Gestor_De_Planta::AgregarJugosDisponibles(const Producto& jugo,int cantidad){
 
     for(auto& JugoFinal:JUGOS_DISPONIBLES){
@@ -318,7 +325,7 @@ void Gestor_De_Planta::ListaJugosFaltanIngredientesYEnvases()const{
     if(JUGOS_SIN_INGREDIENTES.empty())
     {
 
-       cout<<"No hay jugos sin ingredientes aun";
+       cout<<"No hay jugos sin ingredientes aun\n";
        return;
         
     }
@@ -367,43 +374,61 @@ void Gestor_De_Planta::MiniMenuGestor(){
         cout<<"3. Espacio de Maquinas\n";
         cout<<"4. Comprar Frutas\n";
         cout<<"5. Ver pedidos\n";
-        cout<<"6. Volver\n";
-        cout<<"Ingrese una opcion: ";
-        cin>>opcionmini;
+        cout<<"6. Salir de mi planta\n";
+        opcionmini=NumeroValido("Ingrese una opcion: ",1,6);
         
     
         if(opcionmini==1)
         {
-            
+            cout<<"===============================================================\n";
             //listar empleados contratados
             cout<<"\nEmpleados activos:\n ";
             listarEmpleados();
 
+            cout<<"----------------------------------------------------------------\n";
             //aqui se listas las frutas
             cout<<"\nFrutas en inventario:\n";
             ListarFrutas();
 
+            cout<<"----------------------------------------------------------------\n";
+
             cout<<"\nFrutas lavadas en el invetario:\n";
             ListarFrutasLavadas();
+
+            cout<<"----------------------------------------------------------------\n";
 
             cout<<"\nJugos sin Ingredientes y envases por Agregar:\n";
             ListaJugosFaltanIngredientesYEnvases();
 
+            cout<<"----------------------------------------------------------------\n";
+
             cout<<"\nJugos Disponibles:\n";
             ListaJugosDisponibles();
 
+            cout<<"----------------------------------------------------------------\n";
+
             cout<<"\nAgua disponible: "<<getAgua()<<" litros\n";
+
+            cout<<"----------------------------------------------------------------\n";
 
             cout<<"\nConservantes disponibles: "<<getConservantes()<<" unidades\n";
 
+            cout<<"----------------------------------------------------------------\n";
+
             cout<<"\n Envases disponibles: "<<getEnvases()<<" unidades\n";
+
+            cout<<"----------------------------------------------------------------\n";
             
             cout<<"\nEstado de las maquinas actualmente:\n";
             VerEstadoMaquina();
+
+            cout<<"====================================================================\n";
     
         }else if (opcionmini==2){
             int id;
     
+            cout<<"======================================================================\n";
+            cout<<"***seleccione 51 para salir****\n";
            //listar empleados contratados
            cout<<"\nEmpleados activos:\n ";
             listarEmpleados();
@@ -433,11 +458,19 @@ void Gestor_De_Planta::MiniMenuGestor(){
     
         }else if(opcionmini==5){
     
-            //AGREGAR FUNCION
+            if(!distribucion){
+
+                distribucion=new Distribucion();
+                distribucion->setGestor(this);
+
+
+            }
+            distribucion->mostrarMenuPedidos(*this);
 
         }else{
     
             cout<<"Opcion invalida";
+            
     
         }
 

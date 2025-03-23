@@ -76,7 +76,7 @@ void ProcesadorFrutas::MenuProcesadorFrutas(std::vector<Frutas>&inventarioFrutas
 
     do
     {
-        
+        cout<<"=============================================================\n";
         cout<<"\n --- Menu Procesador de Frutas --- \n";
         cout<<"1. Procesar Frutas (Triturar y extraer Jugo)\n";
         cout<<"2. Reparar Maquina\n";
@@ -161,18 +161,11 @@ void ProcesadorFrutas::MenuProcesadorFrutas(std::vector<Frutas>&inventarioFrutas
             else if(fruta.getNombre()=="Tamarindo"){TipoJugo=Producto::JugoTamarindo; PrecioJugo=24.0;}
             else if(fruta.getNombre()=="Coco"){TipoJugo=Producto::AguaCoco; PrecioJugo=30.0;}
             
-            //Por los momentos el jugo valdra como la fruta
-            //Por los momentos el jugo valdra como la fruta
-            //Por los momentos el jugo valdra como la fruta
-            //Por los momentos el jugo valdra como la fruta
-            //Por los momentos el jugo valdra como la fruta
-            //Por los momentos el jugo valdra como la fruta
-            //Por los momentos el jugo valdra como la fruta
-            //Por los momentos el jugo valdra como la fruta
-            //aqui se asegura que el jugo se creee bien
-            Producto Jugo(fruta.getNombre(),CantidadAProcesar,fruta.getCosto());
+            //AQUI DEFINIMOS EL NOMBRE DEL JUGO SU CANTIDAD Y SU NUEVO PRECIO
+            Producto Jugo(fruta.getNombre(),CantidadAProcesar,PrecioJugo);
             Jugo.setCantidadSinIngredientes(CantidadAProcesar);//aqui se asegura que la cantidad es la correcta
             
+            cout<<"=========================================================\n";
             gestor.AgregarJugosSinIngredientesYEnvases(Jugo);
             cout<<"Se ha creado "<<CantidadAProcesar<<" jugos de "<<fruta.getNombre()<<"\n";
 

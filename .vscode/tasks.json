@@ -14,6 +14,7 @@
                 "Empleado.cpp",
                 "Maquina.cpp",
                 "Tienda.cpp",
+                "Distribucion.cpp",
                 "EmpleadoTecnico.cpp",
                 "-o",
                 "Main.exe"

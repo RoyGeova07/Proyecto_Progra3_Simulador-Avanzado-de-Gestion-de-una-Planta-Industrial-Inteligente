@@ -17,7 +17,7 @@ void Maquina::MenuMaquinas(Gestor_De_Planta& gestor){
 
     int opcion;
     
-
+    cout<<"==========================================================\n";
     cout<<"\nMenu de maquinas\n";
     cout<<"1. Maquina Lavadora\n";
     cout<<"2. ProcesadorFrutas\n";
