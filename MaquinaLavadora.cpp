@@ -141,6 +141,19 @@ void MaquinaLavadora::MenuMaquinaLavadora(std::vector<Frutas>& inventarioFrutas,
 
             Frutas& fruta=inventarioFrutas[frutaSeleccionada-1];
 
+            double AguaRequerida=fruta.getCantidad()*AguaPorFruta;
+            if(gestor.getAgua()<AguaPorFruta){
+
+                cout<<"\nNo hay suficiente agua para continuar el lavado. Debe conseguir mas agua\n";
+                break;
+
+            }
+            if(gestor.getAgua()<AguaRequerida){
+
+                cout<<"\nNo hay suficiente agua para lavar todas las frutas, se lavaran las que se puedan\n";
+
+            }
+
             cout<<"\nLavando "<< fruta.getNombre() << "...\n";
             //aqui inicia el hilo
             thread HiloLavadoFruta(&MaquinaLavadora::LavarFruta, this, ref(fruta), ref(gestor));

@@ -8,8 +8,9 @@
 #include "EmpleadoTecnico.h"
 #include "NumeroValido.h"
 #include "Maquina.h"
-#include "Tienda.h"
 #include "Distribucion.h"
+#include "Tienda.h"//siempre incluir el header en el cpp para evitar errores de dependencia circular
+#include <iosfwd>
 
 using namespace std;
 
@@ -20,10 +21,14 @@ Gestor_De_Planta::Gestor_De_Planta(){
     distribucion=new Distribucion();
     distribucion->setGestor(this);
 
+    tiendita=new Tienda();
+
 }
 
+//destructor para liberar memoria
 Gestor_De_Planta::~Gestor_De_Planta() {
     delete distribucion;
+    delete tiendita;
     for (auto emp : empleado) delete emp;
     empleado.clear();
 }
@@ -241,7 +246,7 @@ void Gestor_De_Planta::AgregarFruta(const Frutas& fruta) {
         if(EstaDuplicadoEl.getNombre()==fruta.getNombre())
         {
            
-            //aqui si la fruta ya existe, sumamos la cantidad y actulizamos el precio al ultimo valor
+            //aqui si la fruta ya existe, sumamos la cantidad y actulizamos el precio al ultimo valorEquis
             EstaDuplicadoEl.setCantidad(EstaDuplicadoEl.getCantidad()+fruta.getCantidad());
             EstaDuplicadoEl.setCosto(fruta.getCosto());//aqui se actualiza el precio al nuevo ingresado
             return;
@@ -356,21 +361,78 @@ void Gestor_De_Planta::EliminarJugoSinIngredientes(const string& NombreJugo){
 
 }
 
-void Gestor_De_Planta::MiniMenuGestor(){
+char ObtenerCocaCola(string mensaje){
+
+    string cocacola;
+    char respuestagod;
+    while(true){
+
+        cout<<mensaje;
+        getline(cin,cocacola);
+        if(cocacola.empty())continue;
+        respuestagod = tolower(cocacola[0]);  
+        if(respuestagod=='s'||respuestagod=='n')return respuestagod;
+        cout << "Entrada invalida. Ingrese 's' para si o 'n' para no.\n";   
+
+    }
+
+}
+
+template <typename T>
+T NumeroTypename(string mensaje, T minimoComumMultiplo, T MaximoComunMultiplo){
+
+    T valorEquis;
+    string hitler;
+    char variableExtra;
+    while (true){
+
+        cout << mensaje;
+        getline(cin, hitler);
+        istringstream iss(hitler);
+
+        //aqui se  extrae el valorEquis del tipo T
+        if(!(iss>>valorEquis)){
+
+            cout << "Error: Entrada no valida. Intente de nuevo.\n";
+            continue;
+
+        }
+        // Verificamos si quedaron caracteres adicionales usando 'iss' y no 'cin'
+        if(iss>>variableExtra){
+
+            cout<<"Error: Entrada no valida. Intente de nuevo.\n";
+            continue;
+
+        }
+        if(valorEquis<minimoComumMultiplo||valorEquis>MaximoComunMultiplo){
+
+            cout << "Error: Entrada fuera de rango. Intente de nuevo.\n";
+            continue;
+
+        }
+        return valorEquis;
+    }
+}
+
+
+void Gestor_De_Planta::MiniMenuGestor(Gestor_De_Planta& gestor){
 
     int opcionmini=0;
   
     while (opcionmini!=5)
     {
-        cout<<"\n**Menu de la planta**\n";
+        cout<<"\n====================Menu de la planta====================\n";
         cout<<"1. Listar Planta\n";
         cout<<"2. Despedir Empleados\n";
         cout<<"3. Espacio de Maquinas\n";
         cout<<"4. Comprar Frutas\n";
         cout<<"5. Ver pedidos\n";
-        cout<<"6. Generar reporte de esta planta\n";
-        cout<<"7. Salir de mi planta\n";
-        opcionmini=NumeroValido("Ingrese una opcion: ",1,7);
+        cout<<"6. Generar reporte de la planta de "<<gestor.getNombrePLanta()<<"\n";
+        cout<<"7. Ver reporte de la planta de "<<gestor.getNombrePLanta()<<"\n";
+        cout<<"8. Pedir billete\n";
+        cout<<"9. Guardar Simulacion\n";
+        cout<<"10. Salir de mi planta\n";
+        opcionmini=NumeroValido("Ingrese una opcion: ",1,9);
         
     
         if(opcionmini==1)
@@ -455,9 +517,16 @@ void Gestor_De_Planta::MiniMenuGestor(){
             
         }else if(opcionmini==4){
     
-            Tienda tienda;
+            /*
+            
+            ejemplo de una instancia nueva
+            Tienda tienda;  esto borra todos los datos anteriores
             tienda.MenuTienda(*this);
-            //Tienda::MenuTienda(*this);
+            
+            */
+           getTienda().MenuTienda(*this);//una sola instancia, para no perder los datos
+            
+            
     
         }else if(opcionmini==5){
     
@@ -472,23 +541,62 @@ void Gestor_De_Planta::MiniMenuGestor(){
 
         }else if(opcionmini==6){
     
-            //GENERAR REPORTES DE LA PARTIDA DE LA PLANTA CON ARCHIVOS
-            //GENERAR REPORTES DE LA PARTIDA DE LA PLANTA CON ARCHIVOS
-            //GENERAR REPORTES DE LA PARTIDA DE LA PLANTA CON ARCHIVOS
-            //GENERAR REPORTES DE LA PARTIDA DE LA PLANTA CON ARCHIVOS
-            //GENERAR REPORTES DE LA PARTIDA DE LA PLANTA CON ARCHIVOS
             EmpleadoOperario dummy(""); // No se usa directamente, pero sirve para invocar el metodo estatico
-            dummy.GenerarReportePlantaConHilos(*this, this->getEmpleados());
-
-            
+            dummy.GenerarReportePlantaConHilos(*this, this->getEmpleados());        
     
         }else if(opcionmini==7){
 
-            //SALIR DE LA PARTIDAAAAAAAA
+            string carpeta="Plantas Industriales";
+            string archivo=carpeta+"/"+gestor.getNombrePLanta()+".txt";
+            ifstream reporte(archivo);
+
+            if(!reporte.is_open())
+            {
+                
+                cout<<"\n No se encontrado un reporte de esta planta.\n";
+
+            }else{
+
+                cout<<"\n==========  CONTENIDO DEL REPORTE ==========\n";
+                string linea;
+                while(getline(reporte,linea))
+                {
+
+                    cout<<linea<<"\n";
+                    
+                }
+                cout << "\n==========  FIN DEL REPORTE ==========\n";
+                reporte.close();
+                
+            }
+            
+            
+
+
+        }else if(opcionmini==8){
+
+            char respuestagod;
+            double CapitalAdicional;
+            respuestagod=ObtenerCocaCola("\nDesea agregar mas dinero? (s/n): ");
+            if(respuestagod=='s'||respuestagod=='S')
+            {
+        
+                CapitalAdicional=NumeroTypename("Ingrese la cantidad a adicionar: ",1.0,50000.0);
+                
+            }
+            gestor.agregarCapital(CapitalAdicional);
+
+        }else if(opcionmini==9){
+
+            
+
+        }else if (opcionmini==10){
+
+            cout<<"Saliendo de mi planta\n";
 
         }else{
 
-            cout<<"Opcion no valida\n";
+            cout<<"opcion no valida\n";
 
         }
 

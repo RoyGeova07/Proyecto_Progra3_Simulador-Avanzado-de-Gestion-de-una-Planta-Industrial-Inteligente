@@ -160,7 +160,6 @@ void ConfigurarParametrosIniciales(Gestor_De_Planta& gestor)
     int tipoEmpleado;
 
     cout << "\nIngrese el nombre de la planta: \n";
-    cin.ignore();
     getline(cin, nombrePlanta);
     gestor.setNombrePlanta(nombrePlanta);
 
@@ -289,9 +288,11 @@ void ConfigurarParametrosIniciales(Gestor_De_Planta& gestor)
 
     gestor.VerEstadoMaquina();
 
-    gestor.MiniMenuGestor();
+    gestor.MiniMenuGestor(gestor);
 
     cout<<"=================================================================================\n";
+
+    gestor.MiniMenuGestor(gestor);
     
 }
 
@@ -305,11 +306,10 @@ void MenuPrincipal()
     while (opcion != 5)
     {
         cout << "\n**Menu**" << endl;
-        cout << "1. Configurar parametros iniciales para la simulacion" << endl;
-        cout << "2. Ejecutar simulacion paso a paso continua" << endl;
-        cout << "3. Guardar y Cargar simulaciones desde archivos" << endl;
-        cout << "4. Salir del programa" << endl;
-        opcion=NumeroValido("Escoja una opcion: ",1,5);
+        cout << "1. Configurar parametros iniciales para la simulacion (Nueva Planta)" << endl;
+        cout << "2. Cargar simulaciones desde archivos" << endl;
+        cout << "3. Salir del programa" << endl;
+        opcion=NumeroValido("Escoja una opcion: ",1,4);
 
         if (opcion == 1)
         {
@@ -327,25 +327,9 @@ void MenuPrincipal()
 
         }else if (opcion==2){
 
-            if(!ParametrosConfigurados)
-            {   
-                
-                cout<<"\nERROR: Debe configurar los parametros iniciales antes de ejecutar la simuacion\n";
+            //AGREGAR FUNCION ARCHIVOSSS
 
-                
-            }else{
-
-                gestor.MiniMenuGestor();
-                
-
-            }
-            
-
-        }else if (opcion==3){
-
-            //AGREGAR FUNCION
-
-        }else if (opcion == 4){
+        }else if (opcion == 3){
 
             cout << "Proyecto terminado" << endl;
 

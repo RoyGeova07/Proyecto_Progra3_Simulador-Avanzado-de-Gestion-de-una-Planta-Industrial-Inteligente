@@ -10,6 +10,7 @@
 #include "Maquina.h"
 #include "Empleado.h"
 #include "EmpleadoOperario.h"
+#include "Tienda.h"
 
 
 //declaro esta clase aqui porque tenia un error de circulo de dependencias (circular dependency) entre Maquina.h y Gestor_De_Planta.h.
@@ -22,6 +23,7 @@
 class Maquina;
 class Distribucion;
 class EmpleadoOperario;
+class Tienda;
 
 //Gestor_De_Planta ya no incluye directamente Maquina.h.
 //Maquina.h ya no incluye directamente Gestor_De_Planta.h.
@@ -45,6 +47,7 @@ private:
     int Envases=50;
     int Conservantes=50;
     Distribucion* distribucion=nullptr;//aqui puntero de distribucion
+    Tienda *tiendita;
 
 public:
 
@@ -53,10 +56,10 @@ public:
 
     void AgregarEmpleado(Empleado* emp);
     void AgregarMaquina(Maquina* maq);
-    void listarEmpleados() const;
-    void listarProductos() const;
-    void ListarFrutas() const;
-    void VerEstadoMaquina() const;
+    void listarEmpleados()const;
+    void listarProductos()const;
+    void ListarFrutas()const;
+    void VerEstadoMaquina()const;
     void eliminarEmpleado(int id);
     Empleado* BuscarEmpleadoPorId(int id);
     int CantidadEmpleados() const;
@@ -80,7 +83,7 @@ public:
     int getAgua()const{return AguaLitros;}
     int getEnvases()const{return Envases;}
     int getConservantes()const {return Conservantes;}
-    void MiniMenuGestor();
+    void MiniMenuGestor(Gestor_De_Planta& gestor);
     void ReducirAgua(double litros);
     void AgregarAwuita(double MasAwuita){AguaLitros+=MasAwuita;}
 
@@ -97,6 +100,8 @@ public:
     Distribucion* getDistribucion() const { return distribucion; }
     // O si prefieres trabajar con referencia segura
     // Distribucion& getDistribucion() const { return *distribucion; }
+
+    Tienda& getTienda(){return *tiendita;}//get para una solo instancia de la tienda y no perder los datos, despues de cada salida
     
     void empacar();
     

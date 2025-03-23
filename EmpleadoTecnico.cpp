@@ -52,6 +52,21 @@ void EmpleadoTecnico::RepararMaquina(Maquina& maquina, const vector<EmpleadoTecn
 
     }
 
+    //aqui se verifica si hay suficiente capital 
+    double TotalSalarios=0;
+    for(const auto& tecnico:tecnicos){
+
+        TotalSalarios+=tecnico->getSalario();
+
+    }
+    if(gestor.getCapital()<TotalSalarios){
+
+        cout<<"\n No hay suficiente capital para pagar a todos los tecnicos\n";
+        cout<<"Capital disponible: $"<<gestor.getCapital()<<" | Capital requerido: $"<<TotalSalarios<<"\n";
+        return;
+
+    }
+
     int totalPagado=0;
     vector<thread> hilosReparacion;//aqui se crea un nuevo hilo
     for(const auto& tecnico:tecnicos){
@@ -93,7 +108,7 @@ void EmpleadoTecnico::RepararMaquina(Maquina& maquina, const vector<EmpleadoTecn
     mtx.lock();//protegido con mtx para evitar que otro hilo interfiera al escribir
     cout<<"La maquina "<<maquina.getNombre()<<" ha sido reparada y esta en buen estado.\n";
     cout<<"Capital restante: $"<<gestor.getCapital()<<" \n";    
-    cout << "\nSe pagaron $" << totalPagado << " en total a los técnicos.\n";
+    cout << "\nSe pagaron $" << totalPagado << " en total a los tecnicos.\n";
     maquina.setEnUso(true);
     maquina.IncrementarReparacion();
     mtx.unlock();

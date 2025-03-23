@@ -47,13 +47,7 @@ void Envasadora::AgregarIngredientes(const string& JugoNombre,Gestor_De_Planta& 
         cout<<JugoNombre<<" se le a agredo los conservantes correctamente ("<<cantidad<<" unidades).\n";
         this->mtx.unlock();
 
-    }else{
-
-        this->mtx.lock();
-        cout<<"ERROR: No hay conservantes disponibles para agregar a "<<cantidad<<"unidades de "<<JugoNombre<<"\n";
-        this->mtx.unlock();
-
-    }  
+    }
 
 }
 
@@ -71,12 +65,6 @@ void Envasadora::EnvasarJugos(const std::string& JugoNombre,Gestor_De_Planta& ge
         gestor.AgregarMasEnvases(-cantidad);
         this->mtx.lock();
         cout<<JugoNombre<<" ha sido envasado correctamente ("<<cantidad<<" unidades).\n";
-        this->mtx.unlock();
-
-    }else{
-
-        this->mtx.lock();
-        cout<<"ERROR: no hay suficientes envases para poder envasar "<<cantidad<<" unidades de "<<JugoNombre<<"\n.";
         this->mtx.unlock();
 
     }
@@ -100,7 +88,7 @@ void Envasadora::MenuMaquinaEnvasadora(std::vector<Producto>& InventarioJugos,st
     
     do
     {
-        cout<<"===================================================\n";
+        cout<<"\n===================================================\n";
         cout<<"\n -- Menu de Maquina Envadora -- \n";
         cout<<"1. Envasar y agregar ingredientes\n";
         cout<<"2. Reparar Maquina\n";
@@ -183,6 +171,26 @@ void Envasadora::MenuMaquinaEnvasadora(std::vector<Producto>& InventarioJugos,st
             */
            
             cout<<"\nIniciando proceso de "<<CantidadAProcesar<<" unidades de "<<producto.getNombre()<<"..\n";
+
+            bool TieneConservantes=gestor.getConservantes()>=CantidadAProcesar;
+            bool TieneEnvases=gestor.getEnvases()>=CantidadAProcesar;
+
+            if(!TieneEnvases){
+
+                cout<<"ERROR: No hay suficientes envases para: "<<CantidadAProcesar<<" unidades de "<<producto.getNombre()<<"\n";
+
+            }
+            if(!TieneConservantes){
+
+                cout<<"ERROR: No hay suficientes conservantes para: "<<CantidadAProcesar<<" unidades de "<<producto.getNombre()<<"\n";
+
+            }
+            if(!TieneConservantes||!TieneEnvases){
+
+                cout << "ERROR: No se pudo procesar el jugo de " << producto.getNombre() << " por falta de recursos.\n";
+                continue; // volver al menu
+
+            }
 
             //aqui creacion de hilo
             thread HiloIngrediente(&Envasadora::AgregarIngredientes,this,producto.getNombre(),ref(gestor),CantidadAProcesar);

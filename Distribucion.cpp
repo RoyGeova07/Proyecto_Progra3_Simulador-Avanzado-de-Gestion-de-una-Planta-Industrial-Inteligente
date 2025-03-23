@@ -373,7 +373,7 @@ void Distribucion::mostrarMenuPedidos(Gestor_De_Planta& gestor){
 
         }else if(opcion==3){
 
-            gestor.MiniMenuGestor();
+            gestor.MiniMenuGestor(gestor);
 
         }else{
 

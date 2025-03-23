@@ -141,6 +141,18 @@ void ProcesadorFrutas::MenuProcesadorFrutas(std::vector<Frutas>&inventarioFrutas
 
             cout<<"\nIniciando proceso de "<<CantidadAProcesar<<" uniades de "<<fruta.getNombre()<<"..\n";
 
+            if(gestor.getConservantes()<CantidadAProcesar){
+
+                cout<<"\nERROR: No hay suficiente conservantes para procesar "<<CantidadAProcesar<<" unidades\n";
+                continue;
+
+            }
+            if(gestor.getEnvases()<CantidadAProcesar){
+
+                cout<<"\nERROR: No hay suficiente envases para procesar "<<CantidadAProcesar<<" unidades\n";
+
+            }
+
             //hilo que tritura la fruta
             thread HiloTritura(&ProcesadorFrutas::TriturarFruta,this,5,fruta.getNombre());  
             HiloTritura.join();
@@ -180,7 +192,6 @@ void ProcesadorFrutas::MenuProcesadorFrutas(std::vector<Frutas>&inventarioFrutas
                 cout<<"Se han agotado las frutas seleccionadaas.\n";
 
             }
-
             if (VerificarFallo())
             {
                 

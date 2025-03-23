@@ -8,6 +8,8 @@
 #include "Frutas.h"
 #include "Producto.h"
 
+//error de circulo de dependencias
+class Gestor_De_Planta;
 
 class Tienda
 {

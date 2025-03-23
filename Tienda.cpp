@@ -16,6 +16,7 @@ void Tienda::MenuTienda(Gestor_De_Planta& gestor) {
         cout << "           TIENDA DE INSUMOS        \n";
         cout << "==============================\n";
         cout << " Capital disponible: $" << gestor.getCapital() << "\n";
+        cout<<"Dinero gastado total en la tienda: $"<<DineroGastadoEnTodaLaTienda<<"\n";
         cout << "1.  Comprar Frutas\n";
         cout << "2.  Comprar Conservantes\n";
         cout << "3.  Comprar Envases\n";
@@ -54,13 +55,15 @@ void Tienda::ComprarFrutas(Gestor_De_Planta &gestor) {
 
     double precioUnit;
     switch (tipoF) {
-        case 1: precioUnit=2.4;Limon++; break;
-        case 2: precioUnit=3.4;Naranja++; break;
-        case 3: precioUnit=5.6;Pilla++; break;
-        case 4: precioUnit=7.8;Sandia++;break;
-        case 5: precioUnit=2.0;Fresa++; break;
-        case 6: precioUnit=4.0;Tamarindo++; break;
-        case 7: precioUnit=2.1;Coco++; break;
+
+        case 1: precioUnit=2.4;Limon+=cantidad;break;
+        case 2: precioUnit=3.4;Naranja+=cantidad;break;
+        case 3: precioUnit=5.6;Pilla+=cantidad;break;
+        case 4: precioUnit=7.8;Sandia+=cantidad;break;
+        case 5: precioUnit=2.0;Fresa+=cantidad;break;
+        case 6: precioUnit=4.0;Tamarindo+=cantidad; break;
+        case 7: precioUnit=2.1;Coco+=cantidad; break;
+        
     }
 
     double costoTotal = cantidad * precioUnit;
@@ -76,6 +79,14 @@ void Tienda::ComprarFrutas(Gestor_De_Planta &gestor) {
     DineroGastadoEnTodaLaTienda+=costoTotal;//DINERO GASTADO EN TOTAL EN ESTE TIENDA 
 
     cout << "Compra exitosa. Nuevo capital: $" << gestor.getCapital() << "\n";
+    cout<<"Cantidad de frutas compradas: "<<FrutasCompradas<<endl;
+    cout<<"Limon: "<<Limon<<endl;
+    cout<<"Pilla: "<<Pilla<<endl;
+    cout<<"Naranja: "<<Naranja<<endl;
+    cout<<"Tamarindo:"<<Tamarindo<<endl;
+    cout<<"Coco: "<<Coco<<endl;
+    cout<<"Fresa: "<<Fresa<<endl;
+    cout<<"Sandia: "<<Sandia<<endl;
 }
 
 void Tienda::ComprarConservantes(Gestor_De_Planta &gestor) {

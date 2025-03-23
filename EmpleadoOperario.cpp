@@ -32,6 +32,20 @@ void EmpleadoOperario::GenerarReportePlantaConHilos(Gestor_De_Planta& gestor,std
 
     }
 
+    double TotalXavi=0;
+    for(const auto& operario:operarios){
+
+        TotalXavi+=operario->getSalario();
+
+    }
+    if(gestor.getCapital()<TotalXavi){
+
+        cout<<"\n No hay suficiente capital para pagar a todos los operarios\n";
+        cout<<"Capital disponible: $"<<gestor.getCapital()<<" | Capital requerido: $"<<TotalXavi<<"\n";
+        return;
+
+    }
+
     std::cout << "\n== Generando reporte de la planta con " << operarios.size() << " empleados operarios ==\n\n";
 
     //EXPLICAR ESTA FUNCION FESPUESSS
@@ -44,7 +58,7 @@ void EmpleadoOperario::GenerarReportePlantaConHilos(Gestor_De_Planta& gestor,std
         hilos.emplace_back([&, op]() {
             {
                 std::lock_guard<std::mutex> lock(coutMutex);
-                std::cout << " " << op->getNombre() << " está generando el reporte...\n";
+                std::cout << " " << op->getNombre() << " esta generando el reporte...\n";
             }
 
             std::this_thread::sleep_for(std::chrono::seconds(2));
@@ -120,17 +134,17 @@ void EmpleadoOperario::GenerarReportePlanta(Gestor_De_Planta& gestor) {
     // Estado de máquinas
     reporte << "\n >> Estado de las Maquinas:\n";
     for (const auto& maquina : gestor.getMaquinas()) {
-        reporte << "\n═══════════════════════════════════════════════\n";
+        reporte << "\n=============================================================================\n";
         reporte << " Maquina: " << maquina->getNombre() << "\n";
         reporte << "   Estado: " << (maquina->getEstado() ? "En buen estado" : "En mal estado") << "\n";
         reporte << "   Veces usada: " << maquina->getVecesUsadas() << "\n";
         reporte << "   Veces reparada: " << maquina->getVecesReparada() << "\n";
-        reporte << "   Último uso: " << maquina->getUltimaFechaUso() << "\n";
+        reporte << "   Ultimo uso: " << maquina->getUltimaFechaUso() << "\n";
     }
 
     // Frutas compradas desde la tienda
-    reporte << "\n🛒 >> Reporte de compras en la Tienda:\n";
-    Tienda tienda; // Asegúrate de pasar una instancia válida si se está usando externamente
+    reporte << "\n >> Reporte de compras en la Tienda:\n";
+    Tienda& tienda=gestor.getTienda(); 
     reporte << "   - Frutas totales compradas: " << tienda.getFrutasCompradas() << "\n";
     reporte << "     * Limon: " << tienda.getLimon() << "\n";
     reporte << "     * Naranja: " << tienda.getNaranja() << "\n";
@@ -146,7 +160,6 @@ void EmpleadoOperario::GenerarReportePlanta(Gestor_De_Planta& gestor) {
             << tienda.getDineroGastadoEnTodaLatienda() << "\n";
 
     // Ranking de jugos vendidos
-    reporte << "\n >> Ranking de Jugos Vendidos:\n";
     if(gestor.getDistribucion()!=nullptr){
         gestor.getDistribucion()->MostrarRanking(reporte);
     }else{
@@ -174,7 +187,7 @@ void EmpleadoOperario::GenerarReportePlanta(Gestor_De_Planta& gestor) {
 
     // PAGOS A LOS EMPLEADOS OPERARIOS
     //EXPLICAR DESPUESSS
-    reporte << "\n💰 >> Sueldos pagados por la generacion del reporte:\n";
+    reporte << "\n >> Sueldos pagados por la generacion del reporte:\n";
     double totalPagado = 0.0;
     for (const auto& emp : gestor.getEmpleados()) {
         if (auto op = dynamic_cast<EmpleadoOperario*>(emp)) {
@@ -185,5 +198,4 @@ void EmpleadoOperario::GenerarReportePlanta(Gestor_De_Planta& gestor) {
     }
     reporte << "Total pagado a operarios: $" << fixed << setprecision(2) << totalPagado << "\n";
 
-    reporte << "\n========== FIN DEL REPORTE ==========\n";
 }
