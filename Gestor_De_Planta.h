@@ -52,7 +52,11 @@ private:
 public:
 
     Gestor_De_Planta();
-    ~Gestor_De_Planta();    
+    ~Gestor_De_Planta();
+    
+    void GuardarSimulacionBinario(const std::string &nombreArchivo);
+    void CargarSimulacionBinario(const std::string &nombreArchivo);
+
 
     void AgregarEmpleado(Empleado* emp);
     void AgregarMaquina(Maquina* maq);
