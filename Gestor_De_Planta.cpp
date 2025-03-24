@@ -304,7 +304,8 @@ void Gestor_De_Planta::MiniMenuGestor(Gestor_De_Planta &gestor)
 {
     int opcionmini = 0;
 
-    while (opcionmini != 5)
+    // Cambiamos la condición y el rango de opciones para que podamos tener hasta la 11.
+    while (opcionmini != 11)
     {
         cout << "\n====================Menu de la planta====================\n";
         cout << "1. Listar Planta\n";
@@ -316,9 +317,11 @@ void Gestor_De_Planta::MiniMenuGestor(Gestor_De_Planta &gestor)
         cout << "7. Ver reporte de la planta de " << gestor.getNombrePLanta() << "\n";
         cout << "8. Pedir billete\n";
         cout << "9. Guardar Simulacion\n";
-        cout << "10. Salir de mi planta\n";
+        cout << "10. Cargar Simulacion\n";
+        cout << "11. Salir de mi planta\n";
 
-        opcionmini = NumeroValido("Ingrese una opcion: ", 1, 9);
+        // Ahora permitimos opciones del 1 al 11
+        opcionmini = NumeroValido("Ingrese una opcion: ", 1, 11);
 
         if (opcionmini == 1)
         {
@@ -353,7 +356,7 @@ void Gestor_De_Planta::MiniMenuGestor(Gestor_De_Planta &gestor)
             cout << "----------------------------------------------------------------\n";
             cout << "\nConservantes disponibles: " << getConservantes() << " unidades\n";
             cout << "----------------------------------------------------------------\n";
-            cout << "\n Envases disponibles: " << getEnvases() << " unidades\n";
+            cout << "\nEnvases disponibles: " << getEnvases() << " unidades\n";
             cout << "----------------------------------------------------------------\n";
             cout << "\nEstado de las maquinas actualmente:\n";
             VerEstadoMaquina();
@@ -361,16 +364,16 @@ void Gestor_De_Planta::MiniMenuGestor(Gestor_De_Planta &gestor)
         }
         else if (opcionmini == 2)
         {
-            int id;
             cout << "======================================================================\n";
             cout << "***seleccione 51 para salir****\n";
             cout << "\nEmpleados activos:\n ";
             listarEmpleados();
             cout << "---Nota-- Presione 51 para volver al menu\n";
-            id = NumeroValido("Ingrese el ID del empleado a despedir: ", 1, 51);
+            int id = NumeroValido("Ingrese el ID del empleado a despedir: ", 1, 51);
 
             if (id == 51) {
-                return;
+                // Vuelves al menú principal
+                continue;
             }
 
             eliminarEmpleado(id);
@@ -378,14 +381,17 @@ void Gestor_De_Planta::MiniMenuGestor(Gestor_De_Planta &gestor)
         }
         else if (opcionmini == 3)
         {
+            // Menú de Maquinas
             Maquina::MenuMaquinas(*this);
         }
         else if (opcionmini == 4)
         {
-            getTienda().MenuTienda(*this);  // Para no perder datos de Tienda
+            // Menú de compras en la Tienda
+            getTienda().MenuTienda(*this);
         }
         else if (opcionmini == 5)
         {
+            // Pedidos pendientes de Distribución
             if (!distribucion) {
                 distribucion = new Distribucion();
                 distribucion->setGestor(this);
@@ -394,11 +400,13 @@ void Gestor_De_Planta::MiniMenuGestor(Gestor_De_Planta &gestor)
         }
         else if (opcionmini == 6)
         {
-            EmpleadoOperario dummy(""); // Para invocar el metodo estatico
+            // Generar Reporte
+            EmpleadoOperario dummy(""); 
             dummy.GenerarReportePlantaConHilos(*this, this->getEmpleados());
         }
         else if (opcionmini == 7)
         {
+            // Ver Reporte en pantalla
             string carpeta = "Plantas Industriales";
             string archivo = carpeta + "/" + gestor.getNombrePLanta() + ".txt";
             ifstream reporte(archivo);
@@ -417,27 +425,40 @@ void Gestor_De_Planta::MiniMenuGestor(Gestor_De_Planta &gestor)
         }
         else if (opcionmini == 8)
         {
+            // Agregar capital manualmente
             char respuestagod;
             double CapitalAdicional;
             respuestagod = ObtenerCocaCola("\nDesea agregar mas dinero? (s/n): ");
             if (respuestagod == 's' || respuestagod == 'S') {
                 CapitalAdicional = NumeroTypename("Ingrese la cantidad a adicionar: ", 1.0, 50000.0);
+                gestor.agregarCapital(CapitalAdicional);
             }
-            gestor.agregarCapital(CapitalAdicional);
         }
         else if (opcionmini == 9)
         {
-            // Aquí puedes invocar GuardarSimulacionBinario
+            // Guardar Simulación
             string archivoBin;
             cout << "\nIngrese el nombre del archivo binario (ej: miplanta.bin): ";
             getline(cin, archivoBin);
-            if(archivoBin.empty()) {
+            if (archivoBin.empty()) {
                 archivoBin = "SimulacionPlanta.bin";
             }
             GuardarSimulacionBinario(archivoBin);
         }
         else if (opcionmini == 10)
         {
+            // Cargar Simulación
+            string archivoBin;
+            cout << "\nIngrese el nombre del archivo binario a cargar (ej: miplanta.bin): ";
+            getline(cin, archivoBin);
+            if (archivoBin.empty()) {
+                archivoBin = "SimulacionPlanta.bin";
+            }
+            CargarSimulacionBinario(archivoBin);
+        }
+        else if (opcionmini == 11)
+        {
+            // Salir
             cout << "Saliendo de mi planta\n";
         }
         else
@@ -446,6 +467,7 @@ void Gestor_De_Planta::MiniMenuGestor(Gestor_De_Planta &gestor)
         }
     }
 }
+
 
 //------------------------------------------------------------------------------
 // NUEVAS FUNCIONES PARA GUARDAR Y CARGAR LA SIMULACIÓN EN BINARIO
@@ -553,10 +575,7 @@ void Gestor_De_Planta::GuardarSimulacionBinario(const std::string &nombreArchivo
         }
     }
 
-    // (Opcional) Guardar FRUTAS_LAVADAS, JUGOS_SIN_INGREDIENTES, JUGOS_DISPONIBLES, etc.
-    // según necesites.
-    // ...
-    // cerramos
+
     archivo.close();
     cout << "\nSimulacion guardada exitosamente en: " << ruta << "\n";
 }
