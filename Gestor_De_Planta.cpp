@@ -11,8 +11,11 @@
 #include "Distribucion.h"
 #include "Tienda.h"//siempre incluir el header en el cpp para evitar errores de dependencia circular
 #include <iosfwd>
+#include <filesystem>
 
 using namespace std;
+
+namespace fs=std::filesystem;
 
 
 //aqui se usa un destructor para liberar la memmoria de los vectores de puntero
@@ -432,7 +435,7 @@ void Gestor_De_Planta::MiniMenuGestor(Gestor_De_Planta& gestor){
         cout<<"8. Pedir billete\n";
         cout<<"9. Guardar Simulacion\n";
         cout<<"10. Salir de mi planta\n";
-        opcionmini=NumeroValido("Ingrese una opcion: ",1,9);
+        opcionmini=NumeroValido("Ingrese una opcion: ",1,10);
         
     
         if(opcionmini==1)
@@ -588,7 +591,11 @@ void Gestor_De_Planta::MiniMenuGestor(Gestor_De_Planta& gestor){
 
         }else if(opcionmini==9){
 
-            
+            string nombre;
+            cout<<"\nIngrese el nombre del archivo para guardar (ej:  miplanta.bin:)";
+            getline(cin,nombre);
+            if(nombre.empty())nombre="SimulacionPlanta.bin";
+            GuardarSimulacionBinario(nombre);
 
         }else if (opcionmini==10){
 
@@ -604,4 +611,413 @@ void Gestor_De_Planta::MiniMenuGestor(Gestor_De_Planta& gestor){
         
 
 }
+
+void Gestor_De_Planta::GuardarSimulacionBinario(const std::string &nombreArchivo)
+{
+    // 1) Crear/verificar la carpeta
+    std::string carpeta = "Plantas Industriales guardadas";
+    if(!fs::exists(carpeta)) {
+        fs::create_directory(carpeta);
+    }
+
+    // 2) Construir la ruta completa (carpeta + archivo)
+    std::string ruta = carpeta + "/" + nombreArchivo;
+
+    // 3) Abrir archivo binario
+    std::ofstream archivo(ruta, std::ios::binary);
+    if(!archivo.is_open()) {
+        std::cerr << "Error al abrir el archivo binario para guardar la simulacion.\n";
+        return;
+    }
+
+    // a) Guardar nombre de la planta
+    {
+        size_t len = NombreDelaPlanta.size();
+        archivo.write(reinterpret_cast<const char*>(&len), sizeof(len));
+        archivo.write(NombreDelaPlanta.c_str(), len);
+    }
+
+    // b) Guardar capital, agua, conservantes, envases
+    archivo.write(reinterpret_cast<const char*>(&CapitalInicial), sizeof(CapitalInicial));
+    archivo.write(reinterpret_cast<const char*>(&AguaLitros),     sizeof(AguaLitros));
+    archivo.write(reinterpret_cast<const char*>(&Conservantes),   sizeof(Conservantes));
+    archivo.write(reinterpret_cast<const char*>(&Envases),        sizeof(Envases));
+
+    // c) Guardar FRUTAS
+    {
+        size_t totalFrutas = FRUTAS.size();
+        archivo.write(reinterpret_cast<const char*>(&totalFrutas), sizeof(totalFrutas));
+        for(const auto &f : FRUTAS)
+        {
+            // Necesitamos mapear getNombre() a un int enum
+            int tipoInt = -1;
+            // Ejemplo de mapeo básico:
+            if(f.getNombre() == "Agua")       tipoInt = 0;
+            else if(f.getNombre() == "Limon") tipoInt = 1;
+            else if(f.getNombre() == "Naranja") tipoInt = 2;
+            else if(f.getNombre() == "Piña")  tipoInt = 3;
+            else if(f.getNombre() == "Sandia") tipoInt = 4;
+            else if(f.getNombre() == "Fresa")  tipoInt = 5;
+            else if(f.getNombre() == "Tamarindo") tipoInt = 6;
+            else if(f.getNombre() == "Coco")  tipoInt = 7;
+
+            archivo.write(reinterpret_cast<const char*>(&tipoInt), sizeof(tipoInt));
+            double costo = f.getCosto();
+            archivo.write(reinterpret_cast<const char*>(&costo), sizeof(costo));
+            int cantidad = f.getCantidad();
+            archivo.write(reinterpret_cast<const char*>(&cantidad), sizeof(cantidad));
+            int cLavada = f.getCantidadLavada();
+            archivo.write(reinterpret_cast<const char*>(&cLavada), sizeof(cLavada));
+        }
+    }
+
+    // d) Guardar Empleados
+    {
+        size_t totalEmp = empleado.size();
+        archivo.write(reinterpret_cast<const char*>(&totalEmp), sizeof(totalEmp));
+        for(auto *emp : empleado)
+        {
+            if(dynamic_cast<EmpleadoOperario*>(emp)) {
+                int tipoEmp = 0; // operario
+                archivo.write(reinterpret_cast<const char*>(&tipoEmp), sizeof(tipoEmp));
+            }
+            else if(dynamic_cast<EmpleadoTecnico*>(emp)) {
+                int tipoEmp = 1; // tecnico
+                archivo.write(reinterpret_cast<const char*>(&tipoEmp), sizeof(tipoEmp));
+            }
+            else {
+                int tipoEmp = 9; // desconocido
+                archivo.write(reinterpret_cast<const char*>(&tipoEmp), sizeof(tipoEmp));
+            }
+
+            // Guardar nombre
+            std::string nom = emp->getNombre();
+            size_t lenNom = nom.size();
+            archivo.write(reinterpret_cast<const char*>(&lenNom), sizeof(lenNom));
+            archivo.write(nom.c_str(), lenNom);
+
+            // Guardar cargo
+            std::string cargo = emp->getCargo();
+            size_t lenCargo = cargo.size();
+            archivo.write(reinterpret_cast<const char*>(&lenCargo), sizeof(lenCargo));
+            archivo.write(cargo.c_str(), lenCargo);
+
+            // Guardar id, salario, dineroGanado
+            int id = emp->getId();
+            archivo.write(reinterpret_cast<const char*>(&id), sizeof(id));
+
+            int salario = emp->getSalario();
+            archivo.write(reinterpret_cast<const char*>(&salario), sizeof(salario));
+
+            int dineroGanado = emp->getDineroGanado();
+            archivo.write(reinterpret_cast<const char*>(&dineroGanado), sizeof(dineroGanado));
+        }
+    }
+
+    // e) Guardar FRUTAS_LAVADAS
+    {
+        size_t totalLavadas = FRUTAS_LAVADAS.size();
+        archivo.write(reinterpret_cast<const char*>(&totalLavadas), sizeof(totalLavadas));
+        for(const auto& fruta : FRUTAS_LAVADAS) {
+            int tipoInt = -1;
+            if(fruta.getNombre() == "Limon") tipoInt = 1;
+            else if(fruta.getNombre() == "Naranja") tipoInt = 2;
+            else if(fruta.getNombre() == "Piña") tipoInt = 3;
+            else if(fruta.getNombre() == "Sandia") tipoInt = 4;
+            else if(fruta.getNombre() == "Fresa") tipoInt = 5;
+            else if(fruta.getNombre() == "Tamarindo") tipoInt = 6;
+            else if(fruta.getNombre() == "Coco") tipoInt = 7;
+
+            archivo.write(reinterpret_cast<const char*>(&tipoInt), sizeof(tipoInt));
+            double costo = fruta.getCosto();
+            archivo.write(reinterpret_cast<const char*>(&costo), sizeof(costo));
+            int cantidad = fruta.getCantidad();
+            archivo.write(reinterpret_cast<const char*>(&cantidad), sizeof(cantidad));
+        }
+    }
+
+    // e) Guardar FRUTAS_LAVADAS
+    {
+        size_t totalLavadas = FRUTAS_LAVADAS.size();
+        archivo.write(reinterpret_cast<const char*>(&totalLavadas), sizeof(totalLavadas));
+        for(const auto& fruta : FRUTAS_LAVADAS) {
+            int tipoInt = -1;
+            if(fruta.getNombre() == "Limon") tipoInt = 1;
+            else if(fruta.getNombre() == "Naranja") tipoInt = 2;
+            else if(fruta.getNombre() == "Piña") tipoInt = 3;
+            else if(fruta.getNombre() == "Sandia") tipoInt = 4;
+            else if(fruta.getNombre() == "Fresa") tipoInt = 5;
+            else if(fruta.getNombre() == "Tamarindo") tipoInt = 6;
+            else if(fruta.getNombre() == "Coco") tipoInt = 7;
+
+            archivo.write(reinterpret_cast<const char*>(&tipoInt), sizeof(tipoInt));
+            double costo = fruta.getCosto();
+            archivo.write(reinterpret_cast<const char*>(&costo), sizeof(costo));
+            int cantidad = fruta.getCantidad();
+            archivo.write(reinterpret_cast<const char*>(&cantidad), sizeof(cantidad));
+        }
+    }
+
+    // f) Guardar JUGOS_SIN_INGREDIENTES
+    {
+        size_t totalJugosSin = JUGOS_SIN_INGREDIENTES.size();
+        archivo.write(reinterpret_cast<const char*>(&totalJugosSin), sizeof(totalJugosSin));
+        for(const auto& jugo : JUGOS_SIN_INGREDIENTES) {
+            size_t len = jugo.getNombre().size();
+            archivo.write(reinterpret_cast<const char*>(&len), sizeof(len));
+            archivo.write(jugo.getNombre().c_str(), len);
+
+            int cantidad = jugo.getCantidadSinIngredientes();
+            double precio = jugo.getPrecio();
+            archivo.write(reinterpret_cast<const char*>(&cantidad), sizeof(cantidad));
+            archivo.write(reinterpret_cast<const char*>(&precio), sizeof(precio));
+        }
+    }
+
+    // g) Guardar JUGOS_DISPONIBLES
+    {
+        size_t totalJugos = JUGOS_DISPONIBLES.size();
+        archivo.write(reinterpret_cast<const char*>(&totalJugos), sizeof(totalJugos));
+        for(const auto& jugo : JUGOS_DISPONIBLES) {
+            size_t len = jugo.getNombre().size();
+            archivo.write(reinterpret_cast<const char*>(&len), sizeof(len));
+            archivo.write(jugo.getNombre().c_str(), len);
+
+            int cantidad = jugo.getCantidad();
+            double precio = jugo.getPrecio();
+            archivo.write(reinterpret_cast<const char*>(&cantidad), sizeof(cantidad));
+            archivo.write(reinterpret_cast<const char*>(&precio), sizeof(precio));
+        }
+    }
+
+    // h) Guardar empleados despedidos
+    {
+        size_t totalDespedidos = EMPLEADOS_DESPEDIDOS.size();
+        archivo.write(reinterpret_cast<const char*>(&totalDespedidos), sizeof(totalDespedidos));
+        for(const auto& nombre : EMPLEADOS_DESPEDIDOS) {
+            size_t len = nombre.size();
+            archivo.write(reinterpret_cast<const char*>(&len), sizeof(len));
+            archivo.write(nombre.c_str(), len);
+        }
+    }
+
+    // i) Guardar tienda
+    {
+        Tienda& t = *tiendita;
+        int limon = t.getLimon(), naranja = t.getNaranja(), pina = t.getPilla();
+        int sandia = t.getSandia(), fresa = t.getFresa(), tamarindo = t.getTamarindo(), coco = t.getCoco();
+        int conservantes = t.getConservantesComprados(), envases = t.getEnvasesComprados();
+        double aguaComprada = t.getAguaComprada();
+        double totalGastado = t.getDineroGastadoEnTodaLatienda();
+        int totalFrutas = t.getFrutasCompradas();
+
+        archivo.write(reinterpret_cast<const char*>(&limon), sizeof(limon));
+        archivo.write(reinterpret_cast<const char*>(&naranja), sizeof(naranja));
+        archivo.write(reinterpret_cast<const char*>(&pina), sizeof(pina));
+        archivo.write(reinterpret_cast<const char*>(&sandia), sizeof(sandia));
+        archivo.write(reinterpret_cast<const char*>(&fresa), sizeof(fresa));
+        archivo.write(reinterpret_cast<const char*>(&tamarindo), sizeof(tamarindo));
+        archivo.write(reinterpret_cast<const char*>(&coco), sizeof(coco));
+
+        archivo.write(reinterpret_cast<const char*>(&conservantes), sizeof(conservantes));
+        archivo.write(reinterpret_cast<const char*>(&envases), sizeof(envases));
+        archivo.write(reinterpret_cast<const char*>(&aguaComprada), sizeof(aguaComprada));
+        archivo.write(reinterpret_cast<const char*>(&totalGastado), sizeof(totalGastado));
+        archivo.write(reinterpret_cast<const char*>(&totalFrutas), sizeof(totalFrutas));
+    }
+    
+    archivo.close();
+    cout << "\nSimulacion guardada exitosamente en: " << ruta << "\n";
+}
+
+void Gestor_De_Planta::CargarSimulacionBinario(const std::string &nombreArchivo) {
+    std::string carpeta = "Plantas Industriales guardadas";
+    std::string ruta = carpeta + "/" + nombreArchivo;
+
+    std::ifstream archivo(ruta, std::ios::binary);
+    if (!archivo.is_open()) {
+        std::cerr << "No se pudo abrir el archivo para cargar la simulación.\n";
+        return;
+    }
+
+    // a) Nombre planta
+    size_t len;
+    archivo.read(reinterpret_cast<char*>(&len), sizeof(len));
+    NombreDelaPlanta.resize(len);
+    archivo.read(&NombreDelaPlanta[0], len);
+
+    // b) Capital, agua, conservantes, envases
+    archivo.read(reinterpret_cast<char*>(&CapitalInicial), sizeof(CapitalInicial));
+    archivo.read(reinterpret_cast<char*>(&AguaLitros), sizeof(AguaLitros));
+    archivo.read(reinterpret_cast<char*>(&Conservantes), sizeof(Conservantes));
+    archivo.read(reinterpret_cast<char*>(&Envases), sizeof(Envases));
+
+    // c) Frutas
+    FRUTAS.clear();
+    size_t TotalFrutass;
+    archivo.read(reinterpret_cast<char*>(&TotalFrutass), sizeof(TotalFrutass));
+    for (size_t i = 0; i < TotalFrutass; ++i) {
+        int tipoInt, cantidad, cLavada;
+        double costo;
+        archivo.read(reinterpret_cast<char*>(&tipoInt), sizeof(tipoInt));
+        archivo.read(reinterpret_cast<char*>(&costo), sizeof(costo));
+        archivo.read(reinterpret_cast<char*>(&cantidad), sizeof(cantidad));
+        archivo.read(reinterpret_cast<char*>(&cLavada), sizeof(cLavada));
+
+        std::string nombre;
+        switch(tipoInt) {
+            case 0: nombre = "Agua"; break;
+            case 1: nombre = "Limon"; break;
+            case 2: nombre = "Naranja"; break;
+            case 3: nombre = "Piña"; break;
+            case 4: nombre = "Sandia"; break;
+            case 5: nombre = "Fresa"; break;
+            case 6: nombre = "Tamarindo"; break;
+            case 7: nombre = "Coco"; break;
+            default: nombre = "Desconocida"; break;
+        }
+        Frutas::Fruta tipo = Frutas::ObtenerFrutaDesdeNombre(nombre);
+        Frutas fruta(tipo, costo, cantidad);
+        fruta.setCantidadLavada(cLavada);
+        FRUTAS.push_back(fruta);
+    }
+
+    // d) Empleados
+    empleado.clear();
+    size_t totalEmp;
+    archivo.read(reinterpret_cast<char*>(&totalEmp), sizeof(totalEmp));
+    for (size_t i = 0; i < totalEmp; ++i) {
+        int tipoEmp;
+        archivo.read(reinterpret_cast<char*>(&tipoEmp), sizeof(tipoEmp));
+
+        size_t lenNom, lenCargo;
+        std::string nombre, cargo;
+        archivo.read(reinterpret_cast<char*>(&lenNom), sizeof(lenNom));
+        nombre.resize(lenNom);
+        archivo.read(&nombre[0], lenNom);
+
+        archivo.read(reinterpret_cast<char*>(&lenCargo), sizeof(lenCargo));
+        cargo.resize(lenCargo);
+        archivo.read(&cargo[0], lenCargo);
+
+        int id, salario, dineroGanado;
+        archivo.read(reinterpret_cast<char*>(&id), sizeof(id));
+        archivo.read(reinterpret_cast<char*>(&salario), sizeof(salario));
+        archivo.read(reinterpret_cast<char*>(&dineroGanado), sizeof(dineroGanado));
+
+        Empleado* nuevo = nullptr;
+        if (tipoEmp == 0) nuevo = new EmpleadoOperario(nombre);
+        else if (tipoEmp == 1) nuevo = new EmpleadoTecnico(nombre);
+
+        if (nuevo) {
+            nuevo->setId(id);
+            nuevo->setSalario(salario);
+            nuevo->setDineroGanado(dineroGanado);
+            nuevo->setCargo(cargo);
+            empleado.push_back(nuevo);
+        }
+    }
+
+    // e) Frutas lavadas
+    FRUTAS_LAVADAS.clear();
+    size_t totalLavadas;
+    archivo.read(reinterpret_cast<char*>(&totalLavadas), sizeof(totalLavadas));
+    for (size_t i = 0; i < totalLavadas; ++i) {
+        int tipoInt, cantidad;
+        double costo;
+        archivo.read(reinterpret_cast<char*>(&tipoInt), sizeof(tipoInt));
+        archivo.read(reinterpret_cast<char*>(&costo), sizeof(costo));
+        archivo.read(reinterpret_cast<char*>(&cantidad), sizeof(cantidad));
+
+        std::string nombre;
+        switch(tipoInt) {
+            case 1: nombre = "Limon"; break;
+            case 2: nombre = "Naranja"; break;
+            case 3: nombre = "Piña"; break;
+            case 4: nombre = "Sandia"; break;
+            case 5: nombre = "Fresa"; break;
+            case 6: nombre = "Tamarindo"; break;
+            case 7: nombre = "Coco"; break;
+            default: nombre = "Desconocida"; break;
+        }
+
+        Frutas::Fruta tipo = Frutas::ObtenerFrutaDesdeNombre(nombre);
+        Frutas fruta(tipo, costo, cantidad);
+        FRUTAS_LAVADAS.push_back(fruta);
+    }
+
+    // f) Jugos sin ingredientes
+    JUGOS_SIN_INGREDIENTES.clear();
+    size_t totalJugosSin;
+    archivo.read(reinterpret_cast<char*>(&totalJugosSin), sizeof(totalJugosSin));
+    for (size_t i = 0; i < totalJugosSin; ++i) {
+        size_t len;
+        archivo.read(reinterpret_cast<char*>(&len), sizeof(len));
+        std::string nombre(len, ' ');
+        archivo.read(&nombre[0], len);
+
+        int cantidad;
+        double precio;
+        archivo.read(reinterpret_cast<char*>(&cantidad), sizeof(cantidad));
+        archivo.read(reinterpret_cast<char*>(&precio), sizeof(precio));
+
+        Producto jugo(nombre, cantidad, precio);
+        jugo.setCantidadSinIngredientes(cantidad);
+        JUGOS_SIN_INGREDIENTES.push_back(jugo);
+    }
+
+    // g) Jugos disponibles
+    JUGOS_DISPONIBLES.clear();
+    size_t totalJugos;
+    archivo.read(reinterpret_cast<char*>(&totalJugos), sizeof(totalJugos));
+    for (size_t i = 0; i < totalJugos; ++i) {
+        size_t len;
+        archivo.read(reinterpret_cast<char*>(&len), sizeof(len));
+        std::string nombre(len, ' ');
+        archivo.read(&nombre[0], len);
+
+        int cantidad;
+        double precio;
+        archivo.read(reinterpret_cast<char*>(&cantidad), sizeof(cantidad));
+        archivo.read(reinterpret_cast<char*>(&precio), sizeof(precio));
+
+        Producto jugo(nombre, cantidad, precio);
+        JUGOS_DISPONIBLES.push_back(jugo);
+    }
+
+    // h) Empleados despedidos
+    EMPLEADOS_DESPEDIDOS.clear();
+    size_t totalDespedidos;
+    archivo.read(reinterpret_cast<char*>(&totalDespedidos), sizeof(totalDespedidos));
+    for (size_t i = 0; i < totalDespedidos; ++i) {
+        size_t len;
+        archivo.read(reinterpret_cast<char*>(&len), sizeof(len));
+        std::string nombre(len, ' ');
+        archivo.read(&nombre[0], len);
+        EMPLEADOS_DESPEDIDOS.push_back(nombre);
+    }
+
+    // i) Tienda
+    int limon, naranja, pina, sandia, fresa, tamarindo, coco, conservantes, envases, totalFrutas;
+    double agua, totalGastado;
+    archivo.read(reinterpret_cast<char*>(&limon), sizeof(limon));
+    archivo.read(reinterpret_cast<char*>(&naranja), sizeof(naranja));
+    archivo.read(reinterpret_cast<char*>(&pina), sizeof(pina));
+    archivo.read(reinterpret_cast<char*>(&sandia), sizeof(sandia));
+    archivo.read(reinterpret_cast<char*>(&fresa), sizeof(fresa));
+    archivo.read(reinterpret_cast<char*>(&tamarindo), sizeof(tamarindo));
+    archivo.read(reinterpret_cast<char*>(&coco), sizeof(coco));
+    archivo.read(reinterpret_cast<char*>(&conservantes), sizeof(conservantes));
+    archivo.read(reinterpret_cast<char*>(&envases), sizeof(envases));
+    archivo.read(reinterpret_cast<char*>(&agua), sizeof(agua));
+    archivo.read(reinterpret_cast<char*>(&totalGastado), sizeof(totalGastado));
+    archivo.read(reinterpret_cast<char*>(&totalFrutas), sizeof(totalFrutas));
+
+    tiendita->setDatosCompras(limon, naranja, pina, sandia, fresa, tamarindo, coco,
+                              conservantes, envases, agua, totalGastado, totalFrutas);
+
+    archivo.close();
+    std::cout << "\nSimulación cargada exitosamente desde: " << ruta << "\n";
+}
+
 

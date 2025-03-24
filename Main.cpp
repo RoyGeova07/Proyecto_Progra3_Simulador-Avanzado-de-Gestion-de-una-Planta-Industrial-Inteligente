@@ -327,7 +327,29 @@ void MenuPrincipal()
 
         }else if (opcion==2){
 
-            //AGREGAR FUNCION ARCHIVOSSS
+            string nombre;
+            cout<<"\nIngrese el nombre del archivo a cargar (ej: miplanta.bin): ";
+            getline(cin,nombre);
+            if(nombre.empty()){
+
+                cout<<"Nombre invalido\n";
+                continue;
+
+            }
+
+            string ruta = "Plantas Industriales guardadas/" + nombre;
+            if(!fs::exists(ruta)){
+
+                cout << "\nEl archivo '" << nombre << "' no existe en la carpeta de guardado.\n";
+                continue;
+
+            }
+        
+           gestor.CargarSimulacionBinario(nombre);
+           ParametrosConfigurados = true;
+           PrimerConfiguracion = false; // evita volver a configurar
+
+           gestor.MiniMenuGestor(gestor);
 
         }else if (opcion == 3){
 
@@ -340,9 +362,19 @@ void MenuPrincipal()
     }
 }
 
+void AsegurarCarpetaGuardado() {
+    string carpeta="Plantas Industriales guardadas";
+    if(!fs::exists(carpeta)){
+
+        fs::create_directory(carpeta);
+
+    }
+}
+
 int main()
 {
 
+    AsegurarCarpetaGuardado();
     AsegurarCarpetaReportes();
     MenuPrincipal();
 

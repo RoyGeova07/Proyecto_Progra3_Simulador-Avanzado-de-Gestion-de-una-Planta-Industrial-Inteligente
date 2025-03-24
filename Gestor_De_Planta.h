@@ -89,6 +89,11 @@ public:
 
     void EliminarJugoSinIngredientes(const std::string& nombreJugo);
 
+    void GuardarSimulacionBinario(const std::string &nombreArchivo);
+    void CargarSimulacionBinario(const std::string &nombreArchivo);
+
+    
+
     std::vector<Maquina*>& getMaquinas() { return maquinas; }
     std::vector<Frutas>& getInventarioFrutas() { return FRUTAS; }
     std::vector<Producto>& getInventarioJugosSinIngredientes() {return JUGOS_SIN_INGREDIENTES;}

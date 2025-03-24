@@ -44,6 +44,8 @@ public:
     int getAguaComprada()const{return  AguaComprada;}
     int getFrutasCompradas()const{return FrutasCompradas;}
     double getDineroGastadoEnTodaLatienda()const{return DineroGastadoEnTodaLaTienda;}
+    void setDatosCompras(int limon, int naranja, int pina, int sandia, int fresa, int tamarindo, int coco,
+        int conservantes, int envases, double agua, double totalGastado, int frutasCompradas);
 
 private:
     
@@ -53,6 +55,10 @@ private:
     void ComprarEnvases(Gestor_De_Planta &gestor);
     void ComprarAgua(Gestor_De_Planta &gestor);
 
+
+    
+
+    
 
 };
 

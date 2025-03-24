@@ -154,3 +154,19 @@ void Tienda::ComprarAgua(Gestor_De_Planta &gestor) {
 
     cout << "Agua comprada correctamente. Capital restante: $" << gestor.getCapital() << "\n";
 }
+
+void Tienda::setDatosCompras(int limon, int naranja, int pina, int sandia, int fresa, int tamarindo, int coco,
+    int conservantes, int envases, double agua, double totalGastado, int frutasCompradas) {
+    Limon = limon;
+    Naranja = naranja;
+    Pilla = pina;
+    Sandia = sandia;
+    Fresa = fresa;
+    Tamarindo = tamarindo;
+    Coco = coco;
+    ConservantesComprados = conservantes;
+    EnvasesComprados = envases;
+    AguaComprada = agua;
+    DineroGastadoEnTodaLaTienda = totalGastado;
+    FrutasCompradas = frutasCompradas;
+}

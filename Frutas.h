@@ -20,6 +20,17 @@ public:
 
     enum Fruta{Agua,Limon,Naranja,Pilla,Sandia,Fresa,Tamarindo,Coco};
 
+    static Fruta ObtenerFrutaDesdeNombre(const std::string& nombre) {
+        if(nombre == "Agua") return Frutas::Agua;
+        if(nombre == "Limon") return Frutas::Limon;
+        if(nombre == "Naranja") return Frutas::Naranja;
+        if(nombre == "Piña") return Frutas::Pilla;
+        if(nombre == "Sandia") return Frutas::Sandia;
+        if(nombre == "Fresa") return Frutas::Fresa;
+        if(nombre == "Tamarindo") return Frutas::Tamarindo;
+        if(nombre == "Coco") return Frutas::Coco;
+        return Frutas::Agua; // por defecto
+    }
 
 private:
 

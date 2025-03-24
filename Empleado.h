@@ -37,12 +37,15 @@ public:
     int getSalario() const {return salario;}
     void AgregarPago(int cantidad) {dineroGanado+=cantidad;}
     int getDineroGanado()const {return dineroGanado;}
+    void setId(int NuevoId){ id=NuevoId;}
 
     void setSalario(int nuevoSalario){
 
         this->salario=nuevoSalario;  
 
     }
+    void setDineroGanado(int NuevoDineroGanada){dineroGanado=NuevoDineroGanada;}
+    void setCargo(std::string NuevoCargo){cargo=NuevoCargo;}
 
 };
 
