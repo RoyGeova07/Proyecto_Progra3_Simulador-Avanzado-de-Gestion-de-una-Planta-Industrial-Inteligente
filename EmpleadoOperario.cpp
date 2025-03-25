@@ -90,7 +90,7 @@ void EmpleadoOperario::GenerarReportePlantaConHilos(Gestor_De_Planta& gestor,std
 void EmpleadoOperario::GenerarReportePlanta(Gestor_De_Planta& gestor) {
 
     string nombrePlanta=gestor.getNombrePLanta();
-    string carpeta="Reportes Plantas Industriales";
+    string carpeta="Reportes de Plantas Industriales";
     if (!fs::exists(carpeta)) fs::create_directory(carpeta);
 
    // ¿Que hace ios::trunc?

@@ -346,6 +346,7 @@ void MenuPrincipal()
         }else if (opcion == 3){
 
             cout << "Proyecto terminado" << endl;
+            break;
 
         }else{
 
