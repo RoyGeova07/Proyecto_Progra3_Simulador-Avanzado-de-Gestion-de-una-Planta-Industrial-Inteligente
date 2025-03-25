@@ -11,6 +11,7 @@
 #include "Empleado.h"
 #include "EmpleadoOperario.h"
 #include "Tienda.h"
+#include "MainAPP.h"
 
 
 //declaro esta clase aqui porque tenia un error de circulo de dependencias (circular dependency) entre Maquina.h y Gestor_De_Planta.h.

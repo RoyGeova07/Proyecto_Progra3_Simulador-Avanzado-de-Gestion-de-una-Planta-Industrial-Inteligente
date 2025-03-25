@@ -178,7 +178,7 @@ void MaquinaLavadora::MenuMaquinaLavadora(std::vector<Frutas>& inventarioFrutas,
 
                 cout << "LA LAVADORA SUFRIO UN DESPERFECTO. DEBE REPARARSE.\n";
                 setEnUso(false);
-                break;
+
 
             }
             if(fruta.getCantidadLavada()==fruta.getCantidad()) {

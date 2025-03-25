@@ -44,7 +44,7 @@ public:
         ActualizarFechaUso();
     
     }
-    void IncrementarReparacion(){VecesReparadas;}
+    void IncrementarReparacion(){VecesReparadas++;}
 
     void ActualizarFechaUso(){
 
@@ -59,6 +59,18 @@ public:
 
         std::time_t Tiempo=std::chrono::system_clock::to_time_t(ultimaFechaUso);
         return std::ctime(&Tiempo);//esto incluye salto de linea
+
+    }
+
+    std::chrono::system_clock::time_point getUltimaFechaUsoTP()const{
+
+        return ultimaFechaUso;
+
+    }
+
+    void setUltimaFechaUsoTP(std::chrono::system_clock::time_point fecha){
+
+        ultimaFechaUso=fecha;
 
     }
 

@@ -592,14 +592,32 @@ void Gestor_De_Planta::MiniMenuGestor(Gestor_De_Planta& gestor){
         }else if(opcionmini==9){
 
             string nombre;
-            cout<<"\nIngrese el nombre del archivo para guardar (ej:  miplanta.bin:)";
+            cout<<"\nIngrese el nombre del archivo para guardar (ej:  miplanta.bin): ";
             getline(cin,nombre);
             if(nombre.empty())nombre="SimulacionPlanta.bin";
+
+            string ruta="Planta Industriales guardadas/"+nombre;
+            if(fs::exists(ruta)){
+
+                char respuesta;
+                ObtenerCocaCola("\nEl archivo ya existe. Deseas sobreescribirlo? (s/n): ");
+                if (respuesta!='s'||respuesta=='S');
+                {
+                    
+                    cout<<"Operacion cancelada. No se guardo la simulacion\n";
+                    return;
+
+                }
+                
+            }
+
             GuardarSimulacionBinario(nombre);
 
         }else if (opcionmini==10){
 
-            cout<<"Saliendo de mi planta\n";
+            cout<<" --- Saliendo de mi planta --- \n";
+            //VOLVER AL MENU INICIO DEL MAIN
+            MenuPrincipal();
 
         }else{
 
@@ -736,28 +754,6 @@ void Gestor_De_Planta::GuardarSimulacionBinario(const std::string &nombreArchivo
         }
     }
 
-    // e) Guardar FRUTAS_LAVADAS
-    {
-        size_t totalLavadas = FRUTAS_LAVADAS.size();
-        archivo.write(reinterpret_cast<const char*>(&totalLavadas), sizeof(totalLavadas));
-        for(const auto& fruta : FRUTAS_LAVADAS) {
-            int tipoInt = -1;
-            if(fruta.getNombre() == "Limon") tipoInt = 1;
-            else if(fruta.getNombre() == "Naranja") tipoInt = 2;
-            else if(fruta.getNombre() == "Piña") tipoInt = 3;
-            else if(fruta.getNombre() == "Sandia") tipoInt = 4;
-            else if(fruta.getNombre() == "Fresa") tipoInt = 5;
-            else if(fruta.getNombre() == "Tamarindo") tipoInt = 6;
-            else if(fruta.getNombre() == "Coco") tipoInt = 7;
-
-            archivo.write(reinterpret_cast<const char*>(&tipoInt), sizeof(tipoInt));
-            double costo = fruta.getCosto();
-            archivo.write(reinterpret_cast<const char*>(&costo), sizeof(costo));
-            int cantidad = fruta.getCantidad();
-            archivo.write(reinterpret_cast<const char*>(&cantidad), sizeof(cantidad));
-        }
-    }
-
     // f) Guardar JUGOS_SIN_INGREDIENTES
     {
         size_t totalJugosSin = JUGOS_SIN_INGREDIENTES.size();
@@ -825,6 +821,26 @@ void Gestor_De_Planta::GuardarSimulacionBinario(const std::string &nombreArchivo
         archivo.write(reinterpret_cast<const char*>(&totalGastado), sizeof(totalGastado));
         archivo.write(reinterpret_cast<const char*>(&totalFrutas), sizeof(totalFrutas));
     }
+
+    // j) guardar estado de la maquina
+    
+    for(Maquina* m:maquinas){
+
+        int vecesUsadas=m->getVecesUsadas();
+        int vecesReparadas=m->getVecesReparada();
+        bool Estado=m->getEstado();
+
+        archivo.write(reinterpret_cast<const char*>(&vecesUsadas),sizeof(vecesUsadas));
+        archivo.write(reinterpret_cast<const char*>(&vecesReparadas),sizeof(vecesReparadas));
+        archivo.write(reinterpret_cast<const char*>(&Estado),sizeof(Estado));
+
+        //aqui guarda el tiempo como tipo time_t
+        std::chrono::system_clock::time_point FechaUso=m->getUltimaFechaUsoTP();
+        std::time_t tiempo=std::chrono::system_clock::to_time_t(FechaUso);
+        archivo.write(reinterpret_cast<const char*>(&tiempo),sizeof(tiempo));
+        
+
+    }
     
     archivo.close();
     cout << "\nSimulacion guardada exitosamente en: " << ruta << "\n";
@@ -836,7 +852,7 @@ void Gestor_De_Planta::CargarSimulacionBinario(const std::string &nombreArchivo)
 
     std::ifstream archivo(ruta, std::ios::binary);
     if (!archivo.is_open()) {
-        std::cerr << "No se pudo abrir el archivo para cargar la simulación.\n";
+        std::cerr << "No se pudo abrir el archivo para cargar la simulacion.\n";
         return;
     }
 
@@ -1013,11 +1029,31 @@ void Gestor_De_Planta::CargarSimulacionBinario(const std::string &nombreArchivo)
     archivo.read(reinterpret_cast<char*>(&totalGastado), sizeof(totalGastado));
     archivo.read(reinterpret_cast<char*>(&totalFrutas), sizeof(totalFrutas));
 
-    tiendita->setDatosCompras(limon, naranja, pina, sandia, fresa, tamarindo, coco,
-                              conservantes, envases, agua, totalGastado, totalFrutas);
+    tiendita->setDatosCompras(limon, naranja, pina, sandia, fresa, tamarindo, coco,conservantes, envases, agua, totalGastado, totalFrutas);
+
+    //j) aqui cargar el estado de las 3 maquinas
+    for(Maquina* m:maquinas){
+
+        int VecesUsadas,VecesReperadas;
+        bool Estado;
+        std::time_t tiempo;
+
+        archivo.read(reinterpret_cast<char*>(&VecesUsadas),sizeof(VecesUsadas));
+        archivo.read(reinterpret_cast<char*>(&VecesReperadas),sizeof(VecesReperadas));
+        archivo.read(reinterpret_cast<char*>(&Estado),sizeof(Estado));
+        archivo.read(reinterpret_cast<char*>(&tiempo),sizeof(tiempo));
+
+        m->setEnUso(Estado);
+
+        //aqui con ciclo for asignas los datos
+        for (int i=0;i<VecesReperadas;++i)m->IncrementarReparacion();
+        for (int i=0;i<VecesUsadas;++i)m->IncrementarUso();
+        m->setUltimaFechaUsoTP(std::chrono::system_clock::from_time_t(tiempo));
+
+    }
 
     archivo.close();
-    std::cout << "\nSimulación cargada exitosamente desde: " << ruta << "\n";
+    std::cout << "\nSimulacion cargada exitosamente desde: " << ruta << "\n";
 }
 
 

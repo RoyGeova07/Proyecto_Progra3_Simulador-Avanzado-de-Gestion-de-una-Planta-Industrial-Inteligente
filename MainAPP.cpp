@@ -26,11 +26,10 @@ namespace fs=std::filesystem;
 using namespace std;
 
 bool ParametrosConfigurados=false;
-bool PrimerConfiguracion=true;
 
 void AsegurarCarpetaReportes(){
 
-    std::string carpeta = "Plantas Industriales";
+    std::string carpeta = "Reportes de Plantas Industriales";
     if(!fs::exists(carpeta)){
 
         fs::create_directory(carpeta);
@@ -144,7 +143,7 @@ void ConfigurarParametrosIniciales(Gestor_De_Planta& gestor)
 {
 
     srand(time(0));//aqui se inicializa el random
-    PrimerConfiguracion=false;
+    //PrimerConfiguracion=false;
 
     string nombrePlanta;
     double capitalAdicional ;
@@ -313,17 +312,9 @@ void MenuPrincipal()
 
         if (opcion == 1)
         {
-            if (!PrimerConfiguracion)
-            {
-                
-                cout<<"\nNo puedes volver a acceder a configurar los parametros\n";
-
-            }else{
-
-                ConfigurarParametrosIniciales(gestor);
-                ParametrosConfigurados=true;
-
-            }
+    
+            ConfigurarParametrosIniciales(gestor);
+            ParametrosConfigurados=true;
 
         }else if (opcion==2){
 
@@ -347,9 +338,10 @@ void MenuPrincipal()
         
            gestor.CargarSimulacionBinario(nombre);
            ParametrosConfigurados = true;
-           PrimerConfiguracion = false; // evita volver a configurar
+           //PrimerConfiguracion = false; // evita volver a configurar
 
            gestor.MiniMenuGestor(gestor);
+
 
         }else if (opcion == 3){
 

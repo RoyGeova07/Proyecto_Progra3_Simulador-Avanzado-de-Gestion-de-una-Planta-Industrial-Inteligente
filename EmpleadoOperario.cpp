@@ -8,6 +8,7 @@
 #include <sstream>
 #include <iomanip>
 #include <mutex>
+#include "EmpleadoTecnico.h"
 
 std::mutex coutMutex;// mutex global para controlar el acceso a la consola
 
@@ -68,7 +69,7 @@ void EmpleadoOperario::GenerarReportePlantaConHilos(Gestor_De_Planta& gestor,std
 
             {
                 std::lock_guard<std::mutex> lock(coutMutex);
-                std::cout << " Se ha pagado $" << pago << " a " << op->getNombre() << " por su trabajo.\n";
+                std::cout << "\n Se ha pagado $" << pago << " a " << op->getNombre() << " por su trabajo.\n";
             }
         });
     }
@@ -89,7 +90,7 @@ void EmpleadoOperario::GenerarReportePlantaConHilos(Gestor_De_Planta& gestor,std
 void EmpleadoOperario::GenerarReportePlanta(Gestor_De_Planta& gestor) {
 
     string nombrePlanta=gestor.getNombrePLanta();
-    string carpeta="Plantas Industriales";
+    string carpeta="Reportes Plantas Industriales";
     if (!fs::exists(carpeta)) fs::create_directory(carpeta);
 
    // ¿Que hace ios::trunc?
@@ -126,7 +127,7 @@ void EmpleadoOperario::GenerarReportePlanta(Gestor_De_Planta& gestor) {
                 << " unidades ($" << jugo.getPrecio() << " c/u)\n";
 
     // Recursos
-    reporte << "\n🛠 >> Recursos disponibles:\n";
+    reporte << "\n >> Recursos disponibles:\n";
     reporte << "   - Agua: " << gestor.getAgua() << " litros\n";
     reporte << "   - Conservantes: " << gestor.getConservantes() << "\n";
     reporte << "   - Envases: " << gestor.getEnvases() << "\n";
@@ -197,5 +198,22 @@ void EmpleadoOperario::GenerarReportePlanta(Gestor_De_Planta& gestor) {
         }
     }
     reporte << "Total pagado a operarios: $" << fixed << setprecision(2) << totalPagado << "\n";
+
+    //AGREGAR A LOS EMPLEADOS TECNICOS
+    //--------------------------------------------
+    reporte<<"\n >> Sueldo pagados por la reparacion de maquinas:\n";
+    double totalMaquina;
+    for(const auto& maqui:gestor.getEmpleados()){
+
+        if(auto meca=dynamic_cast<EmpleadoTecnico*>(maqui)){
+
+            double otrosalario=maqui->getSalario();
+            reporte<<"  - "<<maqui->getNombre()<<": $"<<fixed<<setprecision(2)<<otrosalario<<"\n";
+            totalMaquina+=otrosalario;
+
+        }
+
+    }
+    reporte<<"Total Pagado a empleados tecnicos: $"<<fixed<<setprecision(2)<<totalMaquina<<"\n";
 
 }
