@@ -432,7 +432,7 @@ void Gestor_De_Planta::MiniMenuGestor(Gestor_De_Planta& gestor){
         cout<<"5. Ver pedidos\n";
         cout<<"6. Generar reporte de la planta de "<<gestor.getNombrePLanta()<<"\n";
         cout<<"7. Ver reporte de la planta de "<<gestor.getNombrePLanta()<<"\n";
-        cout<<"8. Pedir billete\n";
+        cout<<"8. Ingresar mas capital\n";
         cout<<"9. Guardar Simulacion\n";
         cout<<"10. Salir de mi planta\n";
         opcionmini=NumeroValido("Ingrese una opcion: ",1,10);
@@ -549,7 +549,7 @@ void Gestor_De_Planta::MiniMenuGestor(Gestor_De_Planta& gestor){
     
         }else if(opcionmini==7){
 
-            string carpeta="Plantas Industriales";
+            string carpeta="Reportes de Plantas Industriales";
             string archivo=carpeta+"/"+gestor.getNombrePLanta()+".txt";
             ifstream reporte(archivo);
 

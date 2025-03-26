@@ -184,6 +184,44 @@ void ConfigurarParametrosIniciales(Gestor_De_Planta& gestor)
             cantidad=NumeroValido("Ingrese la cantidad de la fruta: ", 1, 1000);
             precio=NumeroTemplate("Ingrese el precio por unidad de la fruta: ", 1.0, 100.0);
 
+            if(opcion==1&&precio<2.4){
+
+                cout<<"No Podes ingresar esta cantidad para el limon. Tenemos competencia con otra tienda\n";
+                continue;
+
+            }else if(opcion==2&&precio<3.4){
+
+                cout<<"No Podes ingresar esta cantidad para la Naranja. Tenemos competencia con otra tienda\n";
+                continue;
+
+
+            }else if(opcion==3&&precio<5.6){
+
+                cout<<"No Podes ingresar esta cantidad para la Pilla. Tenemos competencia con otra tienda\n";
+                continue;
+
+            }else if(opcion==4&&precio<7.8){
+
+                cout<<"No Podes ingresar esta cantidad para la Sandia. Tenemos competencia con otra tienda\n";
+                continue;
+
+            }else if(opcion==5&&precio<2.0){
+
+                cout<<"No Podes ingresar esta cantidad para el fresa. Tenemos competencia con otra tienda\n";
+                continue;
+
+            }else if(opcion==6&&precio<4.0){
+
+                cout<<"No Podes ingresar esta cantidad para el tamarindo. Tenemos competencia con otra tienda\n";
+                continue;
+
+            }else if(opcion==7&&precio<2.1){
+
+                cout<<"No Podes ingresar esta cantidad para el coco. Tenemos competencia con otra tienda\n";
+                continue;
+
+            }
+
             Frutas fruta(Frutas(static_cast<Frutas::Fruta>(opcion),precio,cantidad));
             gestor.AgregarFruta(fruta);
             cout<<"Se agregaron "<<cantidad<<" unidades de la fruta "<<opcion<<" aun precio de $"<<precio;

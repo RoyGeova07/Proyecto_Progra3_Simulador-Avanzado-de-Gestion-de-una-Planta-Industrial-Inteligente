@@ -110,7 +110,7 @@ void Tienda::ComprarConservantes(Gestor_De_Planta &gestor) {
     cout << "Conservantes comprados exitosamente. Capital restante: $" << gestor.getCapital() << "\n";
 }
 
-void Tienda::ComprarEnvases(Gestor_De_Planta &gestor) {
+void Tienda::ComprarEnvases(Gestor_De_Planta &gestor){
     cout << "\n --- COMPRAR ENVASES ---\n";
     cout << "Cada envase cuesta **$7**\n";
 

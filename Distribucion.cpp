@@ -28,7 +28,7 @@ Distribucion::Distribucion(){
 Distribucion::~Distribucion(){
 
     activo=false;
-    if (hiloGeneradorPedidos.joinable())
+    if(hiloGeneradorPedidos.joinable())
     {
         
         hiloGeneradorPedidos.join();

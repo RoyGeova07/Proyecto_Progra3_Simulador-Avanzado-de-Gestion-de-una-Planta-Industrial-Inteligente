@@ -216,4 +216,8 @@ void EmpleadoOperario::GenerarReportePlanta(Gestor_De_Planta& gestor) {
     }
     reporte<<"Total Pagado a empleados tecnicos: $"<<fixed<<setprecision(2)<<totalMaquina<<"\n";
 
+    reporte<<"===========================================================================\n";
+    reporte<<"Total Pagado a los empleados en general: $"<<totalMaquina+totalPagado<<endl;
+    reporte<<"===========================================================================\n";
+
 }
